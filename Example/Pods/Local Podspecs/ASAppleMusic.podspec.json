@@ -1,0 +1,22 @@
+{
+  "name": "ASAppleMusic",
+  "version": "0.1.0",
+  "summary": "A short description of ASAppleMusic.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/AlexPartyPlay/ASAppleMusic",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "AlexPartyPlay": "alex@partyplay.cc"
+  },
+  "source": {
+    "git": "https://github.com/AlexPartyPlay/ASAppleMusic.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "ASAppleMusic/Classes/**/*"
+}

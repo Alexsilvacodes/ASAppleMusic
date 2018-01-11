@@ -1,0 +1,6 @@
+framework module ASAppleMusic {
+  umbrella header "ASAppleMusic-umbrella.h"
+
+  export *
+  module * { export * }
+}

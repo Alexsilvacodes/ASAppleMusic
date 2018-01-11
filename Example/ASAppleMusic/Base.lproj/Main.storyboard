@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="JwQ-WE-CL6">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="RWg-fO-C2A">
+            <objects>
+                <viewController id="JwQ-WE-CL6" customClass="ViewController" customModule="ASAppleMusic_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Zvp-Ek-xxF">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5dt-xq-thx">
+                                <rect key="frame" x="16" y="617" width="143" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Bzc-ZK-yyt"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="143" id="Zir-F0-8QK"/>
+                                </constraints>
+                                <state key="normal" title="Make Request"/>
+                                <connections>
+                                    <action selector="makeRequestTouchedWithSender:" destination="JwQ-WE-CL6" eventType="touchUpInside" id="Xcy-CN-nyk"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Press down to get data!" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="493-0U-clk">
+                                <rect key="frame" x="16" y="20" width="343" height="589"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zsm-CZ-Oq9">
+                                <rect key="frame" x="209" y="617" width="150" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="CYj-3N-rEs"/>
+                                    <constraint firstAttribute="width" constant="150" id="tPo-Dg-HpD"/>
+                                </constraints>
+                                <state key="normal" title="Clean text"/>
+                                <connections>
+                                    <action selector="cleanTextTouchedWithSender:" destination="JwQ-WE-CL6" eventType="touchUpInside" id="JwA-8l-jiC"/>
+                                </connections>
+                            </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="KKS-PZ-9Xh">
+                                <rect key="frame" x="177" y="333.5" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="bjn-6X-3dd" firstAttribute="trailing" secondItem="Zsm-CZ-Oq9" secondAttribute="trailing" constant="16" id="6WB-u3-CBJ"/>
+                            <constraint firstItem="bjn-6X-3dd" firstAttribute="trailing" secondItem="493-0U-clk" secondAttribute="trailing" constant="16" id="DAl-f4-AoJ"/>
+                            <constraint firstItem="5dt-xq-thx" firstAttribute="leading" secondItem="bjn-6X-3dd" secondAttribute="leading" constant="16" id="Hwi-LG-pjV"/>
+                            <constraint firstItem="493-0U-clk" firstAttribute="leading" secondItem="bjn-6X-3dd" secondAttribute="leading" constant="16" id="LRl-9b-xhy"/>
+                            <constraint firstItem="KKS-PZ-9Xh" firstAttribute="centerX" secondItem="bjn-6X-3dd" secondAttribute="centerX" id="hLC-gj-GBj"/>
+                            <constraint firstItem="bjn-6X-3dd" firstAttribute="bottom" secondItem="5dt-xq-thx" secondAttribute="bottom" constant="20" id="hll-EI-LnR"/>
+                            <constraint firstItem="5dt-xq-thx" firstAttribute="top" secondItem="493-0U-clk" secondAttribute="bottom" constant="8" id="l1S-K2-QBg"/>
+                            <constraint firstItem="493-0U-clk" firstAttribute="top" secondItem="bjn-6X-3dd" secondAttribute="top" id="t5H-F9-CS4"/>
+                            <constraint firstItem="Zsm-CZ-Oq9" firstAttribute="top" secondItem="493-0U-clk" secondAttribute="bottom" constant="8" id="vxn-P6-JFd"/>
+                            <constraint firstItem="KKS-PZ-9Xh" firstAttribute="centerY" secondItem="bjn-6X-3dd" secondAttribute="centerY" id="yVb-YS-tXK"/>
+                            <constraint firstItem="Zsm-CZ-Oq9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="5dt-xq-thx" secondAttribute="trailing" constant="50" id="zKA-zq-Zo9"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="bjn-6X-3dd"/>
+                    </view>
+                    <connections>
+                        <outlet property="activityIndicator" destination="KKS-PZ-9Xh" id="ucC-03-Ha3"/>
+                        <outlet property="makeRequestButton" destination="5dt-xq-thx" id="Qj2-RP-VAo"/>
+                        <outlet property="responseTextView" destination="493-0U-clk" id="kn3-dS-61h"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="F9L-Y4-PNJ" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
+        </scene>
+    </scenes>
+</document>

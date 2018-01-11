@@ -1,0 +1,16 @@
+PODS:
+  - ASAppleMusic (0.1.0)
+
+DEPENDENCIES:
+  - ASAppleMusic (from `../`)
+
+EXTERNAL SOURCES:
+  ASAppleMusic:
+    :path: ../
+
+SPEC CHECKSUMS:
+  ASAppleMusic: 660898fe36e837c7a3699195fd2adf1bcdacc7c0
+
+PODFILE CHECKSUM: edc7ffa4fab3b4407b69733114f3678d29831c8f
+
+COCOAPODS: 1.3.1
