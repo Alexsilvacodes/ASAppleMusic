@@ -1,8 +1,6 @@
 //
-//  Relationship.swift
-//  ASAppleMusic
-//
-//  Copyright © 2018 Alex Silva. All rights reserved.
+//  Alex Silva - 2018
+//  alex@alexsays.info
 //
 
 import Foundation

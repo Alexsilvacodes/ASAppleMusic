@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_ASAppleMusic_TestsVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_ASAppleMusic_TestsVersionString[];
+FOUNDATION_EXPORT double AlamofireVersionNumber;
+FOUNDATION_EXPORT const unsigned char AlamofireVersionString[];
 

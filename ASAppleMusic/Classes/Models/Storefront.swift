@@ -1,54 +1,109 @@
 //
-//  Storefront.swift
-//  ASAppleMusic
-//
-//  Copyright © 2018 Alex Silva. All rights reserved.
+//  Alex Silva - 2018
+//  alex@alexsays.info
 //
 
 import Foundation
+import Alamofire
+import EVReflection
 
 // API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Storefront.html
 
-class Storefront: Resource {
+public class Storefront: EVObject {
 
-    // MARK: Resource attributes
-    var id: String
-    var href: URL
-    var meta: [String : Any]?
-
-    // MARK: Storefront attributes
-    var name: String
-    var storefrontId: Int
-    var supportedLanguageTags: [String]
-    var defaultLanguageTag: String
-
-    init(id: String, href: URL, name: String, storefrontId: Int, supportedLanguageTags: [String], defaultLanguageTag: String) {
-        self.id = id
-        self.href = href
-        self.name = name
-        self.storefrontId = storefrontId
-        self.supportedLanguageTags = supportedLanguageTags
-        self.defaultLanguageTag = defaultLanguageTag
-    }
+    public var name: String?
+    var storefrontId: Int?
+    var supportedLanguageTags: [String]?
+    var defaultLanguageTag: String?
 }
 
-extension ASAppleMusic {
-    // https://api.music.apple.com/v1/storefronts/{id}
-    func getStorefront(withId id: String, completion: @escaping (_ storefront: Storefront?, _ error: Error?) -> Void) {
-        let url = URL(string: "https://api.music.apple.com/v1/storefronts/\(id)")!
-        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30.0)
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            if let data = data {
-                
-            } else {
-                if let error = error as? Error {
-                    completion(nil, error)
-                }
+public extension ASAppleMusic {
+
+    func getStorefront(withID id: String, lang: String? = nil, completion: @escaping (_ storefront: Storefront?, _ error: Error?) -> Void) {
+        callWithToken { token in
+            guard let token = token else {
+                completion(nil, Error())
+                return
+            }
+            let headers = [
+                "Authorization": "Bearer \(token)"
+            ]
+            var url = "https://api.music.apple.com/v1/storefronts/\(id)"
+            if let lang = lang {
+                url = url + "?l=\(lang)"
+            }
+            Alamofire.request(url, headers: headers)
+                .responseJSON { (response) in
+                    if let response = response.result.value as? [String:Any],
+                        let data = response["data"] as? [[String:Any]],
+                        let resource = data.first,
+                        let attributes = resource["attributes"] as? NSDictionary {
+                        let storefront = Storefront(dictionary: attributes)
+                        completion(storefront, nil)
+                    } else {
+                        completion(nil, Error())
+                    }
             }
         }
     }
 
-    func getStorefront(withId id: String, l: String) {
-
+    func getMultipleStorefronts(withIDs ids: [String], lang: String? = nil, completion: @escaping (_ storefront: Storefront?, _ error: Error?) -> Void) {
+        callWithToken { token in
+            guard let token = token else {
+                completion(nil, Error())
+                return
+            }
+            let headers = [
+                "Authorization": "Bearer \(token)"
+            ]
+            var url = "https://api.music.apple.com/v1/storefronts/\(ids.joined(separator: ","))"
+            if let lang = lang {
+                url = url + "?l=\(lang)"
+            }
+            Alamofire.request(url, headers: headers)
+                .responseJSON { (response) in
+                    if let response = response.result.value as? [String:Any],
+                        let data = response["data"] as? [[String:Any]],
+                        let resource = data.first,
+                        let attributes = resource["attributes"] as? NSDictionary {
+                        let storefront = Storefront(dictionary: attributes)
+                        completion(storefront, nil)
+                    } else {
+                        completion(nil, Error())
+                    }
+            }
+        }
     }
+
+    func getAllStorefronts(lang: String? = nil, limit: Int? = nil, offset: Int? = nil, completion: @escaping (_ storefront: Storefront?, _ error: Error?) -> Void) {
+        callWithToken { token in
+            guard let token = token else {
+                completion(nil, Error())
+                return
+            }
+            let headers = [
+                "Authorization": "Bearer \(token)"
+            ]
+            var url = "https://api.music.apple.com/v1/storefronts"
+            if let lang = lang {
+                url = url + "?l=\(lang)"
+            }
+            if let limit = limit {
+                url = url + ""
+            }
+            Alamofire.request(url, headers: headers)
+                .responseJSON { (response) in
+                    if let response = response.result.value as? [String:Any],
+                        let data = response["data"] as? [[String:Any]],
+                        let resource = data.first,
+                        let attributes = resource["attributes"] as? NSDictionary {
+                        let storefront = Storefront(dictionary: attributes)
+                        completion(storefront, nil)
+                    } else {
+                        completion(nil, Error())
+                    }
+            }
+        }
+    }
+
 }

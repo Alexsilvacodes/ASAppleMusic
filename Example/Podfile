@@ -2,10 +2,4 @@ use_frameworks!
 
 target 'ASAppleMusic_Example' do
   pod 'ASAppleMusic', :path => '../'
-
-  target 'ASAppleMusic_Tests' do
-    inherit! :search_paths
-
-    
-  end
 end

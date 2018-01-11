@@ -1,11 +1,10 @@
 //
-//  Resource.swift
-//  ASAppleMusic
-//
-//  Copyright © 2018 Alex Silva. All rights reserved.
+//  Alex Silva - 2018
+//  alex@alexsays.info
 //
 
 import Foundation
+import EVReflection
 
 // API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Resourceobject.html
 
@@ -15,9 +14,10 @@ enum Rating {
     case noRating
 }
 
-protocol Resource {
-
-    var id: String { get set }
-    var href: URL { get set }
-    var meta: [String: Any]? { get set }
+class Resource: EVObject {
+    var id: String?
+    var href: URL?
+    var meta: [String:Any]?
+    var type: String?
+    var attributes: [String:Any]?
 }

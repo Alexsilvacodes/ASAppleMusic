@@ -14,5 +14,6 @@ ASAppleMusic is a framework created to help developers to use the Apple Music AP
   s.ios.deployment_target = '9.0'
   s.source_files = 'ASAppleMusic/Classes/**/*'
   s.ios.framework  = 'UIKit'
-  s.dependency 'SwiftyJSON'
+  s.dependency 'Alamofire'
+  s.dependency 'EVReflection/Alamofire'
 end

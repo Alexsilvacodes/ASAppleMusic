@@ -1,11 +1,10 @@
 //
-//  Error.swift
-//  ASAppleMusic
-//
-//  Copyright © 2018 Alex Silva. All rights reserved.
+//  Alex Silva - 2018
+//  alex@alexsays.info
 //
 
 import Foundation
+import EVReflection
 
 // API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/HTTPStatusCodes.html
 
@@ -33,28 +32,18 @@ enum Code: Int {
 
 // API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/ErrorDictionary.html
 
-class Source: NSObject {
-    var parameter: String!
-
-    init(parameter: String) {
-        super.init()
-
-        self.parameter = parameter
-    }
+class Source: EVObject {
+    var parameter: String?
 }
 
-class Error: NSObject {
+public class Error: EVObject {
 
-    var id: String!
-    var about: String!
-    var status: String!
-    var code: Code!
-    var title: String!
-    var detail: String!
-    var source: Source!
-    var meta: [String: Any]!
-
-    override init() {
-        super.init()
-    }
+    var id: String?
+    var about: String?
+    var status: String?
+    var code: Code?
+    var title: String?
+    var detail: String?
+    var source: Source?
+    var meta: [String: Any]?
 }

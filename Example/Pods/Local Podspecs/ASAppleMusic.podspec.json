@@ -1,22 +1,34 @@
 {
   "name": "ASAppleMusic",
   "version": "0.1.0",
-  "summary": "A short description of ASAppleMusic.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/AlexPartyPlay/ASAppleMusic",
+  "summary": "Apple Music library for developer and user token.",
+  "description": "ASAppleMusic is a framework created to help developers to use the Apple Music API with their developer token or the user token that will be requested to the device user",
+  "homepage": "https://github.com/Alexsays/ASAppleMusic",
   "license": {
-    "type": "MIT",
+    "type": "CC BY-SA 4.0",
     "file": "LICENSE"
   },
   "authors": {
-    "AlexPartyPlay": "alex@partyplay.cc"
+    "Alex Silva": "alex@alexsays.info"
   },
   "source": {
-    "git": "https://github.com/AlexPartyPlay/ASAppleMusic.git",
+    "git": "https://github.com/Alexsays/ASAppleMusic.git",
     "tag": "0.1.0"
   },
+  "social_media_url": "https://twitter.com/alexw0h4l",
   "platforms": {
-    "ios": "8.0"
+    "ios": "9.0"
   },
-  "source_files": "ASAppleMusic/Classes/**/*"
+  "source_files": "ASAppleMusic/Classes/**/*",
+  "ios": {
+    "frameworks": "UIKit"
+  },
+  "dependencies": {
+    "Alamofire": [
+
+    ],
+    "EVReflection/Alamofire": [
+
+    ]
+  }
 }

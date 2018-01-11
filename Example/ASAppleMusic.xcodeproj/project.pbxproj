@@ -196,10 +196,14 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-ASAppleMusic_Example/Pods-ASAppleMusic_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/ASAppleMusic/ASAppleMusic.framework",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/EVReflection/EVReflection.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ASAppleMusic.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EVReflection.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

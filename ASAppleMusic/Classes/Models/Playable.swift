@@ -1,22 +1,16 @@
 //
-//  Playable.swift
-//  ASAppleMusic
-//
-//  Copyright © 2018 Alex Silva. All rights reserved.
+//  Alex Silva - 2018
+//  alex@alexsays.info
 //
 
 import Foundation
+import EVReflection
 
 // API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Playable.html
 
-class Playable {
+class Playable: EVObject {
 
-    var id: String
-    var kind: String
-
-    init(id: String, kind: String) {
-        self.id = id
-        self.kind = kind
-    }
+    var id: String?
+    var kind: String?
 
 }
