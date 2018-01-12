@@ -5,6 +5,7 @@
 
 import Foundation
 import Alamofire
+import StoreKit
 
 enum SourceAPI {
     case developer
@@ -13,6 +14,11 @@ enum SourceAPI {
 
 public class ASAppleMusic {
 
+    /**
+     ASAppleMusic singleton
+
+     
+     */
     public static let shared = ASAppleMusic()
 
     var token: String?
@@ -28,13 +34,27 @@ public class ASAppleMusic {
                 completion(token)
             }
         case .user:
-            completion(nil)
+            getDeveloperToken { devToken in
+                if let devToken = devToken {
+                    let cloudService = SKCloudServiceController()
+                    cloudService.requestUserToken(forDeveloperToken: devToken,
+                                                  completionHandler: { userToken, error in
+                        if let userToken = userToken {
+                            completion(userToken)
+                        } else {
+                            completion(nil)
+                        }
+                    })
+                } else {
+                    completion(nil)
+                }
+            }
         }
     }
 
     private func getDeveloperToken(_ completion: @escaping (_ token: String?) -> Void) {
         let parameters = ["kid": "x", "tid": "x"]
-        Alamofire.request("x",
+        Alamofire.request("",
                           method: .post,
                           parameters: parameters,
                           encoding: JSONEncoding.default)

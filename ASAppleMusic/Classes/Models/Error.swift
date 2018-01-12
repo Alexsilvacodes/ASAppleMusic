@@ -32,11 +32,11 @@ enum Code: Int {
 
 // API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/ErrorDictionary.html
 
-class Source: EVObject {
+public class Source: EVObject {
     var parameter: String?
 }
 
-public class Error: EVObject {
+public class AMError: EVObject {
 
     var id: String?
     var about: String?
@@ -46,4 +46,5 @@ public class Error: EVObject {
     var detail: String?
     var source: Source?
     var meta: [String: Any]?
+
 }

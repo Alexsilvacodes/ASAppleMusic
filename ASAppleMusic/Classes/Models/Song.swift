@@ -8,7 +8,7 @@ import EVReflection
 
 // API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Song.html
 
-class Song: EVObject {
+public class Song: EVObject {
 
     var artistName: String?
     var artwork: Artwork?
