@@ -13,7 +13,7 @@ import EVReflection
 public class Storefront: EVObject {
 
     public var name: String?
-    var storefrontId: String?
+    var storefrontId: Int?
     var supportedLanguageTags: [String]?
     var defaultLanguageTag: String?
 }
