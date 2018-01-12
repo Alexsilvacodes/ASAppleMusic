@@ -17,7 +17,7 @@
 		8760B05E2007F6CA008CD701 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8760B05D2007F6CA008CD701 /* DetailViewController.swift */; };
 		8760B0602008C66A008CD701 /* ConfigurationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8760B05F2008C66A008CD701 /* ConfigurationTableViewCell.swift */; };
 		8760B0622008DD36008CD701 /* ASAppleMusic+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8760B0612008DD36008CD701 /* ASAppleMusic+Helper.swift */; };
-		878558152009238C0070BA8B /* Secret.plist in Resources */ = {isa = PBXBuildFile; fileRef = 878558142009238C0070BA8B /* Secret.plist */; };
+		87855817200926EB0070BA8B /* Secret.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87855816200926EB0070BA8B /* Secret.plist */; };
 		D524C666CCB2F34D28739A29 /* Pods_ASAppleMusic_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CE27DEF3906B97085C4115F /* Pods_ASAppleMusic_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -36,7 +36,7 @@
 		8760B05D2007F6CA008CD701 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		8760B05F2008C66A008CD701 /* ConfigurationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationTableViewCell.swift; sourceTree = "<group>"; };
 		8760B0612008DD36008CD701 /* ASAppleMusic+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ASAppleMusic+Helper.swift"; sourceTree = "<group>"; };
-		878558142009238C0070BA8B /* Secret.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secret.plist; sourceTree = "<group>"; };
+		87855816200926EB0070BA8B /* Secret.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secret.plist; sourceTree = "<group>"; };
 		AB41398B7B54157A5C0E3FD5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		C496978A06B39A230E54EE60 /* ASAppleMusic.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ASAppleMusic.podspec; path = ../ASAppleMusic.podspec; sourceTree = "<group>"; };
 		CE0EF875AC3217D95D24BC23 /* Pods-ASAppleMusic_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ASAppleMusic_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ASAppleMusic_Tests/Pods-ASAppleMusic_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -90,7 +90,7 @@
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 				8760B0592007F4C1008CD701 /* Sections.plist */,
-				878558142009238C0070BA8B /* Secret.plist */,
+				87855816200926EB0070BA8B /* Secret.plist */,
 				8760B05F2008C66A008CD701 /* ConfigurationTableViewCell.swift */,
 			);
 			name = "Example for ASAppleMusic";
@@ -199,7 +199,7 @@
 			files = (
 				8760B05A2007F4C1008CD701 /* Sections.plist in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
-				878558152009238C0070BA8B /* Secret.plist in Resources */,
+				87855817200926EB0070BA8B /* Secret.plist in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 			);
