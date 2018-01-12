@@ -1,8 +1,11 @@
 # Custom
-!Secret.plist
+**/Secret.plist
 
 # OS X
 .DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
 
 # Xcode
 build/
