@@ -8,14 +8,14 @@ import Alamofire
 import EVReflection
 
 /**
- Storefront object represntation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Storefront.html)
+ Storefront object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Storefront.html)
  */
 public class Storefront: EVObject {
 
     public var name: String?
-    var storefrontId: Int?
-    var supportedLanguageTags: [String]?
-    var defaultLanguageTag: String?
+    public var storefrontId: Int?
+    public var supportedLanguageTags: [String]?
+    public var defaultLanguageTag: String?
 }
 
 public extension ASAppleMusic {
@@ -25,17 +25,23 @@ public extension ASAppleMusic {
 
      - Parameters:
         - id: The id of the store in two-letter code. Example: `"us"`
-        - lang: The language that you want to use to get data. **Default value: `en-us`**
-        - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Storefront*, *Error*
+        - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
+        - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Storefront*, *AMError*
         - storefront: the `Storefront` object itself
-        - error: if the request you will get an `Error` object
+        - error: if the request you will get an `AMError` object
 
      **Example:** *https://api.music.apple.com/v1/storefronts/us*
      */
     func getStorefront(withID id: String, lang: String? = nil, completion: @escaping (_ storefront: Storefront?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
-                completion(nil, AMError())
+                let error = AMError()
+                error.status = "401"
+                error.code = .unauthorized
+                error.title = "Unauthorized request"
+                error.detail = "Missing token, refresh current token or request a new token"
+                completion(nil, error)
+                self.print("[ASAppleMusic] 🛑: Missing token")
                 return
             }
             let headers = [
@@ -53,8 +59,18 @@ public extension ASAppleMusic {
                         let attributes = resource["attributes"] as? NSDictionary {
                         let storefront = Storefront(dictionary: attributes)
                         completion(storefront, nil)
+                    } else if let response = response.result.value as? [String:Any], let errors = response["errors"] as? [[String:Any]], let errorDict = errors.first as NSDictionary? {
+                        let error = AMError(dictionary: errorDict)
+                        completion(nil, error)
                     } else {
-                        completion(nil, AMError())
+                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
+
+                        let error = AMError()
+                        error.status = "401"
+                        error.code = .unauthorized
+                        error.title = "Unauthorized request"
+                        error.detail = "Missing token, refresh current token or request a new token"
+                        completion(nil, error)
                     }
             }
         }
@@ -65,23 +81,29 @@ public extension ASAppleMusic {
 
      - Parameters:
          - ids: An id array of the stores in two-letter code. Example: `["us", "es", "jp"]`
-         - lang: The language that you want to use to get data. **Default value: `en-us`**
-         - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Storefront*, *Error*
+         - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
+         - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Storefront*, *AMError*
          - storefront: the `Storefront` object itself
-         - error: if the request you will get an `Error` object
+         - error: if the request you will get an `AMError` object
 
      **Example:** *https://api.music.apple.com/v1/storefronts?ids=us,es,jp*
      */
-    func getMultipleStorefronts(withIDs ids: [String], lang: String? = nil, completion: @escaping (_ storefront: [Storefront]?, _ error: AMError?) -> Void) {
+    func getMultipleStorefronts(withIDs ids: [String], lang: String? = nil, completion: @escaping (_ storefronts: [Storefront]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
-                completion(nil, AMError())
+                let error = AMError()
+                error.status = "401"
+                error.code = .unauthorized
+                error.title = "Unauthorized request"
+                error.detail = "Missing token, refresh current token or request a new token"
+                completion(nil, error)
+                self.print("[ASAppleMusic] 🛑: Missing token")
                 return
             }
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/storefronts/\(ids.joined(separator: ","))"
+            var url = "https://api.music.apple.com/v1/storefronts?ids=\(ids.joined(separator: ","))"
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
@@ -99,8 +121,24 @@ public extension ASAppleMusic {
                             }
                         }
                         completion(storefronts, nil)
+                    } else if let response = response.result.value as? [String:Any],
+                        let errors = response["errors"] as? [[String:Any]],
+                        let errorDict = errors.first as NSDictionary? {
+                        let error = AMError(dictionary: errorDict)
+
+                        
+                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
+
+                        completion(nil, error)
                     } else {
-                        completion(nil, AMError())
+                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
+
+                        let error = AMError()
+                        error.status = "401"
+                        error.code = .unauthorized
+                        error.title = "Unauthorized request"
+                        error.detail = "Missing token, refresh current token or request a new token"
+                        completion(nil, error)
                     }
             }
         }
@@ -110,19 +148,25 @@ public extension ASAppleMusic {
      Get all the Storefront objects. You can decide the limit of stores to get and the offset per page as *Optional* parameters
 
      - Parameters:
-         - lang: The language that you want to use to get data. **Default value: `en-us`**
-         - limit: The limit of stores to get
-         - offset: The *page* of the results to get
-         - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Storefront*, *Error*
-         - storefront: the `Storefront` object itself
-         - error: if the request you will get an `Error` object
+         - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
+         - limit: (Optional) The limit of stores to get
+         - offset: (Optional) The *page* of the results to get
+         - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Storefront*, *AMError*
+         - storefront: the `[Storefront]` array of objects
+         - error: if the request you will get an `AMError` object
 
      **Example:** *https://api.music.apple.com/v1/storefronts?l=en-us&limit=2&offset=2*
      */
-    func getAllStorefronts(lang: String? = nil, limit: Int? = nil, offset: Int? = nil, completion: @escaping (_ storefront: [Storefront]?, _ error: AMError?) -> Void) {
+    func getAllStorefronts(lang: String? = nil, limit: Int? = nil, offset: Int? = nil, completion: @escaping (_ storefronts: [Storefront]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
-                completion(nil, AMError())
+                let error = AMError()
+                error.status = "401"
+                error.code = .unauthorized
+                error.title = "Unauthorized request"
+                error.detail = "Missing token, refresh current token or request a new token"
+                completion(nil, error)
+                self.print("[ASAppleMusic] 🛑: Missing token")
                 return
             }
             let headers = [
@@ -156,8 +200,24 @@ public extension ASAppleMusic {
                             }
                         }
                         completion(storefronts, nil)
+                    } else if let response = response.result.value as? [String:Any],
+                        let errors = response["errors"] as? [[String:Any]],
+                        let errorDict = errors.first as NSDictionary? {
+                        let error = AMError(dictionary: errorDict)
+
+                        
+                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
+
+                        completion(nil, error)
                     } else {
-                        completion(nil, AMError())
+                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
+
+                        let error = AMError()
+                        error.status = "401"
+                        error.code = .unauthorized
+                        error.title = "Unauthorized request"
+                        error.detail = "Missing token, refresh current token or request a new token"
+                        completion(nil, error)
                     }
             }
         }

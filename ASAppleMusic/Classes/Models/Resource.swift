@@ -8,12 +8,6 @@ import EVReflection
 
 // API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Resourceobject.html
 
-enum Rating {
-    case clean
-    case explicit
-    case noRating
-}
-
 class Resource: EVObject {
     var id: String?
     var href: URL?

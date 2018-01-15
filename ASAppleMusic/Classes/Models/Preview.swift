@@ -6,11 +6,12 @@
 import Foundation
 import EVReflection
 
-// API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Preview.html
+/**
+ Playlist Type object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Preview.html)
+ */
+public class Preview: EVObject {
 
-class Preview: EVObject {
-
-    var url: String?
-    var artwork: Artwork?
+    public var url: String?
+    public var artwork: Artwork?
 
 }

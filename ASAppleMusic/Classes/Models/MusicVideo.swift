@@ -4,27 +4,221 @@
 //
 
 import Foundation
+import Alamofire
 import EVReflection
 
-// API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/MusicVideo.html
+/**
+ Music Video object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/MusicVideo.html)
+ */
+public class MusicVideo: EVObject {
 
-class MusicVideo: EVObject {
+    public var artistName: String?
+    public var artwork: Artwork?
+    public var contentRating: Rating?
+    public var durationInMillis: Int64?
+    public var editorialNotes: EditorialNotes?
+    public var genreNames: [String]?
+    public var isrc: String?
+    public var name: String?
+    public var playParams: Playable?
+    public var previews: [Preview]?
+    public var releaseDate: String?
+    public var trackNumber: Int?
+    public var url: String?
+    public var albums: [Album]?
+    public var artists: [Artist]?
+    public var genres: [Genre]?
 
-    var artistName: String?
-    var artwork: Artwork?
-    var contentRating: Rating?
-    var durationInMillis: Int64?
-    var editorialNotes: EditorialNotes?
-    var genreNames: [String]?
-    var isrc: String?
-    var name: String?
-    var playParams: Playable?
-    var previews: [Preview]?
-    var releaseDate: String?
-    var trackNumber: Int?
-    var url: URL?
-    var albums: [Album]?
-    var artists: [Artist]?
-    var genres: [Genre]?
+    public override func setValue(_ value: Any!, forUndefinedKey key: String) {
+        if key == "contentRating" {
+            if let rawValue = value as? String {
+                contentRating = Rating(rawValue: rawValue)
+            }
+        } else if key == "durationInMillis" {
+            if let rawValue = value as? Int64 {
+                durationInMillis = rawValue
+            }
+        } else if key == "trackNumber" {
+            if let rawValue = value as? Int {
+                trackNumber = rawValue
+            }
+        }
+    }
+
+    func setRelationships(_ relationships: [String:Any]) {
+        if let albumsRoot = relationships["albums"] as? [String:Any],
+            let albumsArray = albumsRoot["data"] as? [NSDictionary] {
+            var albums: [Album] = []
+
+            albumsArray.forEach { album in
+                albums.append(Album(dictionary: album))
+            }
+
+            self.albums = albums
+        }
+        if let artistsRoot = relationships["artists"] as? [String:Any],
+            let artistsArray = artistsRoot["data"] as? [NSDictionary] {
+            var artists: [Artist] = []
+
+            artistsArray.forEach { artist in
+                artists.append(Artist(dictionary: artist))
+            }
+
+            self.artists = artists
+        }
+        if let genresRoot = relationships["genres"] as? [String:Any],
+            let genresArray = genresRoot["data"] as? [NSDictionary] {
+            var genres: [Genre] = []
+
+            genresArray.forEach { genre in
+                genres.append(Genre(dictionary: genre))
+            }
+
+            self.genres = genres
+        }
+    }
+
 }
 
+public extension ASAppleMusic {
+
+    /**
+     Get Music Video based on the id of the `storefront` and the music video `id`
+
+     - Parameters:
+     - id: The id of the music video (Number). Example: `"639322181"`
+     - storeID: The id of the store in two-letter code. Example: `"us"`
+     - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *MusicVideo*, *AMError*
+     - musicVideo: the `MusicVideo` object itself
+     - error: if the request you will get an `AMError` object
+
+     **Example:** *https://api.music.apple.com/v1/catalog/us/music-videos/639322181*
+     */
+    func getMusicVideo(withID id: String, storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ musicVideo: MusicVideo?, _ error: AMError?) -> Void) {
+        callWithToken { token in
+            guard let token = token else {
+                let error = AMError()
+                error.status = "401"
+                error.code = .unauthorized
+                error.title = "Unauthorized request"
+                error.detail = "Missing token, refresh current token or request a new token"
+                completion(nil, error)
+                self.print("[ASAppleMusic] 🛑: Missing token")
+                return
+            }
+            let headers = [
+                "Authorization": "Bearer \(token)"
+            ]
+            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/music-videos/\(id)"
+            if let lang = lang {
+                url = url + "?l=\(lang)"
+            }
+            Alamofire.request(url, headers: headers)
+                .responseJSON { (response) in
+                    if let response = response.result.value as? [String:Any],
+                        let data = response["data"] as? [[String:Any]],
+                        let resource = data.first,
+                        let attributes = resource["attributes"] as? NSDictionary {
+                        let musicVideo = MusicVideo(dictionary: attributes)
+                        if let relationships = resource["relationships"] as? [String:Any] {
+                            musicVideo.setRelationships(relationships)
+                        }
+                        completion(musicVideo, nil)
+                    } else if let response = response.result.value as? [String:Any],
+                        let errors = response["errors"] as? [[String:Any]],
+                        let errorDict = errors.first as NSDictionary? {
+                        let error = AMError(dictionary: errorDict)
+
+                        
+                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
+
+                        completion(nil, error)
+                    } else {
+                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
+
+                        let error = AMError()
+                        error.status = "401"
+                        error.code = .unauthorized
+                        error.title = "Unauthorized request"
+                        error.detail = "Missing token, refresh current token or request a new token"
+                        completion(nil, error)
+                    }
+            }
+        }
+    }
+
+    /**
+     Get several Music Video objects based on the `ids` of the music videos that you want to get and the Storefront ID of the store
+
+     - Parameters:
+     - ids: An id array of the music videos. Example: `["609082181", "890853283"]`
+     - storeID: The id of the store in two-letter code. Example: `"us"`
+     - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *MusicVideo*, *AMError*
+     - musicVideos: the `[MusicVideo]` array of objects
+     - error: if the request you will get an `AMError` object
+
+     **Example:** *https://api.music.apple.com/v1/catalog/us/music-videos?ids=609082181,890853283*
+     */
+    func getMultipleMusicVideos(withIDs ids: [String], storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ musicVideos: [MusicVideo]?, _ error: AMError?) -> Void) {
+        callWithToken { token in
+            guard let token = token else {
+                let error = AMError()
+                error.status = "401"
+                error.code = .unauthorized
+                error.title = "Unauthorized request"
+                error.detail = "Missing token, refresh current token or request a new token"
+                completion(nil, error)
+                self.print("[ASAppleMusic] 🛑: Missing token")
+                return
+            }
+            let headers = [
+                "Authorization": "Bearer \(token)"
+            ]
+            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/music-videos?ids=\(ids.joined(separator: ","))"
+            if let lang = lang {
+                url = url + "?l=\(lang)"
+            }
+            Alamofire.request(url, headers: headers)
+                .responseJSON { (response) in
+                    if let response = response.result.value as? [String:Any],
+                        let resources = response["data"] as? [[String:Any]] {
+                        var musicVideos: [MusicVideo]?
+                        if resources.count > 0 {
+                            musicVideos = []
+                        }
+                        resources.forEach { musicVideoData in
+                            if let attributes = musicVideoData["attributes"] as? NSDictionary {
+                                let musicVideo = MusicVideo(dictionary: attributes)
+                                if let relationships = musicVideoData["relationships"] as? [String:Any] {
+                                    musicVideo.setRelationships(relationships)
+                                }
+                                musicVideos?.append(musicVideo)
+                            }
+                        }
+                        completion(musicVideos, nil)
+                    } else if let response = response.result.value as? [String:Any],
+                        let errors = response["errors"] as? [[String:Any]],
+                        let errorDict = errors.first as NSDictionary? {
+                        let error = AMError(dictionary: errorDict)
+
+                        
+                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
+
+                        completion(nil, error)
+                    } else {
+                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
+
+                        let error = AMError()
+                        error.status = "401"
+                        error.code = .unauthorized
+                        error.title = "Unauthorized request"
+                        error.detail = "Missing token, refresh current token or request a new token"
+                        completion(nil, error)
+                    }
+            }
+        }
+    }
+
+}

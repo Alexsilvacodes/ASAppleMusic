@@ -38,6 +38,7 @@
 		7D8CC01E8C9EFFF9F4D65406CDE0AB66 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795F92FF61F8FB68CEBF427B2DC6E37A /* Result.swift */; };
 		850CC6278172D5B37F5422543192AB21 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 415A821FAB1056E494DDFBF557ABCDB2 /* Error.swift */; };
 		86F543C8F2E2E6E281333BBE04903322 /* ASAppleMusic-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = A50916BE5D955EEFF5BE39DB1290FF34 /* ASAppleMusic-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8785581A200D0CCA0070BA8B /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87855818200D0C7D0070BA8B /* Search.swift */; };
 		882EE225D20DA46BDF0049925657A1DE /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A270426B9C29025C092DD6DDA22D249 /* Alamofire.framework */; };
 		915917073D0C5DC111EFFEC5FD6DA060 /* EVReflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C11754CD52C85478C7C790252331E1D /* EVReflection.swift */; };
 		9ED2BB2981896E0A39EFA365503F58CE /* AFError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8520D5A5F186BA70C62E568267A65CA /* AFError.swift */; };
@@ -160,6 +161,7 @@
 		7F008D4D2DDC10ECCD68146FEA095CAD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		805F12E82B11571259F7426B9CFF29F9 /* Pods-ASAppleMusic_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ASAppleMusic_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		85E7FFF63B0140C34DAD892F6229868E /* EVReflectable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EVReflectable.swift; path = Source/EVReflectable.swift; sourceTree = "<group>"; };
+		87855818200D0C7D0070BA8B /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		8D30B3EA80420E7DE4512879EB1776B4 /* Pods-ASAppleMusic_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ASAppleMusic_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		8EFF71B400713868739C2E4321ED9B9F /* Response.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Response.swift; path = Source/Response.swift; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -328,6 +330,7 @@
 				D4A7B40D249CFA848C3008586E00EB5F /* Recommendation.swift */,
 				F9B05CFE59F859C7177584B03EFC3F12 /* Relationship.swift */,
 				696D252DE51656F37E6B7E835657B35D /* Resource.swift */,
+				87855818200D0C7D0070BA8B /* Search.swift */,
 				F82291E87817721D981F04EBF6EA9147 /* Song.swift */,
 				6AE975216AF4F47D72C7E88C7F64FC9B /* Station.swift */,
 				A20CAB505C77AA255F5550BBA41368F8 /* Storefront.swift */,
@@ -665,6 +668,7 @@
 				406A708DC511ACF76E58F8E02D63DE26 /* MusicVideo.swift in Sources */,
 				AB3E51B9C285DF67A2F2D3C74FC2016F /* Playable.swift in Sources */,
 				A8DBB4973CEB00AAD73825518611B75A /* Playlist.swift in Sources */,
+				8785581A200D0CCA0070BA8B /* Search.swift in Sources */,
 				A956B7F4A2DDD2ECC1E5B0537A227E6B /* Preview.swift in Sources */,
 				1B2883C674668EC6D12122C669211C5C /* Recommendation.swift in Sources */,
 				579ED37444FC798189E83C1CB3F69907 /* Relationship.swift in Sources */,

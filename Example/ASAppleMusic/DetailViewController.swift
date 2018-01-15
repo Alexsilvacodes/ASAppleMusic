@@ -24,6 +24,7 @@ class DetailViewController: UIViewController {
             if let result = result {
                 self.statusLabel.text = "Response: OK"
                 self.statusLabel.textColor = .green
+                self.responseTextView.textColor = .black
                 if let descArray = result as? [AnyObject] {
                     var description = ""
                     descArray.forEach { object in
@@ -38,7 +39,17 @@ class DetailViewController: UIViewController {
             } else {
                 self.statusLabel.text = "Response: ERROR"
                 self.statusLabel.textColor = .red
-                self.responseTextView.text = ""
+                self.responseTextView.textColor = .red
+                if let error = error, let title = error.title,
+                    let status = error.status {
+                    var errorString = "\(title) (\(status))"
+
+                    if let detail = error.detail {
+                        errorString = "\(errorString)\n\(detail)"
+                    }
+
+                    self.responseTextView.text = errorString
+                }
             }
         }
     }

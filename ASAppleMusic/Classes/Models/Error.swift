@@ -6,9 +6,10 @@
 import Foundation
 import EVReflection
 
-// API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/HTTPStatusCodes.html
-
-enum Code: Int {
+/**
+ Code object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/HTTPStatusCodes.html)
+ */
+public enum Code: Int {
 
     case ok = 200
     case created = 201
@@ -25,26 +26,44 @@ enum Code: Int {
     case payloadTooLarge = 413
     case URITooLong = 414
     case tooManyRequests = 429
+    case internalServerError = 500
     case notImplemented = 501
     case serviceUnavailable = 503
 
 }
 
-// API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/ErrorDictionary.html
-
+/**
+ Source object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/ErrorDictionary.html)
+ */
 public class Source: EVObject {
-    var parameter: String?
+    public var parameter: String?
 }
 
+/**
+ Error object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Error.html)
+ */
 public class AMError: EVObject {
 
-    var id: String?
-    var about: String?
-    var status: String?
-    var code: Code?
-    var title: String?
-    var detail: String?
-    var source: Source?
-    var meta: [String: Any]?
+    public var id: String?
+    public var about: String?
+    public var status: String?
+    public var code: Code?
+    public var title: String?
+    public var detail: String?
+    public var source: Source?
+    public var meta: [String: Any]?
+
+    public override func setValue(_ value: Any!, forUndefinedKey key: String) {
+        if key == "code" {
+            if let rawValue = value as? String {
+                let indexEnd = rawValue.index(rawValue.startIndex, offsetBy: 3)
+                let rawValueSub = String(rawValue[..<indexEnd])
+
+                if let rawInt = Int(rawValueSub) {
+                    code = Code(rawValue: rawInt)
+                }
+            }
+        }
+    }
 
 }

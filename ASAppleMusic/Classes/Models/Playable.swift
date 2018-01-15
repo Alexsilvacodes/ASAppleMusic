@@ -6,11 +6,12 @@
 import Foundation
 import EVReflection
 
-// API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Playable.html
+/**
+ Playable Video object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/PlayParameters.html)
+ */
+public class Playable: EVObject {
 
-class Playable: EVObject {
-
-    var id: String?
-    var kind: String?
+    public var id: String?
+    public var kind: String?
 
 }

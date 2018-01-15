@@ -7,9 +7,25 @@ import Foundation
 import Alamofire
 import StoreKit
 
-enum SourceAPI {
+public enum SourceAPI {
     case developer
     case user
+}
+
+public enum Rating: String {
+    case clean = "clean"
+    case explicit = "explicit"
+    case noRating = ""
+}
+
+enum TrackType: String {
+    case songs = "songs"
+    case musicVideos = "music-videos"
+}
+
+public enum DebugLevel {
+    case none
+    case verbose
 }
 
 public class ASAppleMusic {
@@ -19,16 +35,26 @@ public class ASAppleMusic {
 
      
      */
-    public static let shared = ASAppleMusic()
+    public static var shared = ASAppleMusic()
 
     var token: String?
-    var source: SourceAPI = .developer
+
+    public var source: SourceAPI = .developer
+    public var debugLevel: DebugLevel = .none
     public var keyID: String?
     public var teamID: String?
     public var tokenServer: String?
 
     // Private Initializer
     private init() {}
+
+    func print(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+        #if DEBUG
+            if debugLevel == .verbose {
+                Swift.print(items, separator: separator, terminator: terminator)
+            }
+        #endif
+    }
 
     /**
      Initialises the Apple Music API.
@@ -75,7 +101,8 @@ public class ASAppleMusic {
 
     private func getDeveloperToken(_ completion: @escaping (_ token: String?) -> Void) {
         guard let kid = keyID, let tid = teamID, let tokenServer = tokenServer else {
-            print("Error: Missing token information for 'teamID'/'keyID'/'tokenServer'")
+            self.print("[ASAppleMusic] 🛑: Missing token information for 'teamID'/'keyID'/'tokenServer'")
+            completion(nil)
             return
         }
         let parameters = ["kid": kid, "tid": tid]

@@ -6,10 +6,12 @@
 import Foundation
 import EVReflection
 
-// API doc: https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/EditorialNotes.html
+/**
+ EditorialNotes object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/EditorialNotes.html)
+ */
+public class EditorialNotes: EVObject {
 
-class EditorialNotes: EVObject {
+    public var standard: String?
+    public var short: String?
 
-    var standard: String?
-    var short: String?
 }
