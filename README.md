@@ -10,7 +10,7 @@ To know more about that API take a look at [the Apple Music API website](https:/
 
 ## Docs
 
-[ASAppleMusic API Docs](http://alexsays.github.io/ASAppleMusic)
+[ASAppleMusic API Docs](http://asapplemusic.alexsays.info)
 
 ## Example
 
