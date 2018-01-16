@@ -33,6 +33,7 @@ enum CallType: String {
     case getTopGenres = "getTopGenres"
     case searchTerm = "searchTerm"
     case getSearchHints = "getSearchHints"
+    case getCharts = "getCharts"
 }
 
 extension ASAppleMusic {
@@ -268,6 +269,28 @@ extension ASAppleMusic {
             ASAppleMusic.shared.getSearchHints(params["term"]!, fromStorefrontID: params["storeID"]!, lang: params["l"], limit: limit, types: types, completion: { resultTerms, error in
                 if let resultTerms = resultTerms {
                     completion(resultTerms as AnyObject, error)
+                } else {
+                    completion(nil, error)
+                }
+            })
+
+        // Charts
+        case .getCharts:
+            var limit: Int? = nil
+            var offset: Int? = nil
+            var types: [String] = []
+            if let limitStr = params["limit"] {
+                limit = Int(limitStr)
+            }
+            if let offsetStr = params["offset"] {
+                offset = Int(offsetStr)
+            }
+            if let typesStr = params["types"] {
+                types = typesStr.components(separatedBy: ",")
+            }
+            ASAppleMusic.shared.getCharts(types, fromStorefrontID: params["storeID"]!, lang: params["l"], chart: params["chart"], genre: params["genre"], limit: limit, offset: offset, completion: { charts, error in
+                if let charts = charts {
+                    completion(charts as AnyObject, error)
                 } else {
                     completion(nil, error)
                 }

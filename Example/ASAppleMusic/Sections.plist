@@ -894,7 +894,79 @@
 		</dict>
 	</dict>
 	<key>Charts</key>
-	<dict/>
+	<dict>
+		<key>Get Charts by type</key>
+		<dict>
+			<key>function</key>
+			<string>getCharts</string>
+			<key>params</key>
+			<dict>
+				<key>types</key>
+				<dict>
+					<key>name</key>
+					<string>Types</string>
+					<key>placeholder</key>
+					<string>albums,songs...</string>
+					<key>optional</key>
+					<false/>
+				</dict>
+				<key>storeID</key>
+				<dict>
+					<key>name</key>
+					<string>Storefront ID</string>
+					<key>placeholder</key>
+					<string>us...</string>
+					<key>optional</key>
+					<false/>
+				</dict>
+				<key>l</key>
+				<dict>
+					<key>name</key>
+					<string>Language</string>
+					<key>placeholder</key>
+					<string>en-US...</string>
+					<key>optional</key>
+					<true/>
+				</dict>
+				<key>chart</key>
+				<dict>
+					<key>name</key>
+					<string>Chart</string>
+					<key>placeholder</key>
+					<string>most-played...</string>
+					<key>optional</key>
+					<true/>
+				</dict>
+				<key>genre</key>
+				<dict>
+					<key>name</key>
+					<string>Genre</string>
+					<key>placeholder</key>
+					<string>14...</string>
+					<key>optional</key>
+					<true/>
+				</dict>
+				<key>limit</key>
+				<dict>
+					<key>name</key>
+					<string>Limit</string>
+					<key>placeholder</key>
+					<string>2...</string>
+					<key>optional</key>
+					<true/>
+				</dict>
+				<key>offset</key>
+				<dict>
+					<key>name</key>
+					<string>Offset</string>
+					<key>placeholder</key>
+					<string>2...</string>
+					<key>optional</key>
+					<true/>
+				</dict>
+			</dict>
+		</dict>
+	</dict>
 	<key>Genres</key>
 	<dict>
 		<key>Multiple Genres</key>
