@@ -11,6 +11,7 @@ ASAppleMusic is a framework created to help developers to use the Apple Music AP
   s.author           = { 'Alex Silva' => 'alex@alexsays.info' }
   s.source           = { :git => 'https://github.com/Alexsays/ASAppleMusic.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/alexw0h4l'
+  s.documentation_url = 'http://asapplemusic.alexsays.info'
   s.ios.deployment_target = '11.0'
   s.source_files = 'ASAppleMusic/Classes/**/*'
   s.ios.framework  = 'UIKit'

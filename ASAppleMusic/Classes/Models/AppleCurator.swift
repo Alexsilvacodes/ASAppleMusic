@@ -12,10 +12,19 @@ import EVReflection
  */
 public class AppleCurator: EVObject {
 
+    /// The curator artwork
     public var artwork: Artwork?
+
+    /// (Optional) The notes about the curator that appear in the iTunes Store
     public var editorialNotes: EditorialNotes?
+
+    /// The localized name of the curator
     public var name: String?
+
+    /// The URL for sharing an curator in the iTunes Store
     public var url: String?
+
+    /// The relationships associated with this activity
     public var relationships: [Relationship]?
 
     /// :nodoc:

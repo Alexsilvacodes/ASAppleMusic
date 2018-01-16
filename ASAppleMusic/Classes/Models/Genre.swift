@@ -12,6 +12,7 @@ import EVReflection
  */
 public class Genre: EVObject {
 
+    /// The localized name of the genre
     public var name: String?
 
 }

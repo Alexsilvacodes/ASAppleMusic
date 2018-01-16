@@ -22,21 +22,44 @@ public enum PlaylistType: String {
  */
 public class Playlist: EVObject {
 
+    /// (Optional) The playlist artwork
     public var artwork: Artwork?
+
+    /// (Optional) The display name of the curator
     public var curatorName: String?
+
+    /// (Optional) A description of the playlist
     public var desc: EditorialNotes?
+
+    /// The date the playlist was last modified
     public var lastModifiedDate: String?
+
+    /// The localized name of the album
     public var name: String?
+
+    /// The type of playlist
     public var playlistType: PlaylistType?
+
+    /// (Optional) The parameters to use to playback the tracks in the playlist
     public var playParams: Playable?
+
+    /// The URL for sharing an album in the iTunes Store
     public var url: String?
+
+    /// The relationships associated with this activity
     public var relationships: [Relationship]?
+
+    /// The songs included in the playlist
     public var songs: [Song]?
+
+    /// The music videos included in the playlist
     public var musicVideos: [MusicVideo]?
+
     /// :nodoc:
     public override func propertyMapping() -> [(keyInObject: String?, keyInResource: String?)] {
         return [(keyInObject: "desc", keyInResource: "description")]
     }
+
     /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [
@@ -45,6 +68,7 @@ public class Playlist: EVObject {
             ("playParams", { if let playParams = $0 as? NSDictionary { self.playParams = Playable(dictionary: playParams) } }, { return self.playParams })
         ]
     }
+
     /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "playlistType" {

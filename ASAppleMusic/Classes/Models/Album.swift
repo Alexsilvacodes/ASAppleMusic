@@ -12,22 +12,55 @@ import EVReflection
  */
 public class Album: EVObject {
 
+    /// The artist’s name
     public var artistName: String?
+
+    /// The album artwork
     public var artwork: Artwork?
+
+    /// (Optional) The RIAA rating of the content. The possible values for this rating are clean and explicit. No value means no rating
     public var contentRating: String?
+
+    /// The copyright text
     public var copyright: String?
+
+    /// (Optional) The notes about the album that appear in the iTunes Store
     public var editorialNotes: EditorialNotes?
+
+    /// The names of the genres associated with this album
     public var genreNames: [String]?
+
+    /// Indicates whether the album is complete. If true, the album is complete; otherwise, it is not. An album is complete if it contains all its tracks and songs
     public var isComplete: Bool?
+
+    /// Indicates whether the album contains a single song
     public var isSingle: Bool?
+
+    /// The localized name of the album
     public var name: String?
+
+    /// The localized name of the album
     public var recordLabel: String?
+
+    /// The release date of the album in YYYY-MM-DD format
     public var releaseDate: String?
+
+    /// (Optional) The parameters to use to playback the tracks of the album
     public var playParams: Playable?
+
+    /// The number of tracks.
     public var trackCount: Int?
+
+    /// The URL for sharing an album in the iTunes Store
     public var url: String?
+
+    /// The relationships associated with this activity
     public var relationships: [Relationship]?
+
+    /// The songs on the album
     public var songs: [Song]?
+
+    /// The music videos on the album
     public var musicVideos: [MusicVideo]?
 
     /// :nodoc:

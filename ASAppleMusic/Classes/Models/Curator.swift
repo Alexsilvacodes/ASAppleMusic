@@ -12,11 +12,21 @@ import EVReflection
  */
 public class Curator: EVObject {
 
+    /// The curator artwork
     public var artwork: Artwork?
+
+    /// (Optional) The notes about the curator
     public var editorialNotes: EditorialNotes?
+
+    /// The localized name of the curator
     public var name: String?
+
+    /// The URL for sharing a curator in Apple Music
     public var url: String?
+    
+    /// The relationships associated with this activity
     public var relationships: [Relationship]?
+
     /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [

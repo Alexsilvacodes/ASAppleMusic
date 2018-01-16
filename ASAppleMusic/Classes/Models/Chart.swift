@@ -18,11 +18,22 @@ public enum ChartType: String {
  */
 public class Chart: EVObject {
 
+    /// The localized name for the chart
     public var name: String?
+
+    /// The chart identifier
     public var chart: String?
+
+    /// The URL for the chart
     public var href: String?
+
+    /// An array of the objects that were requested ordered by popularity
     public var data: [AnyObject]?
+
+    /// Chart type: `albums`, `music-videos` and `songs`
     public var type: ChartType?
+
+    /// (Optional) The URL for the next page
     public var next: String?
 
 }

@@ -12,15 +12,15 @@ import EVReflection
  */
 public class Activity: EVObject {
 
-    /// :nodoc:
+    /// The activity artwork
     public var artwork: Artwork?
-    /// :nodoc:
+    /// (Optional) The notes about the activity that appear in the iTunes Store
     public var editorialNotes: EditorialNotes?
-    /// :nodoc:
+    /// The localized name of the activity
     public var name: String?
-    /// :nodoc:
+    /// The URL for sharing an activity in the iTunes Store
     public var url: String?
-    /// :nodoc:
+    /// The relationships associated with this activity
     public var relationships: [Relationship]?
 
     /// :nodoc:

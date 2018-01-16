@@ -11,8 +11,12 @@ import EVReflection
  */
 public class Preview: EVObject {
 
+    /// The ID of the content to use for playback
     public var url: String?
+
+    /// The kind of the content to use for playback
     public var artwork: Artwork?
+
     /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [

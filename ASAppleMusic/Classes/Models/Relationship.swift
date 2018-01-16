@@ -7,6 +7,7 @@ import Foundation
 import EVReflection
 
 public enum RelationshipType: String {
+
     case activities = "activities"
     case albums = "albums"
     case appleCurator = "apple-curator"
@@ -15,6 +16,7 @@ public enum RelationshipType: String {
     case genres = "genres"
     case playlists = "playlists"
     case stations = "stations"
+
 }
 
 /**
@@ -22,9 +24,15 @@ public enum RelationshipType: String {
  */
 public class Relationship: EVObject {
 
+    /// One or more destination objects
     public var id: String?
+
+    /// A URL subpath that fetches the resource as the primary object. This member is only present in responses
     public var href: String?
+
+    /// Type of the relationship, take a look at the enum to know the types
     public var type: RelationshipType?
+
     /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "type" {

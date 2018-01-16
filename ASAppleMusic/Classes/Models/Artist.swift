@@ -12,11 +12,22 @@ import EVReflection
  */
 public class Artist: EVObject {
 
+    /// The names of the genres associated with this artist
     public var genreNames: [String]?
+
+    /// (Optional) The notes about the artist that appear in the iTunes Store
     public var editorialNotes: EditorialNotes?
+
+    /// The localized name of the artist
     public var name: String?
+
+    /// The URL for sharing an artist in the iTunes Store
     public var url: String?
+
+    /// The relationships associated with this activity
     public var relationships: [Relationship]?
+
+    /// The music videos on the album
     public var musicVideos: [MusicVideo]?
 
     /// :nodoc:

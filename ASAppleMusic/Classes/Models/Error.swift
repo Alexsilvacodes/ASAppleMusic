@@ -36,22 +36,41 @@ public enum Code: Int {
  Source object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/ErrorDictionary.html)
  */
 public class Source: EVObject {
+
+    /// The URI query parameter that caused the error
     public var parameter: String?
+
 }
 
 /**
- Error object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Error.html)
+ Error object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/ErrorDictionary.html)
  */
 public class AMError: EVObject {
 
+    /// A unique identifier for this occurrence of the error
     public var id: String?
+
+    /// A link to more information about this occurrence
     public var about: String?
+
+    /// The HTTP status code for this problem
     public var status: String?
+
+    /// The code for this error. For possible values, [see HTTP Status Codes](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/HTTPStatusCodes.html)
     public var code: Code?
+
+    /// A short description of the problem that may be localized
     public var title: String?
+
+    /// A long description of the problem that may be localized
     public var detail: String?
+
+    /// A object containing references to the source of the error. For possible members, [see Source object](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/ErrorDictionary.html)
     public var source: Source?
+
+    /// Contains meta information about the error
     public var meta: [String: Any]?
+
     /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "code" {

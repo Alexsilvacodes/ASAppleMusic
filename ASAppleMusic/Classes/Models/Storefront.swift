@@ -12,10 +12,18 @@ import EVReflection
  */
 public class Storefront: EVObject {
 
+    /// The localized name of the storefront
     public var name: String?
+
+    /// The numeric ID of the storefront
     public var storefrontId: Int?
+
+    /// The localizations that the storefront supports, represented as an array of language tags
     public var supportedLanguageTags: [String]?
+
+    /// The default language for the storefront, represented as a language tag
     public var defaultLanguageTag: String?
+
     /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "storefrontId" {

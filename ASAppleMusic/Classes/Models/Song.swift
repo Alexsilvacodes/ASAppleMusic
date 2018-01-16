@@ -12,26 +12,66 @@ import EVReflection
  */
 public class Song: EVObject {
 
+    /// The artist’s name
     public var artistName: String?
+
+    /// The album artwork
     public var artwork: Artwork?
+
+    /// (Optional) The song’s composer
     public var composerName: String?
+
+    /// (Optional) The RIAA rating of the content. The possible values for this rating are clean and explicit. No value means no rating
     public var contentRating: Rating?
+
+    /// The disc number the song appears on
     public var discNumber: Int?
+
+    /// (Optional) The duration of the song in milliseconds
     public var durationInMillis: Int64?
+
+    /// (Optional) The notes about the song that appear in the iTunes Store
     public var editorialNotes: EditorialNotes?
+
+    /// The genre names the song is associated with
     public var genreNames: [String]?
+
+    /// The ISRC (International Standard Recording Code) for the song
     public var isrc: String?
+
+    /// (Optional, classical music only) The movement count of this song
     public var movementCount: Int?
+
+    /// (Optional, classical music only) The movement name of this song
     public var movementName: String?
+
+    /// (Optional, classical music only) The movement number of this song
     public var movementNumber: Int?
+
+    /// The localized name of the song
     public var name: String?
+
+    /// (Optional) The parameters to use to playback the song
     public var playParams: Playable?
+
+    /// The preview assets for the song
     public var previews: [Preview]?
+
+    /// The release date of the song in YYYY-MM-DD format
     public var releaseDate: String?
+
+    /// The number of the song in the album’s track list
     public var trackNumber: Int?
+
+    /// The URL for sharing a song in the iTunes Store
     public var url: String?
+
+    /// (Optional, classical music only) The name of the associated work
     public var workName: String?
+
+    /// The relationships associated with this activity
     public var relationships: [Relationship]?
+
     /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [
@@ -51,6 +91,7 @@ public class Song: EVObject {
             }, { return self.previews })
         ]
     }
+
     /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "contentRating" {

@@ -12,20 +12,51 @@ import EVReflection
  */
 public class MusicVideo: EVObject {
 
+    /// The artist’s name
     public var artistName: String?
+
+    /// The artwork for the music video’s associated album
     public var artwork: Artwork?
+
+    /// (Optional) The RIAA rating of the content. The possible values for this rating are clean and explicit. No value means no rating
     public var contentRating: Rating?
+
+    /// (Optional) The duration of the music video in milliseconds
     public var durationInMillis: Int64?
+
+    /// (Optional) The editorial notes for the music video
     public var editorialNotes: EditorialNotes?
+
+    /// The music video’s associated genres
     public var genreNames: [String]?
+
+    /// The ISRC (International Standard Recording Code) for the music video
     public var isrc: String?
+
+    /// The localized name of the music video
     public var name: String?
+
+    /// (Optional) The parameters to use to playback the music video
     public var playParams: Playable?
+
+    /// The preview assets for the music video
     public var previews: [Preview]?
+
+    /// The release date of the music video in YYYY-MM-DD format
     public var releaseDate: String?
+
+    /// (Optional) The number of the music video in the album’s track list
     public var trackNumber: Int?
+
+    /// A clear url directly to the music video
     public var url: String?
+
+    /// (Optional) The video subtype associated with the content
+    public var videoSubType: String?
+
+    /// The relationships associated with this activity
     public var relationships: [Relationship]?
+
     /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [

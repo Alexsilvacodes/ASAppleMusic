@@ -12,13 +12,27 @@ import EVReflection
  */
 public class Station: EVObject {
 
+    /// The radio station artwork
     public var artwork: Artwork?
+
+    /// (Optional) The duration of the stream. Not emitted for 'live' or programmed stations
     public var durationInMillis: Int64?
+
+    /// (Optional) The notes about the station that appear in Apple Music
     public var editorialNotes: EditorialNotes?
+
+    /// (Optional) The episode number of the station. Only emitted when the station represents an episode of a show or other content
     public var episodeNumber: Int?
+
+    /// Indicates whether the station is a live stream
     public var isLive: Bool?
+
+    /// The localized name of the station
     public var name: String?
+
+    /// The URL for sharing a station in Apple Music
     public var url: String?
+
     /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [
