@@ -1,5 +1,8 @@
 # Custom
+Secret.plist
 **/Secret.plist
+.swift-version
+**/.swift-version
 
 # OS X
 .DS_Store
