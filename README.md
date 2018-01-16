@@ -53,6 +53,12 @@ To use this class just call the singleton `shared` and each *getter method* to g
  }
  ````
 
+## Not Available *(WIP)*
+
+- Recents
+- Recommendations
+- Reviews
+
 ## Author
 
 Alex Silva, alex@alexsays.info
