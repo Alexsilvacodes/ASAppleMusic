@@ -1,11 +1,8 @@
 # ASAppleMusic 🍎🎵
 
-[![CI Status](http://img.shields.io/travis/Alexsays/ASAppleMusic.svg?style=flat)](https://travis-ci.org/Alexsays/ASAppleMusic)
 [![Version](https://img.shields.io/cocoapods/v/ASAppleMusic.svg?style=flat)](http://cocoapods.org/pods/ASAppleMusic)
 [![License](https://img.shields.io/cocoapods/l/ASAppleMusic.svg?style=flat)](http://cocoapods.org/pods/ASAppleMusic)
 [![Platform](https://img.shields.io/cocoapods/p/ASAppleMusic.svg?style=flat)](http://cocoapods.org/pods/ASAppleMusic)
-
-# WORK IN PROGRESS FOR NOW ‼️
 
 ## About
 ASAppleMusic allows you as developer to get all the Apple Music data from the catalog including: albums, artists, tracks, etc.
