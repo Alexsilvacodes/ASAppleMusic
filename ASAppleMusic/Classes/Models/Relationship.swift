@@ -25,7 +25,7 @@ public class Relationship: EVObject {
     public var id: String?
     public var href: String?
     public var type: RelationshipType?
-
+    /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "type" {
             if let rawValue = value as? String, let relationship = RelationshipType(rawValue: rawValue) {

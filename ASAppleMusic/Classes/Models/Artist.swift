@@ -19,6 +19,7 @@ public class Artist: EVObject {
     public var relationships: [Relationship]?
     public var musicVideos: [MusicVideo]?
 
+    /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [
             ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = EditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes })

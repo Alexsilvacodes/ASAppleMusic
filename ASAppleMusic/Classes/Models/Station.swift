@@ -19,14 +19,14 @@ public class Station: EVObject {
     public var isLive: Bool?
     public var name: String?
     public var url: String?
-
+    /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [
             ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = Artwork(dictionary: artwork) } }, { return self.artwork }),
             ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = EditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes })
         ]
     }
-
+    /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "durationInMillis" {
             if let rawValue = value as? Int64 {

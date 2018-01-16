@@ -16,7 +16,7 @@ public class Storefront: EVObject {
     public var storefrontId: Int?
     public var supportedLanguageTags: [String]?
     public var defaultLanguageTag: String?
-
+    /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "storefrontId" {
             if let rawValue = value as? Int {

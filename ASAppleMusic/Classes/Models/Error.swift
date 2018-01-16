@@ -52,7 +52,7 @@ public class AMError: EVObject {
     public var detail: String?
     public var source: Source?
     public var meta: [String: Any]?
-
+    /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "code" {
             if let rawValue = value as? String {

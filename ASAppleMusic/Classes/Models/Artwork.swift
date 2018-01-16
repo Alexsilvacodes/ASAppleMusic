@@ -20,6 +20,7 @@ public class Artwork: EVObject {
     public var textColor3: String?
     public var textColor4: String?
 
+    /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "width" {
             if let rawValue = value as? Int {

@@ -40,21 +40,59 @@ public enum DebugLevel {
     case verbose
 }
 
+/**
+ To use this class just call the singleton and each method to get the API object desired.
+ By default the token used will be the Developer token and 0 logging, if you want to change it just change the value of `source` and `debugLevel` attributes.
+
+ This API is configured as you should know how to generate developer and user tokens, for more info [visit the Apple Music API.](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/SetUpWebServices.html)
+
+ You should create your own web server that receives parameters as `POST` request in the body in JSON format like:
+ ````
+ {
+    "kid": "C234234AS",
+    "tid": "AS234ASF2"
+ }
+ ````
+
+ and should return the token in JSON format:
+ ````
+ {
+    "token": "alf9dsahf92fjdsa.fdsaifjds89a4fh"
+ }
+ ````
+ */
 public class ASAppleMusic {
 
     /**
      ASAppleMusic singleton
-
-     
      */
     public static var shared = ASAppleMusic()
 
     var token: String?
 
+    /**
+     SourceAPI token that will use to receive data
+     */
     public var source: SourceAPI = .developer
+
+    /**
+     Debug Level for logs
+     */
     public var debugLevel: DebugLevel = .none
+
+    /**
+     KeyID from the Developer account key
+     */
     public var keyID: String?
+
+    /**
+     TeamID from the Developer account key
+     */
     public var teamID: String?
+
+    /**
+     tokenServer URL from where you should get the token
+     */
     public var tokenServer: String?
 
     // Private Initializer

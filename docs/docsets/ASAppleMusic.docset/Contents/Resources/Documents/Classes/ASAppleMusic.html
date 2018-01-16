@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ASAppleMusic Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/ASAppleMusic" class="dashAnchor"></a>
+    <a title="ASAppleMusic Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">ASAppleMusic Docs</a> (30% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">ASAppleMusic Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        ASAppleMusic Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AMError.html">AMError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ASAppleMusic.html">ASAppleMusic</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/c:@M@ASAppleMusic@objc(cs)Activity">Activity</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Album.html">Album</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/AppleCurator.html">AppleCurator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Artist.html">Artist</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Artwork.html">Artwork</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Chart.html">Chart</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Curator.html">Curator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EditorialNotes.html">EditorialNotes</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Genre.html">Genre</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MusicVideo.html">MusicVideo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Playable.html">Playable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Playlist.html">Playlist</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Preview.html">Preview</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Relationship.html">Relationship</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Song.html">Song</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Source.html">Source</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Station.html">Station</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Storefront.html">Storefront</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ChartType.html">ChartType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/Code.html">Code</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/DebugLevel.html">DebugLevel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/PlaylistType.html">PlaylistType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/Rating.html">Rating</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/RelationshipType.html">RelationshipType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SourceAPI.html">SourceAPI</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>ASAppleMusic</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">ASAppleMusic</span></code></pre>
+
+                </div>
+              </div>
+            <p>To use this class just call the singleton and each method to get the API object desired.
+By default the token used will be the Developer token and 0 logging, if you want to change it just change the value of <code>source</code> and <code>debugLevel</code> attributes.</p>
+
+<p>This API is configured as you should know how to generate developer and user tokens, for more info <a href="https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/SetUpWebServices.html">visit the Apple Music API.</a></p>
+
+<p>You should create your own web server that receives parameters as <code>POST</code> request in the body in JSON format like:</p>
+<pre class="highlight swift"><code><span class="p">{</span>
+   <span class="s">"kid"</span><span class="p">:</span> <span class="s">"C234234AS"</span><span class="p">,</span>
+   <span class="s">"tid"</span><span class="p">:</span> <span class="s">"AS234ASF2"</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>and should return the token in JSON format:</p>
+<pre class="highlight swift"><code><span class="p">{</span>
+   <span class="s">"token"</span><span class="p">:</span> <span class="s">"alf9dsahf92fjdsa.fdsaifjds89a4fh"</span>
+<span class="p">}</span>
+</code></pre>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC6sharedABvZ"></a>
+                    <a name="//apple_ref/swift/Variable/shared" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC6sharedABvZ">shared</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>ASAppleMusic singleton</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">shared</span> <span class="o">=</span> <span class="nf">ASAppleMusic</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC6sourceAA9SourceAPIOv"></a>
+                    <a name="//apple_ref/swift/Property/source" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC6sourceAA9SourceAPIOv">source</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>SourceAPI token that will use to receive data</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">source</span><span class="p">:</span> <span class="kt"><a href="../Enums/SourceAPI.html">SourceAPI</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">developer</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC10debugLevelAA05DebugD0Ov"></a>
+                    <a name="//apple_ref/swift/Property/debugLevel" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC10debugLevelAA05DebugD0Ov">debugLevel</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Debug Level for logs</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">debugLevel</span><span class="p">:</span> <span class="kt"><a href="../Enums/DebugLevel.html">DebugLevel</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">none</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC5keyIDSSSgv"></a>
+                    <a name="//apple_ref/swift/Property/keyID" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC5keyIDSSSgv">keyID</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>KeyID from the Developer account key</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">keyID</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC6teamIDSSSgv"></a>
+                    <a name="//apple_ref/swift/Property/teamID" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC6teamIDSSSgv">teamID</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>TeamID from the Developer account key</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">teamID</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC11tokenServerSSSgv"></a>
+                    <a name="//apple_ref/swift/Property/tokenServer" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC11tokenServerSSSgv">tokenServer</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>tokenServer URL from where you should get the token</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">tokenServer</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC10initializeySS5keyID_SS04teamE0SS11tokenServertF"></a>
+                    <a name="//apple_ref/swift/Method/initialize(keyID:teamID:tokenServer:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC10initializeySS5keyID_SS04teamE0SS11tokenServertF">initialize(keyID:teamID:tokenServer:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialises the Apple Music API.</p>
+
+<ul>
+<li>keyID: The ID from the &lsquo;.p8&rsquo; file with the key from MusicKit</li>
+<li>teamID: The ID from your Apple Developer account Team</li>
+<li>tokenServer: Your own server that will generate the token with JWT. Follow the ASAppleMusic documentation to know more about this</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://localhost/getToken">https://localhost/getToken</a></em></p>
+
+<p><em>To get the MusicKit API take a look at <a href="https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/SetUpWebServices.html#//apple_ref/doc/uid/TP40017625-CH2-SW3">the Apple Music API documentation</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">initialize</span><span class="p">(</span><span class="nv">keyID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">teamID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">tokenServer</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC11getActivityySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getActivity(withID:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC11getActivityySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF">getActivity(withID:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get Activity based on the id of the <code>storefront</code> and the activity <code>id</code></p>
+
+<ul>
+<li>id: The id of the activity (Number). Example: <code>&quot;926339514&quot;</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>Activity</em>, <em>AMError</em></li>
+<li>activity: the <code><a href="../Classes.html#/c:@M@ASAppleMusic@objc(cs)Activity">Activity</a></code> object itself</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/activities/926339514">https://api.music.apple.com/v1/catalog/us/activities/926339514</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getActivity</span><span class="p">(</span><span class="n">withID</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">activity</span><span class="p">:</span> <span class="kt"><a href="../Classes.html#/c:@M@ASAppleMusic@objc(cs)Activity">Activity</a></span><span class="p">?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC21getMultipleActivitiesySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA8ActivityCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getMultipleActivities(withIDs:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC21getMultipleActivitiesySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA8ActivityCGSg_AA7AMErrorCSgtc10completiontF">getMultipleActivities(withIDs:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get several Activity objects based on the <code>ids</code> of the activities that you want to get and the Storefront ID of the store</p>
+
+<ul>
+<li>ids: An id array of the activities. Example: <code>[&quot;956449513&quot;, &quot;936419203&quot;]</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>[Activity]</em>, <em>AMError</em></li>
+<li>activities: the <code>[Activity]</code> array of objects</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/activities?ids=956449513,936419203">https://api.music.apple.com/v1/catalog/us/activities?ids=956449513,936419203</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getMultipleActivities</span><span class="p">(</span><span class="n">withIDs</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">activities</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes.html#/c:@M@ASAppleMusic@objc(cs)Activity">Activity</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC8getAlbumySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getAlbum(withID:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC8getAlbumySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF">getAlbum(withID:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get Album based on the id of the <code>storefront</code> and the album <code>id</code></p>
+
+<ul>
+<li>id: The id of the album (Number). Example: <code>&quot;190758912&quot;</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>Album</em>, <em>AMError</em></li>
+<li>album: the <code><a href="../Classes/Album.html">Album</a></code> object itself</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/albums/190758912">https://api.music.apple.com/v1/catalog/us/albums/190758912</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getAlbum</span><span class="p">(</span><span class="n">withID</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">album</span><span class="p">:</span> <span class="kt"><a href="../Classes/Album.html">Album</a></span><span class="p">?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC17getMultipleAlbumsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA5AlbumCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getMultipleAlbums(withIDs:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC17getMultipleAlbumsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA5AlbumCGSg_AA7AMErrorCSgtc10completiontF">getMultipleAlbums(withIDs:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get several Album objects based on the <code>ids</code> of the albums that you want to get and the Storefront ID of the store</p>
+
+<ul>
+<li>ids: An id array of the albums. Example: <code>[&quot;299738314&quot;, &quot;190758912&quot;]</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>[Album]</em>, <em>AMError</em></li>
+<li>albums: the <code>[Album]</code> array of objects</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/albums?ids=299738314,190758912">https://api.music.apple.com/v1/catalog/us/albums?ids=299738314,190758912</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getMultipleAlbums</span><span class="p">(</span><span class="n">withIDs</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">albums</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Album.html">Album</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC15getAppleCuratorySS6withID_SS010storefrontG0SSSg4langyAA0dE0CSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getAppleCurator(withID:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC15getAppleCuratorySS6withID_SS010storefrontG0SSSg4langyAA0dE0CSg_AA7AMErrorCSgtc10completiontF">getAppleCurator(withID:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get AppleCurator based on the id of the <code>storefront</code> and the apple curator <code>id</code></p>
+
+<ul>
+<li>id: The id of the apple curator (Number). Example: <code>&quot;926449586&quot;</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>AppleCurator</em>, <em>AMError</em></li>
+<li>appleCurator: the <code><a href="../Classes/AppleCurator.html">AppleCurator</a></code> object itself</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/apple-curators/926449586">https://api.music.apple.com/v1/catalog/us/apple-curators/926449586</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getAppleCurator</span><span class="p">(</span><span class="n">withID</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">appleCurator</span><span class="p">:</span> <span class="kt"><a href="../Classes/AppleCurator.html">AppleCurator</a></span><span class="p">?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC24getMultipleAppleCuratorsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA0E7CuratorCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getMultipleAppleCurators(withIDs:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC24getMultipleAppleCuratorsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA0E7CuratorCGSg_AA7AMErrorCSgtc10completiontF">getMultipleAppleCurators(withIDs:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get several AppleCurator objects based on the <code>ids</code> of the appleCurators that you want to get and the Storefront ID of the store</p>
+
+<ul>
+<li>ids: An id array of the appleCurators. Example: <code>[&quot;974459448&quot;, &quot;1142683517&quot;]</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>[AppleCurator]</em>, <em>AMError</em></li>
+<li>appleCurators: the <code>[AppleCurator]</code> array of objects</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/apple-curators?ids=974459448,1142683517">https://api.music.apple.com/v1/catalog/us/apple-curators?ids=974459448,1142683517</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getMultipleAppleCurators</span><span class="p">(</span><span class="n">withIDs</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">appleCurators</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/AppleCurator.html">AppleCurator</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC9getArtistySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getArtist(withID:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC9getArtistySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF">getArtist(withID:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get Artist based on the id of the <code>storefront</code> and the artist <code>id</code></p>
+
+<ul>
+<li>id: The id of the artist (Number). Example: <code>&quot;179934&quot;</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>Artist</em>, <em>AMError</em></li>
+<li>artist: the <code><a href="../Classes/Artist.html">Artist</a></code> object itself</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/artists/179934">https://api.music.apple.com/v1/catalog/us/artists/179934</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getArtist</span><span class="p">(</span><span class="n">withID</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">artist</span><span class="p">:</span> <span class="kt"><a href="../Classes/Artist.html">Artist</a></span><span class="p">?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC18getMultipleArtistsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA6ArtistCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getMultipleArtists(withIDs:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC18getMultipleArtistsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA6ArtistCGSg_AA7AMErrorCSgtc10completiontF">getMultipleArtists(withIDs:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get several Artist objects based on the <code>ids</code> of the artists that you want to get and the Storefront ID of the store</p>
+
+<ul>
+<li>ids: An id array of the artists. Example: <code>[&quot;179934&quot;, &quot;463106&quot;]</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>[Artist]</em>, <em>AMError</em></li>
+<li>artists: the <code>[Artist]</code> array of objects</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/artists?ids=179934,463106">https://api.music.apple.com/v1/catalog/us/artists?ids=179934,463106</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getMultipleArtists</span><span class="p">(</span><span class="n">withIDs</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">artists</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Artist.html">Artist</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC9getChartsySaySSG_SS16fromStorefrontIDSSSg4langAF5chartAF5genreSiSg5limitAJ6offsetySayAA5ChartCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getCharts(_:fromStorefrontID:lang:chart:genre:limit:offset:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC9getChartsySaySSG_SS16fromStorefrontIDSSSg4langAF5chartAF5genreSiSg5limitAJ6offsetySayAA5ChartCGSg_AA7AMErrorCSgtc10completiontF">getCharts(_:fromStorefrontID:lang:chart:genre:limit:offset:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get Chart based on the id of the <code>storefront</code> and the <code>types</code> of the chart</p>
+
+<ul>
+<li>types: Array of chart types to get. Example: <code>[&quot;albums&quot;, &quot;songs&quot;]</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>chart: (Optional) String that describes the chart. Example: <code>&quot;most-played&quot;</code></li>
+<li>genre: (Optional) Genre ID type to get the charts (Number). Example: <code>&quot;13&quot;</code></li>
+<li>limit: (Optional) The limit of stores to get. Example: <code>&quot;2&quot;</code></li>
+<li>offset: (Optional) The <em>page</em> of the results to get. Example <code>&quot;2&quot;</code></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>Curator</em>, <em>AMError</em></li>
+<li>curator: the <code><a href="../Classes/Curator.html">Curator</a></code> object itself</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/curators/1217688517">https://api.music.apple.com/v1/catalog/us/curators/1217688517</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getCharts</span><span class="p">(</span><span class="n">_</span> <span class="nv">types</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">fromStorefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">chart</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">genre</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">offset</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">charts</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Chart.html">Chart</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC10getCuratorySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getCurator(withID:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC10getCuratorySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF">getCurator(withID:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get Curator based on the id of the <code>storefront</code> and the curator <code>id</code></p>
+
+<ul>
+<li>id: The id of the curator (Number). Example: <code>&quot;1217688517&quot;</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>Curator</em>, <em>AMError</em></li>
+<li>curator: the <code><a href="../Classes/Curator.html">Curator</a></code> object itself</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/curators/1217688517">https://api.music.apple.com/v1/catalog/us/curators/1217688517</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getCurator</span><span class="p">(</span><span class="n">withID</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">curator</span><span class="p">:</span> <span class="kt"><a href="../Classes/Curator.html">Curator</a></span><span class="p">?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC19getMultipleCuratorsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA7CuratorCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getMultipleCurators(withIDs:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC19getMultipleCuratorsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA7CuratorCGSg_AA7AMErrorCSgtc10completiontF">getMultipleCurators(withIDs:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get several Curator objects based on the <code>ids</code> of the curators that you want to get and the Storefront ID of the store</p>
+
+<ul>
+<li>ids: An id array of the curators. Example: <code>[&quot;974459448&quot;, &quot;1142683517&quot;]</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>[Curator]</em>, <em>AMError</em></li>
+<li>curators: the <code>[Curator]</code> array of objects</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/curators?ids=974459448,1142683517">https://api.music.apple.com/v1/catalog/us/curators?ids=974459448,1142683517</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getMultipleCurators</span><span class="p">(</span><span class="n">withIDs</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">curators</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Curator.html">Curator</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC8getGenreySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getGenre(withID:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC8getGenreySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF">getGenre(withID:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get Genre based on the id of the <code>storefront</code> and the genre <code>id</code></p>
+
+<ul>
+<li>id: The id of the genre (Number). Example: <code>&quot;14&quot;</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>Genre</em>, <em>AMError</em></li>
+<li>genre: the <code><a href="../Classes/Genre.html">Genre</a></code> object itself</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/genres/14">https://api.music.apple.com/v1/catalog/us/genres/14</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getGenre</span><span class="p">(</span><span class="n">withID</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">genre</span><span class="p">:</span> <span class="kt"><a href="../Classes/Genre.html">Genre</a></span><span class="p">?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC17getMultipleGenresySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA5GenreCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getMultipleGenres(withIDs:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC17getMultipleGenresySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA5GenreCGSg_AA7AMErrorCSgtc10completiontF">getMultipleGenres(withIDs:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get several Genre objects based on the <code>ids</code> of the genres that you want to get and the Storefront ID of the store</p>
+
+<ul>
+<li>ids: An id array of the genres. Example: <code>[&quot;14&quot;, &quot;20&quot;]</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>[Genre]</em>, <em>AMError</em></li>
+<li>genres: the <code>[Genre]</code> array of objects</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/genres?ids=14,20">https://api.music.apple.com/v1/catalog/us/genres?ids=14,20</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getMultipleGenres</span><span class="p">(</span><span class="n">withIDs</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">genres</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Genre.html">Genre</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC12getTopGenresySS12storefrontID_SSSg4langSiSg5limitAG6offsetySayAA5GenreCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getTopGenres(storefrontID:lang:limit:offset:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC12getTopGenresySS12storefrontID_SSSg4langSiSg5limitAG6offsetySayAA5GenreCGSg_AA7AMErrorCSgtc10completiontF">getTopGenres(storefrontID:lang:limit:offset:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get the top charts Genres. You can decide the limit of stores to get and the offset per page as <em>Optional</em> parameters</p>
+
+<ul>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>limit: (Optional) The limit of genres to get</li>
+<li>offset: (Optional) The <em>page</em> of the results to get</li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>[Genre]</em>, <em>AMError</em></li>
+<li>genres: the <code>[Genre]</code> array of objects</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/genres?l=en-us&limit=2&offset=2">https://api.music.apple.com/v1/genres?l=en-us&amp;limit=2&amp;offset=2</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getTopGenres</span><span class="p">(</span><span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">offset</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">genres</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Genre.html">Genre</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC03getB5VideoySS6withID_SS010storefrontF0SSSg4langyAA0bD0CSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getMusicVideo(withID:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC03getB5VideoySS6withID_SS010storefrontF0SSSg4langyAA0bD0CSg_AA7AMErrorCSgtc10completiontF">getMusicVideo(withID:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get Music Video based on the id of the <code>storefront</code> and the music video <code>id</code></p>
+
+<ul>
+<li>id: The id of the music video (Number). Example: <code>&quot;639322181&quot;</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>MusicVideo</em>, <em>AMError</em></li>
+<li>musicVideo: the <code><a href="../Classes/MusicVideo.html">MusicVideo</a></code> object itself</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/music-videos/639322181">https://api.music.apple.com/v1/catalog/us/music-videos/639322181</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getMusicVideo</span><span class="p">(</span><span class="n">withID</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">musicVideo</span><span class="p">:</span> <span class="kt"><a href="../Classes/MusicVideo.html">MusicVideo</a></span><span class="p">?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC011getMultipleB6VideosySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA0B5VideoCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getMultipleMusicVideos(withIDs:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC011getMultipleB6VideosySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA0B5VideoCGSg_AA7AMErrorCSgtc10completiontF">getMultipleMusicVideos(withIDs:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get several Music Video objects based on the <code>ids</code> of the music videos that you want to get and the Storefront ID of the store</p>
+
+<ul>
+<li>ids: An id array of the music videos. Example: <code>[&quot;609082181&quot;, &quot;890853283&quot;]</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>[MusicVideo]</em>, <em>AMError</em></li>
+<li>musicVideos: the <code>[MusicVideo]</code> array of objects</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/music-videos?ids=609082181,890853283">https://api.music.apple.com/v1/catalog/us/music-videos?ids=609082181,890853283</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getMultipleMusicVideos</span><span class="p">(</span><span class="n">withIDs</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">musicVideos</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/MusicVideo.html">MusicVideo</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC11getPlaylistySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getPlaylist(withID:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC11getPlaylistySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF">getPlaylist(withID:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get Playlist based on the id of the <code>storefront</code> and the playlist <code>id</code></p>
+
+<ul>
+<li>id: The id of the playlist. Example: <code>&quot;pl.acc464d753b94302b8806e6fcde56e17&quot;</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>Playlist</em>, <em>AMError</em></li>
+<li>playlist: the <code><a href="../Classes/Playlist.html">Playlist</a></code> object itself</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/playlists/pl.acc464d753b94302b8806e6fcde56e17">https://api.music.apple.com/v1/catalog/us/playlists/pl.acc464d753b94302b8806e6fcde56e17</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getPlaylist</span><span class="p">(</span><span class="n">withID</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">playlist</span><span class="p">:</span> <span class="kt"><a href="../Classes/Playlist.html">Playlist</a></span><span class="p">?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC20getMultiplePlaylistsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA8PlaylistCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getMultiplePlaylists(withIDs:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC20getMultiplePlaylistsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA8PlaylistCGSg_AA7AMErrorCSgtc10completiontF">getMultiplePlaylists(withIDs:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get several Playlist objects based on the <code>ids</code> of the playlists that you want to get and the Storefront ID of the store</p>
+
+<ul>
+<li>ids: An id array of the playlists. Example: <code>[&quot;pl.acc464c740b94302b8805e5fcbe67e17&quot;, &quot;pl.97c6f95b0b774bedbcce227f9ea5d32b&quot;]</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>[Playlist]</em>, <em>AMError</em></li>
+<li>playlists: the <code>[Playlist]</code> array of objects</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/playlists?ids=pl.acc464c740b94302b8805e5fcbe67e17,pl.97c6f95b0b774bedbcce227f9ea5d32b">https://api.music.apple.com/v1/catalog/us/playlists?ids=pl.acc464c740b94302b8805e5fcbe67e17,pl.97c6f95b0b774bedbcce227f9ea5d32b</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getMultiplePlaylists</span><span class="p">(</span><span class="n">withIDs</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">playlists</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Playlist.html">Playlist</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC10searchTermySS_SS16fromStorefrontIDSSSg4langSiSg5limitAG6offsetSaySSGSg5typesySayyXlGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/searchTerm(_:fromStorefrontID:lang:limit:offset:types:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC10searchTermySS_SS16fromStorefrontIDSSSg4langSiSg5limitAG6offsetSaySSGSg5typesySayyXlGSg_AA7AMErrorCSgtc10completiontF">searchTerm(_:fromStorefrontID:lang:limit:offset:types:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get search results based on the id of the <code>storefront</code> and the <code>term</code> that you want to find</p>
+
+<ul>
+<li>term: The term of the content that you want to find. Example: <code>&quot;james+brown&quot;</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>limit: (Optional) The limit of stores to get</li>
+<li>offset: (Optional) The <em>page</em> of the results to get</li>
+<li>types: (Optional) The list of the types of resources to include in the results. Values: <code>activities</code>, <code>artists</code>, <code>apple-curators</code>, <code>albums</code>, <code>curators</code>, <code>songs</code>, <code>playlists</code>, <code>music-videos</code>, and <code>stations</code></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>AnyObject</em>, <em>AMError</em></li>
+<li>results: the <code>[AnyObject]</code> array of results</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/search?term=james+brown&limit=2&types=artists,albums">https://api.music.apple.com/v1/catalog/us/search?term=james+brown&amp;limit=2&amp;types=artists,albums</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">searchTerm</span><span class="p">(</span><span class="n">_</span> <span class="nv">term</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">fromStorefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">offset</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">types</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">results</span><span class="p">:</span> <span class="p">[</span><span class="kt">AnyObject</span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC14getSearchHintsySS_SS16fromStorefrontIDSSSg4langSiSg5limitSaySSGSg5typesyAJ_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getSearchHints(_:fromStorefrontID:lang:limit:types:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC14getSearchHintsySS_SS16fromStorefrontIDSSSg4langSiSg5limitSaySSGSg5typesyAJ_AA7AMErrorCSgtc10completiontF">getSearchHints(_:fromStorefrontID:lang:limit:types:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get Search hints that may be helpful for autocompletion based on the <code>term</code> and the Storefront ID of the store</p>
+
+<ul>
+<li>term: The term of the content that you want to find. Example: <code>&quot;james+brown&quot;</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>limit: (Optional) The limit of stores to get</li>
+<li>types: (Optional) The list of the types of resources to include in the results. Values: <code>activities</code>, <code>artists</code>, <code>apple-curators</code>, <code>albums</code>, <code>curators</code>, <code>songs</code>, <code>playlists</code>, <code>music-videos</code>, and <code>stations</code></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>[String]</em>, <em>AMError</em></li>
+<li>resultTerms: the <code>[String]</code> array of results</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/search/hints?term=love&limit=10">https://api.music.apple.com/v1/catalog/us/search/hints?term=love&amp;limit=10</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getSearchHints</span><span class="p">(</span><span class="n">_</span> <span class="nv">term</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">fromStorefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">types</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">resultTerms</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC7getSongySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getSong(withID:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC7getSongySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF">getSong(withID:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get Song based on the id of the <code>storefront</code> and the song <code>id</code></p>
+
+<ul>
+<li>id: The id of the song (Number). Example: <code>&quot;900032321&quot;</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>Song</em>, <em>AMError</em></li>
+<li>song: the <code><a href="../Classes/Song.html">Song</a></code> object itself</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/songs/900032321">https://api.music.apple.com/v1/catalog/us/songs/900032321</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getSong</span><span class="p">(</span><span class="n">withID</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">song</span><span class="p">:</span> <span class="kt"><a href="../Classes/Song.html">Song</a></span><span class="p">?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC16getMultipleSongsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA4SongCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getMultipleSongs(withIDs:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC16getMultipleSongsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA4SongCGSg_AA7AMErrorCSgtc10completiontF">getMultipleSongs(withIDs:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get several Song objects based on the <code>ids</code> of the songs that you want to get and the Storefront ID of the store</p>
+
+<ul>
+<li>ids: An id array of the songs. Example: <code>[&quot;204719240&quot;, &quot;203251597&quot;]</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>[Song]</em>, <em>AMError</em></li>
+<li>songs: the <code>[Song]</code> array of objects</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/songs?ids=204719240,203251597">https://api.music.apple.com/v1/catalog/us/songs?ids=204719240,203251597</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getMultipleSongs</span><span class="p">(</span><span class="n">withIDs</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">songs</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Song.html">Song</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC10getStationySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getStation(withID:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC10getStationySS6withID_SS010storefrontF0SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF">getStation(withID:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get Station based on the id of the <code>storefront</code> and the station <code>id</code></p>
+
+<ul>
+<li>id: The id of the station (Number). Example: <code>&quot;ra.925434166&quot;</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>Station</em>, <em>AMError</em></li>
+<li>station: the <code><a href="../Classes/Station.html">Station</a></code> object itself</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/stations/ra.925434166">https://api.music.apple.com/v1/catalog/us/stations/ra.925434166</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getStation</span><span class="p">(</span><span class="n">withID</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">station</span><span class="p">:</span> <span class="kt"><a href="../Classes/Station.html">Station</a></span><span class="p">?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC19getMultipleStationsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA7StationCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getMultipleStations(withIDs:storefrontID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC19getMultipleStationsySaySSG7withIDs_SS12storefrontIDSSSg4langySayAA7StationCGSg_AA7AMErrorCSgtc10completiontF">getMultipleStations(withIDs:storefrontID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get several Station objects based on the <code>ids</code> of the stations that you want to get and the Storefront ID of the store</p>
+
+<ul>
+<li>ids: An id array of the stations. Example: <code>[&quot;ra.925344166&quot;, &quot;ra.1228162316&quot;]</code></li>
+<li>storeID: The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></li>
+<li>lang: (Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></li>
+<li>completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>[Station]</em>, <em>AMError</em></li>
+<li>stations: the <code>[Station]</code> array of objects</li>
+<li>error: if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</li>
+</ul>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/catalog/us/stations?ids=ra.925344166,ra.1228162316">https://api.music.apple.com/v1/catalog/us/stations?ids=ra.925344166,ra.1228162316</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getMultipleStations</span><span class="p">(</span><span class="n">withIDs</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="n">storefrontID</span> <span class="nv">storeID</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">stations</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Station.html">Station</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC13getStorefrontySS6withID_SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getStorefront(withID:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC13getStorefrontySS6withID_SSSg4langyAA0D0CSg_AA7AMErrorCSgtc10completiontF">getStorefront(withID:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get Storefront based on the <code>id</code> of the store</p>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/storefronts/us">https://api.music.apple.com/v1/storefronts/us</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getStorefront</span><span class="p">(</span><span class="n">withID</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">storefront</span><span class="p">:</span> <span class="kt"><a href="../Classes/Storefront.html">Storefront</a></span><span class="p">?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>id</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The id of the store in two-letter code. Example: <code>&quot;us&quot;</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lang</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>(Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>Storefront</em>, <em>AMError</em></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>storefront</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the <code><a href="../Classes/Storefront.html">Storefront</a></code> object itself</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>error</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC22getMultipleStorefrontsySaySSG7withIDs_SSSg4langySayAA10StorefrontCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getMultipleStorefronts(withIDs:lang:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC22getMultipleStorefrontsySaySSG7withIDs_SSSg4langySayAA10StorefrontCGSg_AA7AMErrorCSgtc10completiontF">getMultipleStorefronts(withIDs:lang:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get several Storefront objects based on the <code>ids</code> of the stores that you want to get</p>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/storefronts?ids=us,es,jp">https://api.music.apple.com/v1/storefronts?ids=us,es,jp</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getMultipleStorefronts</span><span class="p">(</span><span class="n">withIDs</span> <span class="nv">ids</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">],</span> <span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">storefronts</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Storefront.html">Storefront</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>ids</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An id array of the stores in two-letter code. Example: <code>[&quot;us&quot;, &quot;es&quot;, &quot;jp&quot;]</code></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lang</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>(Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>Storefront</em>, <em>AMError</em></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>storefront</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the <code><a href="../Classes/Storefront.html">Storefront</a></code> object itself</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>error</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:12ASAppleMusicAAC17getAllStorefrontsySSSg4lang_SiSg5limitAF6offsetySayAA10StorefrontCGSg_AA7AMErrorCSgtc10completiontF"></a>
+                    <a name="//apple_ref/swift/Method/getAllStorefronts(lang:limit:offset:completion:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:12ASAppleMusicAAC17getAllStorefrontsySSSg4lang_SiSg5limitAF6offsetySayAA10StorefrontCGSg_AA7AMErrorCSgtc10completiontF">getAllStorefronts(lang:limit:offset:completion:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Get all the Storefront objects. You can decide the limit of stores to get and the offset per page as <em>Optional</em> parameters</p>
+
+<p><strong>Example:</strong> <em><a href="https://api.music.apple.com/v1/storefronts?l=en-us&limit=2&offset=2">https://api.music.apple.com/v1/storefronts?l=en-us&amp;limit=2&amp;offset=2</a></em></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">getAllStorefronts</span><span class="p">(</span><span class="nv">lang</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">limit</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">offset</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">storefronts</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Classes/Storefront.html">Storefront</a></span><span class="p">]?,</span> <span class="n">_</span> <span class="nv">error</span><span class="p">:</span> <span class="kt"><a href="../Classes/AMError.html">AMError</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lang</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>(Optional) The language that you want to use to get data. <strong>Default value: <code>en-us</code></strong></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>limit</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>(Optional) The limit of stores to get</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>offset</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>(Optional) The <em>page</em> of the results to get</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completion</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The completion code that will be executed asynchronously after the request is completed. It has two return parameters: <em>[Storefront]</em>, <em>AMError</em></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>storefront</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the <code>[Storefront]</code> array of objects</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>error</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>if the request you will get an <code><a href="../Classes/AMError.html">AMError</a></code> object</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="https://github.com/Alexsays/ASAppleMusic" target="_blank" rel="external">Alex Silva</a>. All rights reserved. (Last updated: 2018-01-16)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

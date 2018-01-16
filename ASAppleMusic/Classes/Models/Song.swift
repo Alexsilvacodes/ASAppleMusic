@@ -32,7 +32,7 @@ public class Song: EVObject {
     public var url: String?
     public var workName: String?
     public var relationships: [Relationship]?
-
+    /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [
             ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = Artwork(dictionary: artwork) } }, { return self.artwork }),
@@ -51,7 +51,7 @@ public class Song: EVObject {
             }, { return self.previews })
         ]
     }
-
+    /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "contentRating" {
             if let rawValue = value as? String {

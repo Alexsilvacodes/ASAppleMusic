@@ -33,11 +33,11 @@ public class Playlist: EVObject {
     public var relationships: [Relationship]?
     public var songs: [Song]?
     public var musicVideos: [MusicVideo]?
-
+    /// :nodoc:
     public override func propertyMapping() -> [(keyInObject: String?, keyInResource: String?)] {
         return [(keyInObject: "desc", keyInResource: "description")]
     }
-
+    /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [
             ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = Artwork(dictionary: artwork) } }, { return self.artwork }),
@@ -45,7 +45,7 @@ public class Playlist: EVObject {
             ("playParams", { if let playParams = $0 as? NSDictionary { self.playParams = Playable(dictionary: playParams) } }, { return self.playParams })
         ]
     }
-
+    /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "playlistType" {
             if let rawValue = value as? String {

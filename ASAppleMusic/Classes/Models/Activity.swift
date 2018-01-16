@@ -12,12 +12,18 @@ import EVReflection
  */
 public class Activity: EVObject {
 
+    /// :nodoc:
     public var artwork: Artwork?
+    /// :nodoc:
     public var editorialNotes: EditorialNotes?
+    /// :nodoc:
     public var name: String?
+    /// :nodoc:
     public var url: String?
+    /// :nodoc:
     public var relationships: [Relationship]?
 
+    /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [
             ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = Artwork(dictionary: artwork) } }, { return self.artwork }),
