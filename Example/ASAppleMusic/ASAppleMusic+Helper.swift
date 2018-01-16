@@ -265,9 +265,9 @@ extension ASAppleMusic {
             if let typesStr = params["types"] {
                 types = typesStr.components(separatedBy: ",")
             }
-            ASAppleMusic.shared.getSearchHints(params["term"]!, fromStorefrontID: params["storeID"]!, lang: params["l"], limit: limit, types: types, completion: { results, error in
-                if let results = results {
-                    completion(results as AnyObject, error)
+            ASAppleMusic.shared.getSearchHints(params["term"]!, fromStorefrontID: params["storeID"]!, lang: params["l"], limit: limit, types: types, completion: { resultTerms, error in
+                if let resultTerms = resultTerms {
+                    completion(resultTerms as AnyObject, error)
                 } else {
                     completion(nil, error)
                 }

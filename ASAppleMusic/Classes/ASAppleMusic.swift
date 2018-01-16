@@ -7,11 +7,6 @@ import Foundation
 import Alamofire
 import StoreKit
 
-public enum SourceAPI {
-    case developer
-    case user
-}
-
 public enum Rating: String {
     case clean = "clean"
     case explicit = "explicit"
@@ -23,6 +18,23 @@ enum TrackType: String {
     case musicVideos = "music-videos"
 }
 
+/**
+ The API that the framework will use
+
+ - developer: uses developer API
+ - user: uses user API
+ */
+public enum SourceAPI {
+    case developer
+    case user
+}
+
+/**
+ Debug level to get on the Log console
+
+ - none: shows nothing on console
+ - verbose: shows URL Requests, errors and succesfully done requests
+ */
 public enum DebugLevel {
     case none
     case verbose
@@ -48,7 +60,7 @@ public class ASAppleMusic {
     // Private Initializer
     private init() {}
 
-    func print(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+    func print(_ items: Any, separator: String = " ", terminator: String = "\n") {
         #if DEBUG
             if debugLevel == .verbose {
                 Swift.print(items, separator: separator, terminator: terminator)

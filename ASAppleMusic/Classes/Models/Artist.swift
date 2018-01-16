@@ -19,6 +19,12 @@ public class Artist: EVObject {
     public var relationships: [Relationship]?
     public var musicVideos: [MusicVideo]?
 
+    public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
+        return [
+            ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = EditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes })
+        ]
+    }
+
     func setRelationshipObjects(_ relationships: [String:Any]) {
         var relationshipsArray: [Relationship] = []
 
@@ -37,11 +43,13 @@ public class Artist: EVObject {
             }
         }
         if let musicVideosRoot = relationships["music-videos"] as? [String:Any],
-            let musicVideosArray = musicVideosRoot["data"] as? [NSDictionary] {
+            let musicVideosArray = musicVideosRoot["data"] as? [[String:Any]] {
             var musicVideos: [MusicVideo] = []
 
-            musicVideosArray.forEach { musicVideo in
-                musicVideos.append(MusicVideo(dictionary: musicVideo))
+            musicVideosArray.forEach { musicVideoData in
+                if let musicVideo = musicVideoData["attributes"] as? NSDictionary {
+                    musicVideos.append(MusicVideo(dictionary: musicVideo))
+                }
             }
 
             self.musicVideos = musicVideos
@@ -97,6 +105,7 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let data = response["data"] as? [[String:Any]],
                         let resource = data.first,
@@ -106,12 +115,12 @@ public extension ASAppleMusic {
                             artist.setRelationshipObjects(relationships)
                         }
                         completion(artist, nil)
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {
                         let error = AMError(dictionary: errorDict)
 
-                        
                         self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
 
                         completion(nil, error)
@@ -136,7 +145,7 @@ public extension ASAppleMusic {
      - ids: An id array of the artists. Example: `["179934", "463106"]`
      - storeID: The id of the store in two-letter code. Example: `"us"`
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Artist*, *AMError*
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[Artist]*, *AMError*
      - artists: the `[Artist]` array of objects
      - error: if the request you will get an `AMError` object
 
@@ -163,6 +172,7 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
                         var artists: [Artist]?
@@ -179,12 +189,12 @@ public extension ASAppleMusic {
                             }
                         }
                         completion(artists, nil)
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {
                         let error = AMError(dictionary: errorDict)
 
-                        
                         self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
 
                         completion(nil, error)

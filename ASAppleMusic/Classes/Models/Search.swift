@@ -43,7 +43,7 @@ public extension ASAppleMusic {
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/search?term=\(term)"
+            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/search?term=\(term.replacingOccurrences(of: " ", with: "+"))"
             var params: [String] = []
             if let lang = lang {
                 params.append("l=\(lang)")
@@ -63,71 +63,90 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let results = response["results"] as? [String:Any] {
                         var resultObjects: [AnyObject] = []
 
                         if let activitiesData = results["activities"] as? [String:Any],
-                            let activities = activitiesData["data"] as? [NSDictionary] {
-                            activities.forEach { activity in
-                                resultObjects.append(Activity(dictionary: activity))
+                            let activities = activitiesData["data"] as? [[String:Any]] {
+                            activities.forEach { activityData in
+                                if let activity = activityData["attributes"] as? NSDictionary {
+                                    resultObjects.append(Activity(dictionary: activity))
+                                }
                             }
                         }
                         if let artistsData = results["artists"] as? [String:Any],
-                            let artists = artistsData["data"] as? [NSDictionary] {
-                            artists.forEach { artist in
-                                resultObjects.append(Artist(dictionary: artist))
+                            let artists = artistsData["data"] as? [[String:Any]] {
+                            artists.forEach { artistData in
+                                if let artist = artistData["attributes"] as? NSDictionary {
+                                    resultObjects.append(Artist(dictionary: artist))
+                                }
                             }
                         }
                         if let appleCuratorsData = results["apple-curators"] as? [String:Any],
-                            let appleCurators = appleCuratorsData["data"] as? [NSDictionary] {
-                            appleCurators.forEach { appleCurator in
-                                resultObjects.append(AppleCurator(dictionary: appleCurator))
+                            let appleCurators = appleCuratorsData["data"] as? [[String:Any]] {
+                            appleCurators.forEach { appleCuratorData in
+                                if let appleCurator = appleCuratorData["attributes"] as? NSDictionary {
+                                    resultObjects.append(AppleCurator(dictionary: appleCurator))
+                                }
                             }
                         }
                         if let albumsData = results["albums"] as? [String:Any],
-                            let albums = albumsData["data"] as? [NSDictionary] {
-                            albums.forEach { album in
-                                resultObjects.append(Album(dictionary: album))
+                            let albums = albumsData["data"] as? [[String:Any]] {
+                            albums.forEach { albumData in
+                                if let album = albumData["attributes"] as? NSDictionary {
+                                    resultObjects.append(Album(dictionary: album))
+                                }
                             }
                         }
                         if let curatorsData = results["curators"] as? [String:Any],
-                            let curators = curatorsData["data"] as? [NSDictionary] {
-                            curators.forEach { curator in
-                                resultObjects.append(Curator(dictionary: curator))
+                            let curators = curatorsData["data"] as? [[String:Any]] {
+                            curators.forEach { curatorData in
+                                if let curator = curatorData["attributes"] as? NSDictionary {
+                                    resultObjects.append(Curator(dictionary: curator))
+                                }
                             }
                         }
                         if let songsData = results["songs"] as? [String:Any],
-                            let songs = songsData["data"] as? [NSDictionary] {
-                            songs.forEach { song in
-                                resultObjects.append(Song(dictionary: song))
+                            let songs = songsData["data"] as? [[String:Any]] {
+                            songs.forEach { songData in
+                                if let song = songData["attributes"] as? NSDictionary {
+                                    resultObjects.append(Song(dictionary: song))
+                                }
                             }
                         }
                         if let playlistsData = results["playlists"] as? [String:Any],
-                            let playlists = playlistsData["data"] as? [NSDictionary] {
-                            playlists.forEach { playlist in
-                                resultObjects.append(Playlist(dictionary: playlist))
+                            let playlists = playlistsData["data"] as? [[String:Any]] {
+                            playlists.forEach { playlistData in
+                                if let playlist = playlistData["attributes"] as? NSDictionary {
+                                    resultObjects.append(Playlist(dictionary: playlist))
+                                }
                             }
                         }
                         if let musicVideosData = results["music-videos"] as? [String:Any],
-                            let musicVideos = musicVideosData["data"] as? [NSDictionary] {
-                            musicVideos.forEach { musicVideo in
-                                resultObjects.append(MusicVideo(dictionary: musicVideo))
+                            let musicVideos = musicVideosData["data"] as? [[String:Any]] {
+                            musicVideos.forEach { musicVideoData in
+                                if let musicVideo = musicVideoData["attributes"] as? NSDictionary {
+                                    resultObjects.append(MusicVideo(dictionary: musicVideo))
+                                }
                             }
                         }
                         if let stationsData = results["stations"] as? [String:Any],
-                            let stations = stationsData["data"] as? [NSDictionary] {
-                            stations.forEach { station in
-                                resultObjects.append(Station(dictionary: station))
+                            let stations = stationsData["data"] as? [[String:Any]] {
+                            stations.forEach { stationData in
+                                if let station = stationData["attributes"] as? NSDictionary {
+                                    resultObjects.append(Station(dictionary: station))
+                                }
                             }
                         }
                         completion(resultObjects, nil)
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {
                         let error = AMError(dictionary: errorDict)
 
-                        
                         self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
 
                         completion(nil, error)
@@ -154,13 +173,13 @@ public extension ASAppleMusic {
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
      - limit: (Optional) The limit of stores to get
      - types: (Optional) The list of the types of resources to include in the results. Values: `activities`, `artists`, `apple-curators`, `albums`, `curators`, `songs`, `playlists`, `music-videos`, and `stations`
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *AnyObject*, *AMError*
-     - results: the `[AnyObject]` array of results
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[String]*, *AMError*
+     - resultTerms: the `[String]` array of results
      - error: if the request you will get an `AMError` object
 
      **Example:** *https://api.music.apple.com/v1/catalog/us/search/hints?term=love&limit=10*
      */
-    func getSearchHints(_ term: String, fromStorefrontID storeID: String, lang: String? = nil, limit: Int? = nil, types: [String]? = nil, completion: @escaping (_ results: [AnyObject]?, _ error: AMError?) -> Void) {
+    func getSearchHints(_ term: String, fromStorefrontID storeID: String, lang: String? = nil, limit: Int? = nil, types: [String]? = nil, completion: @escaping (_ resultTerms: [String]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -175,7 +194,7 @@ public extension ASAppleMusic {
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/search/hints?term=\(term))"
+            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/search/hints?term=\(term.replacingOccurrences(of: " ", with: "+")))"
             var params: [String] = []
             if let lang = lang {
                 params.append("l=\(lang)")
@@ -192,71 +211,17 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
-                        let results = response["results"] as? [String:Any] {
-                        var resultObjects: [AnyObject] = []
-
-                        if let activitiesData = results["activities"] as? [String:Any],
-                            let activities = activitiesData["data"] as? [NSDictionary] {
-                            activities.forEach { activity in
-                                resultObjects.append(Activity(dictionary: activity))
-                            }
-                        }
-                        if let artistsData = results["artists"] as? [String:Any],
-                            let artists = artistsData["data"] as? [NSDictionary] {
-                            artists.forEach { artist in
-                                resultObjects.append(Artist(dictionary: artist))
-                            }
-                        }
-                        if let appleCuratorsData = results["apple-curators"] as? [String:Any],
-                            let appleCurators = appleCuratorsData["data"] as? [NSDictionary] {
-                            appleCurators.forEach { appleCurator in
-                                resultObjects.append(AppleCurator(dictionary: appleCurator))
-                            }
-                        }
-                        if let albumsData = results["albums"] as? [String:Any],
-                            let albums = albumsData["data"] as? [NSDictionary] {
-                            albums.forEach { album in
-                                resultObjects.append(Album(dictionary: album))
-                            }
-                        }
-                        if let curatorsData = results["curators"] as? [String:Any],
-                            let curators = curatorsData["data"] as? [NSDictionary] {
-                            curators.forEach { curator in
-                                resultObjects.append(Curator(dictionary: curator))
-                            }
-                        }
-                        if let songsData = results["songs"] as? [String:Any],
-                            let songs = songsData["data"] as? [NSDictionary] {
-                            songs.forEach { song in
-                                resultObjects.append(Song(dictionary: song))
-                            }
-                        }
-                        if let playlistsData = results["playlists"] as? [String:Any],
-                            let playlists = playlistsData["data"] as? [NSDictionary] {
-                            playlists.forEach { playlist in
-                                resultObjects.append(Playlist(dictionary: playlist))
-                            }
-                        }
-                        if let musicVideosData = results["music-videos"] as? [String:Any],
-                            let musicVideos = musicVideosData["data"] as? [NSDictionary] {
-                            musicVideos.forEach { musicVideo in
-                                resultObjects.append(MusicVideo(dictionary: musicVideo))
-                            }
-                        }
-                        if let stationsData = results["stations"] as? [String:Any],
-                            let stations = stationsData["data"] as? [NSDictionary] {
-                            stations.forEach { station in
-                                resultObjects.append(Station(dictionary: station))
-                            }
-                        }
-                        completion(resultObjects, nil)
+                        let results = response["results"] as? [String:Any],
+                        let resultTerms = results["terms"] as? [String] {
+                        completion(resultTerms, nil)
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {
                         let error = AMError(dictionary: errorDict)
 
-                        
                         self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
 
                         completion(nil, error)

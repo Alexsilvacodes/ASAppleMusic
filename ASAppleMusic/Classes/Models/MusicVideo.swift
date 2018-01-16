@@ -25,9 +25,26 @@ public class MusicVideo: EVObject {
     public var releaseDate: String?
     public var trackNumber: Int?
     public var url: String?
-    public var albums: [Album]?
-    public var artists: [Artist]?
-    public var genres: [Genre]?
+    public var relationships: [Relationship]?
+
+    public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
+        return [
+            ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = Artwork(dictionary: artwork) } }, { return self.artwork }),
+            ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = EditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes }),
+            ("playParams", { if let playParams = $0 as? NSDictionary { self.playParams = Playable(dictionary: playParams) } }, { return self.playParams }),
+            ("previews", {
+                    if let previewsArray = $0 as? [NSDictionary] {
+                        var previews: [Preview] = []
+
+                        previewsArray.forEach { preview in
+                            previews.append(Preview(dictionary: preview))
+                        }
+
+                        self.previews = previews.isEmpty ? nil : previews
+                    }
+                }, { return self.previews })
+        ]
+    }
 
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "contentRating" {
@@ -42,39 +59,40 @@ public class MusicVideo: EVObject {
             if let rawValue = value as? Int {
                 trackNumber = rawValue
             }
+        } else if key == "playParams" {
+            if let rawValue = value as? NSDictionary {
+                playParams = Playable(dictionary: rawValue)
+            }
         }
     }
 
-    func setRelationships(_ relationships: [String:Any]) {
+    func setRelationshipObjects(_ relationships: [String:Any]) {
+        var relationshipsArray: [Relationship] = []
+
         if let albumsRoot = relationships["albums"] as? [String:Any],
             let albumsArray = albumsRoot["data"] as? [NSDictionary] {
-            var albums: [Album] = []
 
             albumsArray.forEach { album in
-                albums.append(Album(dictionary: album))
+                relationshipsArray.append(Relationship(dictionary: album))
             }
-
-            self.albums = albums
         }
         if let artistsRoot = relationships["artists"] as? [String:Any],
             let artistsArray = artistsRoot["data"] as? [NSDictionary] {
-            var artists: [Artist] = []
 
             artistsArray.forEach { artist in
-                artists.append(Artist(dictionary: artist))
+                relationshipsArray.append(Relationship(dictionary: artist))
             }
-
-            self.artists = artists
         }
         if let genresRoot = relationships["genres"] as? [String:Any],
             let genresArray = genresRoot["data"] as? [NSDictionary] {
-            var genres: [Genre] = []
 
             genresArray.forEach { genre in
-                genres.append(Genre(dictionary: genre))
+                relationshipsArray.append(Relationship(dictionary: genre))
             }
+        }
 
-            self.genres = genres
+        if !relationshipsArray.isEmpty {
+            self.relationships = relationshipsArray
         }
     }
 
@@ -116,15 +134,17 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let data = response["data"] as? [[String:Any]],
                         let resource = data.first,
                         let attributes = resource["attributes"] as? NSDictionary {
                         let musicVideo = MusicVideo(dictionary: attributes)
                         if let relationships = resource["relationships"] as? [String:Any] {
-                            musicVideo.setRelationships(relationships)
+                            musicVideo.setRelationshipObjects(relationships)
                         }
                         completion(musicVideo, nil)
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {
@@ -155,7 +175,7 @@ public extension ASAppleMusic {
      - ids: An id array of the music videos. Example: `["609082181", "890853283"]`
      - storeID: The id of the store in two-letter code. Example: `"us"`
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *MusicVideo*, *AMError*
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[MusicVideo]*, *AMError*
      - musicVideos: the `[MusicVideo]` array of objects
      - error: if the request you will get an `AMError` object
 
@@ -182,6 +202,7 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
                         var musicVideos: [MusicVideo]?
@@ -192,12 +213,13 @@ public extension ASAppleMusic {
                             if let attributes = musicVideoData["attributes"] as? NSDictionary {
                                 let musicVideo = MusicVideo(dictionary: attributes)
                                 if let relationships = musicVideoData["relationships"] as? [String:Any] {
-                                    musicVideo.setRelationships(relationships)
+                                    musicVideo.setRelationshipObjects(relationships)
                                 }
                                 musicVideos?.append(musicVideo)
                             }
                         }
                         completion(musicVideos, nil)
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {

@@ -16,6 +16,15 @@ public class Storefront: EVObject {
     public var storefrontId: Int?
     public var supportedLanguageTags: [String]?
     public var defaultLanguageTag: String?
+
+    public override func setValue(_ value: Any!, forUndefinedKey key: String) {
+        if key == "storefrontId" {
+            if let rawValue = value as? Int {
+                storefrontId = rawValue
+            }
+        }
+    }
+
 }
 
 public extension ASAppleMusic {
@@ -53,14 +62,21 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let data = response["data"] as? [[String:Any]],
                         let resource = data.first,
                         let attributes = resource["attributes"] as? NSDictionary {
                         let storefront = Storefront(dictionary: attributes)
                         completion(storefront, nil)
-                    } else if let response = response.result.value as? [String:Any], let errors = response["errors"] as? [[String:Any]], let errorDict = errors.first as NSDictionary? {
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
+                    } else if let response = response.result.value as? [String:Any],
+                        let errors = response["errors"] as? [[String:Any]],
+                        let errorDict = errors.first as NSDictionary? {
                         let error = AMError(dictionary: errorDict)
+
+                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
+
                         completion(nil, error)
                     } else {
                         self.print("[ASAppleMusic] 🛑: Unauthorized request")
@@ -109,6 +125,7 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
                         var storefronts: [Storefront]?
@@ -121,12 +138,12 @@ public extension ASAppleMusic {
                             }
                         }
                         completion(storefronts, nil)
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {
                         let error = AMError(dictionary: errorDict)
 
-                        
                         self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
 
                         completion(nil, error)
@@ -151,7 +168,7 @@ public extension ASAppleMusic {
          - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
          - limit: (Optional) The limit of stores to get
          - offset: (Optional) The *page* of the results to get
-         - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Storefront*, *AMError*
+         - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[Storefront]*, *AMError*
          - storefront: the `[Storefront]` array of objects
          - error: if the request you will get an `AMError` object
 
@@ -188,6 +205,7 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
                         var storefronts: [Storefront]?
@@ -200,12 +218,13 @@ public extension ASAppleMusic {
                             }
                         }
                         completion(storefronts, nil)
+
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {
                         let error = AMError(dictionary: errorDict)
 
-                        
                         self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
 
                         completion(nil, error)

@@ -81,12 +81,12 @@
 					<key>optional</key>
 					<false/>
 				</dict>
-				<key>id</key>
+				<key>term</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Search term</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>James Brown...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -157,7 +157,7 @@
 				<key>id</key>
 				<dict>
 					<key>name</key>
-					<string>ID</string>
+					<string>Storefront ID</string>
 					<key>placeholder</key>
 					<string>us...</string>
 					<key>optional</key>
@@ -183,7 +183,7 @@
 				<key>ids</key>
 				<dict>
 					<key>name</key>
-					<string>IDs</string>
+					<string>Storefront IDs</string>
 					<key>placeholder</key>
 					<string>us,es,jp...</string>
 					<key>optional</key>
@@ -253,12 +253,12 @@
 					<key>optional</key>
 					<false/>
 				</dict>
-				<key>id</key>
+				<key>ids</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Album IDs</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>299738314,190758912...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -326,12 +326,12 @@
 					<key>optional</key>
 					<false/>
 				</dict>
-				<key>id</key>
+				<key>ids</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Music Video IDs</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>299738314,939748305 ...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -364,7 +364,7 @@
 				<key>id</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Music Video ID</string>
 					<key>placeholder</key>
 					<string>299738314...</string>
 					<key>optional</key>
@@ -399,12 +399,12 @@
 					<key>optional</key>
 					<false/>
 				</dict>
-				<key>id</key>
+				<key>ids</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Playlist IDs</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>pl.acc464c740b94302b8805e5fcbe67e17,pl.97c6f95b0b774bedbcce227f9ea5d32b</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -437,9 +437,9 @@
 				<key>id</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Playlist ID</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>pl.acc464d753b94302b8806e6fcde56e17...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -472,12 +472,12 @@
 					<key>optional</key>
 					<false/>
 				</dict>
-				<key>id</key>
+				<key>ids</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Song IDs</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>204719240,203251597...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -510,9 +510,9 @@
 				<key>id</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Song ID</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>900032321...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -545,7 +545,7 @@
 					<key>optional</key>
 					<false/>
 				</dict>
-				<key>id</key>
+				<key>ids</key>
 				<dict>
 					<key>name</key>
 					<string>Album ID</string>
@@ -618,12 +618,12 @@
 					<key>optional</key>
 					<false/>
 				</dict>
-				<key>id</key>
+				<key>ids</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Artist IDs</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>179934,463106...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -656,9 +656,9 @@
 				<key>id</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Artist ID</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>179934...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -691,12 +691,12 @@
 					<key>optional</key>
 					<false/>
 				</dict>
-				<key>id</key>
+				<key>ids</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Curator IDs</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>974459448,1142683517...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -729,9 +729,9 @@
 				<key>id</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Curator ID</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>1217688517...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -764,12 +764,12 @@
 					<key>optional</key>
 					<false/>
 				</dict>
-				<key>id</key>
+				<key>ids</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Activity IDs</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>956449513,936419203...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -802,9 +802,9 @@
 				<key>id</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Activity ID</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>926339514...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -837,12 +837,12 @@
 					<key>optional</key>
 					<false/>
 				</dict>
-				<key>id</key>
+				<key>ids</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Apple Curator IDs</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>974459448,1142683517...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -875,9 +875,9 @@
 				<key>id</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Apple Curator ID</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>926449586...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -912,12 +912,12 @@
 					<key>optional</key>
 					<false/>
 				</dict>
-				<key>id</key>
+				<key>ids</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Genre IDs</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>14,20...</string>
 					<key>optional</key>
 					<false/>
 				</dict>
@@ -950,9 +950,9 @@
 				<key>id</key>
 				<dict>
 					<key>name</key>
-					<string>Album ID</string>
+					<string>Genre ID</string>
 					<key>placeholder</key>
-					<string>299738314...</string>
+					<string>14...</string>
 					<key>optional</key>
 					<false/>
 				</dict>

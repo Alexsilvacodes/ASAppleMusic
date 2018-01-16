@@ -29,7 +29,7 @@ public extension ASAppleMusic {
      - genre: the `Genre` object itself
      - error: if the request you will get an `AMError` object
 
-     **Example:** *https://api.music.apple.com/v1/catalog/us/genres/190758912*
+     **Example:** *https://api.music.apple.com/v1/catalog/us/genres/14*
      */
     func getGenre(withID id: String, storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ genre: Genre?, _ error: AMError?) -> Void) {
         callWithToken { token in
@@ -52,18 +52,19 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let data = response["data"] as? [[String:Any]],
                         let resource = data.first,
                         let attributes = resource["attributes"] as? NSDictionary {
                         let genre = Genre(dictionary: attributes)
                         completion(genre, nil)
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {
                         let error = AMError(dictionary: errorDict)
 
-                        
                         self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
 
                         completion(nil, error)
@@ -88,7 +89,7 @@ public extension ASAppleMusic {
      - ids: An id array of the genres. Example: `["14", "20"]`
      - storeID: The id of the store in two-letter code. Example: `"us"`
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Genre*, *AMError*
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[Genre]*, *AMError*
      - genres: the `[Genre]` array of objects
      - error: if the request you will get an `AMError` object
 
@@ -115,6 +116,7 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
                         var genres: [Genre]?
@@ -128,12 +130,12 @@ public extension ASAppleMusic {
                             }
                         }
                         completion(genres, nil)
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {
                         let error = AMError(dictionary: errorDict)
 
-                        
                         self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
 
                         completion(nil, error)
@@ -159,7 +161,7 @@ public extension ASAppleMusic {
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
      - limit: (Optional) The limit of genres to get
      - offset: (Optional) The *page* of the results to get
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Genre*, *AMError*
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[Genre]*, *AMError*
      - genres: the `[Genre]` array of objects
      - error: if the request you will get an `AMError` object
 
@@ -196,6 +198,7 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
                         var genres: [Genre]?
@@ -208,6 +211,7 @@ public extension ASAppleMusic {
                             }
                         }
                         completion(genres, nil)
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {

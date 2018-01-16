@@ -13,7 +13,6 @@ class Chart: EVObject {
     var name: String?
     var chart: String?
     var chartHref: String?
-    var data: [Resource]?
     var next: String?
 }
 

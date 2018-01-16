@@ -49,7 +49,18 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SectionCell", for: indexPath)
 
-        cell.textLabel?.text = Array(sections.keys)[indexPath.row]
+        let key = Array(sections.keys)[indexPath.row]
+        cell.textLabel?.text = key
+
+        if let sectionDict = sections[key] as? [String:Any], sectionDict.isEmpty {
+            cell.textLabel?.font = UIFont.italicSystemFont(ofSize: 17.0)
+            cell.textLabel?.textColor = .lightGray
+            cell.accessoryType = .none
+        } else {
+            cell.textLabel?.font = UIFont.systemFont(ofSize: 17.0)
+            cell.textLabel?.textColor = .black
+            cell.accessoryType = .disclosureIndicator
+        }
 
         return cell
     }
@@ -61,6 +72,8 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         subsectionSelected = sections[key] as! [String:Any]
         titleSelected = key
 
-        performSegue(withIdentifier: "MainToConfiguration", sender: self)
+        if !subsectionSelected.isEmpty {
+            performSegue(withIdentifier: "MainToConfiguration", sender: self)
+        }
     }
 }

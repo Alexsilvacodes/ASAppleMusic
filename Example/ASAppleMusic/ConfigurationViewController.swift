@@ -109,7 +109,9 @@ extension ConfigurationViewController: UITextFieldDelegate {
         let paramsRequest = selectedRequest["params"] as! [String:Any]
         let key = Array(paramsRequest.keys)[textField.tag]
 
-        if let text = textField.text, !text.isEmpty {
+        let trimmedText = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if let text = trimmedText, !text.isEmpty {
             params[key] = textField.text
         } else {
             params.removeValue(forKey: key)

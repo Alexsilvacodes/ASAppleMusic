@@ -16,18 +16,28 @@ public class AppleCurator: EVObject {
     public var editorialNotes: EditorialNotes?
     public var name: String?
     public var url: String?
-    public var playlists: [Playlist]?
+    public var relationships: [Relationship]?
 
-    func setRelationships(_ relationships: [String:Any]) {
+    public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
+        return [
+            ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = Artwork(dictionary: artwork) } }, { return self.artwork }),
+            ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = EditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes })
+        ]
+    }
+
+    func setRelationshipObjects(_ relationships: [String:Any]) {
+        var relationshipsArray: [Relationship] = []
+
         if let playlistsRoot = relationships["playlists"] as? [String:Any],
             let playlistsArray = playlistsRoot["data"] as? [NSDictionary] {
-            var playlists: [Playlist] = []
 
             playlistsArray.forEach { playlist in
-                playlists.append(Playlist(dictionary: playlist))
+                relationshipsArray.append(Relationship(dictionary: playlist))
             }
+        }
 
-            self.playlists = playlists
+        if !relationshipsArray.isEmpty {
+            self.relationships = relationshipsArray
         }
     }
 
@@ -69,21 +79,22 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let data = response["data"] as? [[String:Any]],
                         let resource = data.first,
                         let attributes = resource["attributes"] as? NSDictionary {
                         let appleCurator = AppleCurator(dictionary: attributes)
                         if let relationships = resource["relationships"] as? [String:Any] {
-                            appleCurator.setRelationships(relationships)
+                            appleCurator.setRelationshipObjects(relationships)
                         }
                         completion(appleCurator, nil)
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {
                         let error = AMError(dictionary: errorDict)
 
-                        
                         self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
 
                         completion(nil, error)
@@ -108,7 +119,7 @@ public extension ASAppleMusic {
      - ids: An id array of the appleCurators. Example: `["974459448", "1142683517"]`
      - storeID: The id of the store in two-letter code. Example: `"us"`
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *AppleCurator*, *AMError*
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[AppleCurator]*, *AMError*
      - appleCurators: the `[AppleCurator]` array of objects
      - error: if the request you will get an `AMError` object
 
@@ -135,6 +146,7 @@ public extension ASAppleMusic {
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
                         var appleCurators: [AppleCurator]?
@@ -145,18 +157,18 @@ public extension ASAppleMusic {
                             if let attributes = appleCuratorData["attributes"] as? NSDictionary {
                                 let appleCurator = AppleCurator(dictionary: attributes)
                                 if let relationships = appleCuratorData["relationships"] as? [String:Any] {
-                                    appleCurator.setRelationships(relationships)
+                                    appleCurator.setRelationshipObjects(relationships)
                                 }
                                 appleCurators?.append(appleCurator)
                             }
                         }
                         completion(appleCurators, nil)
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {
                         let error = AMError(dictionary: errorDict)
 
-                        
                         self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
 
                         completion(nil, error)
