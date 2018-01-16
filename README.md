@@ -14,6 +14,8 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
+Xcode 9.0+, iOS 11.0+, Swift 4.0+
+
 ## Installation
 
 ASAppleMusic is available through [CocoaPods](http://cocoapods.org). To install
