@@ -3,6 +3,8 @@ Secret.plist
 **/Secret.plist
 .swift-version
 **/.swift-version
+jazzy_deploy.sh
+**/jazzy_deploy.sh
 
 # OS X
 .DS_Store
