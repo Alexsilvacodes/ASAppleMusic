@@ -8,6 +8,10 @@
 ASAppleMusic allows you as developer to get all the Apple Music data from the catalog including: albums, artists, tracks, etc.
 To know more about that API take a look at [the Apple Music API website](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/index.html).
 
+## Docs
+
+[ASAppleMusic API Docs](http://alexsays.github.io/ASAppleMusic)
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
