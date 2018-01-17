@@ -59,6 +59,11 @@ To use this class just call the singleton `shared` and each *getter method* to g
 - Recommendations
 - Reviews
 
+## Android version
+
+By [Aaron Asencio](http://aaronat1.com)
+[![AAAppleMusic](https://developers.google.com/site-assets/logo-github.svg)](https://github.com/aaronat1/AAAppleMusic)
+
 ## Author
 
 Alex Silva, alex@alexsays.info
