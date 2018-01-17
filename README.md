@@ -67,7 +67,11 @@ By [Aaron Asencio](http://aaronat1.com)
 
 ## Author
 
-Alex Silva, alex@alexsays.info
+Alex Silva
+
+- [alex@alexsays.info](mailto:alex@alexsays.info)
+- [@alexw0h4l](https://twitter.com/alexw0h4l)
+- [My website 👨🏻‍💻](http://alexsays.info)
 
 ## License
 
