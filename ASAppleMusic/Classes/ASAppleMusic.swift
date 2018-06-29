@@ -134,14 +134,20 @@ public class ASAppleMusic {
             getDeveloperToken { devToken in
                 if let devToken = devToken {
                     let cloudService = SKCloudServiceController()
-                    cloudService.requestUserToken(forDeveloperToken: devToken,
-                                                  completionHandler: { userToken, error in
-                        if let userToken = userToken {
-                            completion(userToken)
+                    SKCloudServiceController.requestAuthorization { status in
+                        if status == .authorized {
+                            cloudService.requestUserToken(forDeveloperToken: devToken,
+                                                          completionHandler: { userToken, error in
+                                if let userToken = userToken {
+                                    completion(userToken)
+                                } else {
+                                    completion(nil)
+                                }
+                            })
                         } else {
                             completion(nil)
                         }
-                    })
+                    }
                 } else {
                     completion(nil)
                 }

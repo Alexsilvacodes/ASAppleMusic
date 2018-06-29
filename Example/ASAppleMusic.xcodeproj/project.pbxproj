@@ -147,7 +147,6 @@
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
 				0B7D794773B0FD262B915871 /* [CP] Embed Pods Frameworks */,
-				35533A9B084FBA2081F46F26 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -229,21 +228,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ASAppleMusic_Example/Pods-ASAppleMusic_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		35533A9B084FBA2081F46F26 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ASAppleMusic_Example/Pods-ASAppleMusic_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8853D916F61F27F5BC6EBD23 /* [CP] Check Pods Manifest.lock */ = {

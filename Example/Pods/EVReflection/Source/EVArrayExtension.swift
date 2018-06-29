@@ -128,13 +128,27 @@ public extension Array where Element: EVReflectable {
      Convert this array to a json string
      
      - parameter conversionOptions: Option set for the various conversion options.
-     
+     - parameter prettyPrinted: Define if you want enters and indents
+
      - returns: The json string
      */
     public func toJsonString(_ conversionOptions: ConversionOptions = .DefaultSerialize, prettyPrinted: Bool = false) -> String {
         return "[\n" + self.map({($0).toJsonString(conversionOptions, prettyPrinted: prettyPrinted)}).joined(separator: ", \n") + "\n]"
     }
 
+    /**
+     Convert this array to a json data
+     
+     - parameter conversionOptions: Option set for the various conversion options.
+     - parameter prettyPrinted: Define if you want enters and indents
+     - parameter encoding: The string encoding defaulsts to .utf8
+     
+     - returns: The json data
+     */
+    public func toJsonData(_ conversionOptions: ConversionOptions = .DefaultSerialize, prettyPrinted: Bool = false, encoding: String.Encoding = .utf8) -> Data {
+        return self.toJsonString(conversionOptions, prettyPrinted: prettyPrinted).data(using: encoding) ?? Data()
+    }
+    
     /**
      Returns the dictionary representation of this array.
      
@@ -189,4 +203,48 @@ public extension Array where Element: NSDictionary {
         return "[\n" + jsonArray.joined(separator: ", \n") + "\n]"
     }
 
+}
+
+public extension NSArray {
+    func nestedArrayMap<T>(_ element: (NSDictionary)->T) -> [[T]] {
+        return (self.map {
+            (($0 as? NSArray)?.map {
+                element($0 as? NSDictionary ?? NSDictionary())
+                }) ?? []
+        })
+    }
+    
+    func doubleNestedArrayMap<T>(_ element: (NSDictionary)->T) -> [[[T]]] {
+        return (self.map {
+            (($0 as? NSArray)?.nestedArrayMap { element($0) }) ?? [[]]
+        })
+    }
+    
+    func tripleNestedArrayMap<T>(_ element: (NSDictionary)->T) -> [[[[T]]]] {
+        return (self.map {
+            (($0 as? NSArray)?.doubleNestedArrayMap { element($0) }) ?? [[[]]]
+        })
+    }
+    
+    func quadrupleNestedArrayMap<T>(_ element: (NSDictionary)->T) -> [[[[[T]]]]] {
+        return (self.map {
+            (($0 as? NSArray)?.tripleNestedArrayMap { element($0) }) ?? [[[[]]]]
+        })
+    }
+    
+    func quintupleNestedArrayMap<T>(_ element: (NSDictionary)->T) -> [[[[[[T]]]]]] {
+        return (self.map {
+            (($0 as? NSArray)?.quadrupleNestedArrayMap { element($0) }) ?? [[[[[]]]]]
+        })
+    }
+    
+    func sextupleNestedArrayMap<T>(_ element: (NSDictionary)->T) -> [[[[[[[T]]]]]]] {
+        return (self.map {
+            (($0 as? NSArray)?.quintupleNestedArrayMap { element($0) }) ?? [[[[[[]]]]]]
+        })
+    }
+    
+    // If you need deeper nesting, whell, then you probably see the pattern above that you need to implement :-)
+    // just name them septuple, octuple, nonuple and decuple
+    // I'm not sure how far swift can handle it, but you should not want something like that.
 }

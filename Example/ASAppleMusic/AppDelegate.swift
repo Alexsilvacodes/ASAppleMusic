@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let path = Bundle.main.path(forResource: "Secret", ofType: "plist"), let dict = NSDictionary(contentsOfFile: path) as? [String:String], let keyID = dict["keyID"], let teamID = dict["teamID"], let tokenServer = dict["tokenServer"] {
             ASAppleMusic.shared.initialize(keyID: keyID, teamID: teamID, tokenServer: tokenServer)
         }
+        ASAppleMusic.shared.source = .user
         ASAppleMusic.shared.debugLevel = .verbose
 
         return true

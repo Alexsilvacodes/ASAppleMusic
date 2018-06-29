@@ -79,8 +79,8 @@ final public class EVReflection {
                 }
                 
                 if let value: Any = valid ? dictValue : (v as Any) {
-                    if let custom = original as? EVCustomReflectable {
-                        custom.constructWith(value: value)
+                    if var custom = original as? EVCustomReflectable {
+                        custom = custom.constructWith(value: value)
                     }
                     setObjectValue(anyObject, key: keyInObject!, theValue: value, typeInObject: types[keyInObject!] as? String, valid: valid, conversionOptions: conversionOptions)
                 }
@@ -797,9 +797,9 @@ final public class EVReflection {
     }
     
     public class func convertToInternalSwiftRepresentation(type: String) -> String {
-        if type.components(separatedBy: "<").count > 1 {
+        if type.split(separator: "<").count > 1 {
             // Remove the Array or Set prefix
-            let prefix = type.components(separatedBy: "<") [0] + "<"
+            let prefix = type.split(separator: "<") [0] + "<"
             var subtype = String(type[prefix.endIndex...])
             subtype = String(subtype[..<subtype.index(before: subtype.endIndex)])
             return prefix + convertToInternalSwiftRepresentation(type: subtype) + ">"
@@ -980,7 +980,10 @@ final public class EVReflection {
             do {
                 if !(value is NSNull) {
                     var setValue: AnyObject? = value as AnyObject?
-                    try anyObject.validateValue(&setValue, forKey: key)
+                    let validateFunction = "validate" + key.prefix(1).uppercased() + key.dropFirst() + ":error:"
+                    if (anyObject as AnyObject).responds(to: Selector(validateFunction)) {
+                        try anyObject.validateValue(&setValue, forKey: key)
+                    }
                     anyObject.setValue(setValue, forKey: key)
                 }
             } catch _ {
@@ -1191,9 +1194,9 @@ final public class EVReflection {
         //Swift.Array<Swift.Array<Swift.Array<A81>>>
         let dictValue: NSArray? = theDictValue as? NSArray
         if fieldType?.hasPrefix("Swift.Array<Swift.Array<") ?? false && theDictValue is NSArray {
+            evPrint(.UseWorkaround, "TODO: You have to implement a workaround for double nested arrays. See https://github.com/evermeer/EVReflection/issues/212")
             for item in dictValue! {
-                print("Have to convert here... NSArray to \(fieldType ?? "") \(item)")
-                
+                evPrint(.UseWorkaround, "TODO: Have to convert here... NSArray to \(fieldType ?? "") \(item)")
             }
         }
         return dictValue!
@@ -1564,6 +1567,8 @@ final public class EVReflection {
             return convertDictionaryForJsonSerialization(reflectable.toDictionary(), theObject: theObject)
         case let ok as NSDictionary:
             return convertDictionaryForJsonSerialization(ok, theObject: theObject)
+        case let d as Data:
+            return d.base64EncodedString() as AnyObject
         default:
             (theObject as? EVReflectable)?.addStatusMessage(.InvalidType, message: "Unexpected type while converting value for JsonSerialization: \(value)")
             evPrint(.InvalidType, "ERROR: Unexpected type while converting value for JsonSerialization: \(value)")
@@ -1574,23 +1579,18 @@ final public class EVReflection {
 
 extension Date {
     public init?(fromDateTimeString: String) {
-        
         let pattern = "\\\\?/Date\\((\\d+)(([+-]\\d{2})(\\d{2}))?\\)\\\\?/"
         let regex = try! NSRegularExpression(pattern: pattern)
-        guard let match = regex.firstMatch(in: fromDateTimeString, range: NSRange(location: 0, length: fromDateTimeString.utf16.count)) else {
-            //            evPrint("Failed to find a match")
-            return nil
+        let match: NSRange = regex.rangeOfFirstMatch(in: fromDateTimeString, range: NSRange(location: 0, length: fromDateTimeString.utf16.count))
+        var dateString: String = ""
+        if match.location == NSNotFound {
+            dateString = fromDateTimeString
+        } else {
+            dateString = (fromDateTimeString as NSString).substring(with: match)     // Extract milliseconds
         }
-        
-        #if swift(>=4.0)
-            let dateString = (fromDateTimeString as NSString).substring(with: match.range(at: 1))     // Extract milliseconds
-        #else
-            let dateString = (fromDateTimeString as NSString).substring(with: match.rangeAt(1))     // Extract milliseconds
-        #endif
-
-        let timeStamp = Double(dateString)! / 1000.0 // Convert to UNIX timestamp in seconds
-        
-        self.init(timeIntervalSince1970: timeStamp) // Create Date from timestamp
+        let substrings = dateString.components(separatedBy: CharacterSet.decimalDigits.inverted)
+        guard let timeStamp = (substrings.compactMap { Double($0) }.first) else { return nil }
+        self.init(timeIntervalSince1970: timeStamp / 1000.0) // Create Date from timestamp
     }
 }
 

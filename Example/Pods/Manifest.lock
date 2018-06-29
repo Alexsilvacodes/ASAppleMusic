@@ -1,25 +1,30 @@
 PODS:
-  - Alamofire (4.6.0)
-  - ASAppleMusic (0.1.0):
+  - Alamofire (4.7.2)
+  - ASAppleMusic (1.0.1):
     - Alamofire
     - EVReflection/Alamofire
-  - EVReflection/Alamofire (5.4.2):
+  - EVReflection/Alamofire (5.6.2):
     - Alamofire
     - EVReflection/Core
-  - EVReflection/Core (5.4.2)
+  - EVReflection/Core (5.6.2)
 
 DEPENDENCIES:
   - ASAppleMusic (from `../`)
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - EVReflection
+
 EXTERNAL SOURCES:
   ASAppleMusic:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
-  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
-  ASAppleMusic: b408e0f6581d27367f809ae80ff3fe76e31fa3e6
-  EVReflection: 440818f89dbb185408442548b99e5d4ee7a1739b
+  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
+  ASAppleMusic: c6c5979269fda1844c2d306d4471bc360d55beec
+  EVReflection: 640322f8a3aaf78cbc3c23892476b6adb636ebf0
 
 PODFILE CHECKSUM: 6c41e99ecb537c18d6a4308b2e46168da441d2e4
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.5.3

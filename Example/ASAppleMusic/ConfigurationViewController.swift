@@ -65,7 +65,7 @@ class ConfigurationViewController: UIViewController {
             if let vc = segue.destination as? DetailViewController {
                 vc.title = Array(subsections.keys)[requestPickerView.selectedRow(inComponent: 0)]
                 vc.params = params
-                vc.function = selectedRequest["function"] as! String
+                vc.function = selectedRequest["function"] as? String
             }
         }
     }
