@@ -8,31 +8,48 @@ import Alamofire
 import EVReflection
 
 /**
- Genre object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Genre.html)
+ Storefront object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Storefront.html)
  */
-public class Genre: EVObject {
+public class AMStorefront: EVObject {
 
-    /// The localized name of the genre
+    /// The localized name of the storefront
     public var name: String?
+
+    /// The numeric ID of the storefront
+    public var storefrontId: Int?
+
+    /// The localizations that the storefront supports, represented as an array of language tags
+    public var supportedLanguageTags: [String]?
+
+    /// The default language for the storefront, represented as a language tag
+    public var defaultLanguageTag: String?
+
+    /// :nodoc:
+    public override func setValue(_ value: Any!, forUndefinedKey key: String) {
+        if key == "storefrontId" {
+            if let rawValue = value as? Int {
+                storefrontId = rawValue
+            }
+        }
+    }
 
 }
 
 public extension ASAppleMusic {
 
     /**
-     Get Genre based on the id of the `storefront` and the genre `id`
+     Get Storefront based on the `id` of the store
 
      - Parameters:
-     - id: The id of the genre (Number). Example: `"14"`
-     - storeID: The id of the store in two-letter code. Example: `"us"`
-     - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Genre*, *AMError*
-     - genre: the `Genre` object itself
-     - error: if the request you will get an `AMError` object
+        - id: The id of the store in two-letter code. Example: `"us"`
+        - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
+        - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Storefront*, *AMError*
+        - storefront: the `Storefront` object itself
+        - error: if the request you will get an `AMError` object
 
-     **Example:** *https://api.music.apple.com/v1/catalog/us/genres/14*
+     **Example:** *https://api.music.apple.com/v1/storefronts/us*
      */
-    func getGenre(withID id: String, storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ genre: Genre?, _ error: AMError?) -> Void) {
+    func getStorefront(withID id: String, lang: String? = nil, completion: @escaping (_ storefront: AMStorefront?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -47,7 +64,7 @@ public extension ASAppleMusic {
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/genres/\(id)"
+            var url = "https://api.music.apple.com/v1/storefronts/\(id)"
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
@@ -58,8 +75,8 @@ public extension ASAppleMusic {
                         let data = response["data"] as? [[String:Any]],
                         let resource = data.first,
                         let attributes = resource["attributes"] as? NSDictionary {
-                        let genre = Genre(dictionary: attributes)
-                        completion(genre, nil)
+                        let storefront = AMStorefront(dictionary: attributes)
+                        completion(storefront, nil)
                         self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
@@ -84,19 +101,18 @@ public extension ASAppleMusic {
     }
 
     /**
-     Get several Genre objects based on the `ids` of the genres that you want to get and the Storefront ID of the store
+     Get several Storefront objects based on the `ids` of the stores that you want to get
 
      - Parameters:
-     - ids: An id array of the genres. Example: `["14", "20"]`
-     - storeID: The id of the store in two-letter code. Example: `"us"`
-     - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[Genre]*, *AMError*
-     - genres: the `[Genre]` array of objects
-     - error: if the request you will get an `AMError` object
+         - ids: An id array of the stores in two-letter code. Example: `["us", "es", "jp"]`
+         - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
+         - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Storefront*, *AMError*
+         - storefront: the `Storefront` object itself
+         - error: if the request you will get an `AMError` object
 
-     **Example:** *https://api.music.apple.com/v1/catalog/us/genres?ids=14,20*
+     **Example:** *https://api.music.apple.com/v1/storefronts?ids=us,es,jp*
      */
-    func getMultipleGenres(withIDs ids: [String], storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ genres: [Genre]?, _ error: AMError?) -> Void) {
+    func getMultipleStorefronts(withIDs ids: [String], lang: String? = nil, completion: @escaping (_ storefronts: [AMStorefront]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -111,7 +127,7 @@ public extension ASAppleMusic {
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/genres?ids=\(ids.joined(separator: ","))"
+            var url = "https://api.music.apple.com/v1/storefronts?ids=\(ids.joined(separator: ","))"
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
@@ -120,17 +136,16 @@ public extension ASAppleMusic {
                     self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
-                        var genres: [Genre]?
+                        var storefronts: [AMStorefront]?
                         if resources.count > 0 {
-                            genres = []
+                            storefronts = []
                         }
-                        resources.forEach { genreData in
-                            if let attributes = genreData["attributes"] as? NSDictionary {
-                                let genre = Genre(dictionary: attributes)
-                                genres?.append(genre)
+                        resources.forEach { storefrontData in
+                            if let attributes = storefrontData["attributes"] as? NSDictionary {
+                                storefronts?.append(AMStorefront(dictionary: attributes))
                             }
                         }
-                        completion(genres, nil)
+                        completion(storefronts, nil)
                         self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
@@ -155,20 +170,19 @@ public extension ASAppleMusic {
     }
 
     /**
-     Get the top charts Genres. You can decide the limit of stores to get and the offset per page as *Optional* parameters
+     Get all the Storefront objects. You can decide the limit of stores to get and the offset per page as *Optional* parameters
 
      - Parameters:
-     - storeID: The id of the store in two-letter code. Example: `"us"`
-     - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - limit: (Optional) The limit of genres to get
-     - offset: (Optional) The *page* of the results to get
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[Genre]*, *AMError*
-     - genres: the `[Genre]` array of objects
-     - error: if the request you will get an `AMError` object
+         - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
+         - limit: (Optional) The limit of stores to get
+         - offset: (Optional) The *page* of the results to get
+         - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[Storefront]*, *AMError*
+         - storefront: the `[Storefront]` array of objects
+         - error: if the request you will get an `AMError` object
 
-     **Example:** *https://api.music.apple.com/v1/genres?l=en-us&limit=2&offset=2*
+     **Example:** *https://api.music.apple.com/v1/storefronts?l=en-us&limit=2&offset=2*
      */
-    func getTopGenres(storefrontID storeID: String, lang: String? = nil, limit: Int? = nil, offset: Int? = nil, completion: @escaping (_ genres: [Genre]?, _ error: AMError?) -> Void) {
+    func getAllStorefronts(lang: String? = nil, limit: Int? = nil, offset: Int? = nil, completion: @escaping (_ storefronts: [AMStorefront]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -183,7 +197,7 @@ public extension ASAppleMusic {
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/genres"
+            var url = "https://api.music.apple.com/v1/storefronts"
             var params: [String] = []
             if let lang = lang {
                 params.append("l=\(lang)")
@@ -202,23 +216,23 @@ public extension ASAppleMusic {
                     self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
-                        var genres: [Genre]?
+                        var storefronts: [AMStorefront]?
                         if resources.count > 0 {
-                            genres = []
+                            storefronts = []
                         }
-                        resources.forEach { genreData in
-                            if let attributes = genreData["attributes"] as? NSDictionary {
-                                genres?.append(Genre(dictionary: attributes))
+                        resources.forEach { storefrontData in
+                            if let attributes = storefrontData["attributes"] as? NSDictionary {
+                                storefronts?.append(AMStorefront(dictionary: attributes))
                             }
                         }
-                        completion(genres, nil)
+                        completion(storefronts, nil)
+
                         self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
                         let errorDict = errors.first as NSDictionary? {
                         let error = AMError(dictionary: errorDict)
 
-                        
                         self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
 
                         completion(nil, error)

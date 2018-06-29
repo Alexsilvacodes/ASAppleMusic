@@ -8,41 +8,41 @@ import Alamofire
 import EVReflection
 
 /**
- Apple Curator object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/AppleCurator.html)
+ Curator object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Curator.html)
  */
-public class AppleCurator: EVObject {
+public class AMCurator: EVObject {
 
     /// The curator artwork
-    public var artwork: Artwork?
+    public var artwork: AMArtwork?
 
-    /// (Optional) The notes about the curator that appear in the iTunes Store
-    public var editorialNotes: EditorialNotes?
+    /// (Optional) The notes about the curator
+    public var editorialNotes: AMEditorialNotes?
 
     /// The localized name of the curator
     public var name: String?
 
-    /// The URL for sharing an curator in the iTunes Store
+    /// The URL for sharing a curator in Apple Music
     public var url: String?
-
+    
     /// The relationships associated with this activity
-    public var relationships: [Relationship]?
+    public var relationships: [AMRelationship]?
 
     /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [
-            ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = Artwork(dictionary: artwork) } }, { return self.artwork }),
-            ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = EditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes })
+            ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = AMArtwork(dictionary: artwork) } }, { return self.artwork }),
+            ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = AMEditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes })
         ]
     }
 
     func setRelationshipObjects(_ relationships: [String:Any]) {
-        var relationshipsArray: [Relationship] = []
+        var relationshipsArray: [AMRelationship] = []
 
         if let playlistsRoot = relationships["playlists"] as? [String:Any],
             let playlistsArray = playlistsRoot["data"] as? [NSDictionary] {
 
             playlistsArray.forEach { playlist in
-                relationshipsArray.append(Relationship(dictionary: playlist))
+                relationshipsArray.append(AMRelationship(dictionary: playlist))
             }
         }
 
@@ -56,19 +56,19 @@ public class AppleCurator: EVObject {
 public extension ASAppleMusic {
 
     /**
-     Get AppleCurator based on the id of the `storefront` and the apple curator `id`
+     Get Curator based on the id of the `storefront` and the curator `id`
 
      - Parameters:
-     - id: The id of the apple curator (Number). Example: `"926449586"`
+     - id: The id of the curator (Number). Example: `"1217688517"`
      - storeID: The id of the store in two-letter code. Example: `"us"`
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *AppleCurator*, *AMError*
-     - appleCurator: the `AppleCurator` object itself
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Curator*, *AMError*
+     - curator: the `Curator` object itself
      - error: if the request you will get an `AMError` object
 
-     **Example:** *https://api.music.apple.com/v1/catalog/us/apple-curators/926449586*
+     **Example:** *https://api.music.apple.com/v1/catalog/us/curators/1217688517*
      */
-    func getAppleCurator(withID id: String, storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ appleCurator: AppleCurator?, _ error: AMError?) -> Void) {
+    func getCurator(withID id: String, storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ curator: AMCurator?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -83,7 +83,7 @@ public extension ASAppleMusic {
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/apple-curators/\(id)"
+            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/curators/\(id)"
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
@@ -94,11 +94,11 @@ public extension ASAppleMusic {
                         let data = response["data"] as? [[String:Any]],
                         let resource = data.first,
                         let attributes = resource["attributes"] as? NSDictionary {
-                        let appleCurator = AppleCurator(dictionary: attributes)
+                        let curator = AMCurator(dictionary: attributes)
                         if let relationships = resource["relationships"] as? [String:Any] {
-                            appleCurator.setRelationshipObjects(relationships)
+                            curator.setRelationshipObjects(relationships)
                         }
-                        completion(appleCurator, nil)
+                        completion(curator, nil)
                         self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
@@ -123,19 +123,19 @@ public extension ASAppleMusic {
     }
 
     /**
-     Get several AppleCurator objects based on the `ids` of the appleCurators that you want to get and the Storefront ID of the store
+     Get several Curator objects based on the `ids` of the curators that you want to get and the Storefront ID of the store
 
      - Parameters:
-     - ids: An id array of the appleCurators. Example: `["974459448", "1142683517"]`
+     - ids: An id array of the curators. Example: `["974459448", "1142683517"]`
      - storeID: The id of the store in two-letter code. Example: `"us"`
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[AppleCurator]*, *AMError*
-     - appleCurators: the `[AppleCurator]` array of objects
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[Curator]*, *AMError*
+     - curators: the `[Curator]` array of objects
      - error: if the request you will get an `AMError` object
 
-     **Example:** *https://api.music.apple.com/v1/catalog/us/apple-curators?ids=974459448,1142683517*
+     **Example:** *https://api.music.apple.com/v1/catalog/us/curators?ids=974459448,1142683517*
      */
-    func getMultipleAppleCurators(withIDs ids: [String], storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ appleCurators: [AppleCurator]?, _ error: AMError?) -> Void) {
+    func getMultipleCurators(withIDs ids: [String], storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ curators: [AMCurator]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -150,7 +150,7 @@ public extension ASAppleMusic {
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/apple-curators?ids=\(ids.joined(separator: ","))"
+            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/curators?ids=\(ids.joined(separator: ","))"
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
@@ -159,20 +159,20 @@ public extension ASAppleMusic {
                     self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
-                        var appleCurators: [AppleCurator]?
+                        var curators: [AMCurator]?
                         if resources.count > 0 {
-                            appleCurators = []
+                            curators = []
                         }
-                        resources.forEach { appleCuratorData in
-                            if let attributes = appleCuratorData["attributes"] as? NSDictionary {
-                                let appleCurator = AppleCurator(dictionary: attributes)
-                                if let relationships = appleCuratorData["relationships"] as? [String:Any] {
-                                    appleCurator.setRelationshipObjects(relationships)
+                        resources.forEach { curatorData in
+                            if let attributes = curatorData["attributes"] as? NSDictionary {
+                                let curator = AMCurator(dictionary: attributes)
+                                if let relationships = curatorData["relationships"] as? [String:Any] {
+                                    curator.setRelationshipObjects(relationships)
                                 }
-                                appleCurators?.append(appleCurator)
+                                curators?.append(curator)
                             }
                         }
-                        completion(appleCurators, nil)
+                        completion(curators, nil)
                         self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],

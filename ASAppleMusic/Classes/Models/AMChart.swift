@@ -7,7 +7,7 @@ import Foundation
 import Alamofire
 import EVReflection
 
-public enum ChartType: String {
+public enum AMChartType: String {
     case albums = "albums"
     case musicVideos = "music-videos"
     case songs = "songs"
@@ -16,7 +16,7 @@ public enum ChartType: String {
 /**
  Chart object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/FetchCharts.html)
  */
-public class Chart: EVObject {
+public class AMChart: EVObject {
 
     /// The localized name for the chart
     public var name: String?
@@ -31,7 +31,7 @@ public class Chart: EVObject {
     public var data: [AnyObject]?
 
     /// Chart type: `albums`, `music-videos` and `songs`
-    public var type: ChartType?
+    public var type: AMChartType?
 
     /// (Optional) The URL for the next page
     public var next: String?
@@ -57,7 +57,7 @@ public extension ASAppleMusic {
 
      **Example:** *https://api.music.apple.com/v1/catalog/us/curators/1217688517*
      */
-    func getCharts(_ types: [String], fromStorefrontID storeID: String, lang: String? = nil, chart: String? = nil, genre: String? = nil, limit: Int? = nil, offset: Int? = nil, completion: @escaping (_ charts: [Chart]?, _ error: AMError?) -> Void) {
+    func getCharts(_ types: [String], fromStorefrontID storeID: String, lang: String? = nil, chart: String? = nil, genre: String? = nil, limit: Int? = nil, offset: Int? = nil, completion: @escaping (_ charts: [AMChart]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -94,25 +94,25 @@ public extension ASAppleMusic {
                     self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let results = response["results"] as? [String:Any] {
-                        var resultObjects: [Chart] = []
+                        var resultObjects: [AMChart] = []
 
                         if let albums = results["albums"] as? [NSDictionary] {
                             albums.forEach { album in
-                                let chart = Chart(dictionary: album)
+                                let chart = AMChart(dictionary: album)
                                 chart.type = .albums
                                 resultObjects.append(chart)
                             }
                         }
                         if let songs = results["songs"] as? [NSDictionary] {
                             songs.forEach { song in
-                                let chart = Chart(dictionary: song)
+                                let chart = AMChart(dictionary: song)
                                 chart.type = .songs
                                 resultObjects.append(chart)
                             }
                         }
                         if let musicVideos = results["music-videos"] as? [NSDictionary] {
                             musicVideos.forEach { musicVideo in
-                                let chart = Chart(dictionary: musicVideo)
+                                let chart = AMChart(dictionary: musicVideo)
                                 chart.type = .musicVideos
                                 resultObjects.append(chart)
                             }

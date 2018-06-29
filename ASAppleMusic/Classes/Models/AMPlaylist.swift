@@ -10,7 +10,7 @@ import EVReflection
 /**
  Playlist Type object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Playlist.html)
  */
-public enum PlaylistType: String {
+public enum AMPlaylistType: String {
     case userShared = "user-shared"
     case editorial = "editorial"
     case external = "external"
@@ -20,16 +20,16 @@ public enum PlaylistType: String {
 /**
  Playlist object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Playlist.html)
  */
-public class Playlist: EVObject {
+public class AMPlaylist: EVObject {
 
     /// (Optional) The playlist artwork
-    public var artwork: Artwork?
+    public var artwork: AMArtwork?
 
     /// (Optional) The display name of the curator
     public var curatorName: String?
 
     /// (Optional) A description of the playlist
-    public var desc: EditorialNotes?
+    public var desc: AMEditorialNotes?
 
     /// The date the playlist was last modified
     public var lastModifiedDate: String?
@@ -38,22 +38,22 @@ public class Playlist: EVObject {
     public var name: String?
 
     /// The type of playlist
-    public var playlistType: PlaylistType?
+    public var playlistType: AMPlaylistType?
 
     /// (Optional) The parameters to use to playback the tracks in the playlist
-    public var playParams: Playable?
+    public var playParams: AMPlayable?
 
     /// The URL for sharing an album in the iTunes Store
     public var url: String?
 
     /// The relationships associated with this activity
-    public var relationships: [Relationship]?
+    public var relationships: [AMRelationship]?
 
     /// The songs included in the playlist
-    public var songs: [Song]?
+    public var songs: [AMSong]?
 
     /// The music videos included in the playlist
-    public var musicVideos: [MusicVideo]?
+    public var musicVideos: [AMMusicVideo]?
 
     /// :nodoc:
     public override func propertyMapping() -> [(keyInObject: String?, keyInResource: String?)] {
@@ -63,9 +63,9 @@ public class Playlist: EVObject {
     /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [
-            ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = Artwork(dictionary: artwork) } }, { return self.artwork }),
-            ("desc", { if let description = $0 as? NSDictionary { self.desc = EditorialNotes(dictionary: description) } }, { return self.desc }),
-            ("playParams", { if let playParams = $0 as? NSDictionary { self.playParams = Playable(dictionary: playParams) } }, { return self.playParams })
+            ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = AMArtwork(dictionary: artwork) } }, { return self.artwork }),
+            ("desc", { if let description = $0 as? NSDictionary { self.desc = AMEditorialNotes(dictionary: description) } }, { return self.desc }),
+            ("playParams", { if let playParams = $0 as? NSDictionary { self.playParams = AMPlayable(dictionary: playParams) } }, { return self.playParams })
         ]
     }
 
@@ -73,25 +73,25 @@ public class Playlist: EVObject {
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "playlistType" {
             if let rawValue = value as? String {
-                playlistType = PlaylistType(rawValue: rawValue)
+                playlistType = AMPlaylistType(rawValue: rawValue)
             }
         }
     }
 
     func setRelationshipObjects(_ relationships: [String:Any]) {
-        var relationshipsArray: [Relationship] = []
+        var relationshipsArray: [AMRelationship] = []
 
         if let curatorsRoot = relationships["curators"] as? [String:Any],
             let curatorsArray = curatorsRoot["data"] as? [NSDictionary] {
 
             curatorsArray.forEach { curator in
-                relationshipsArray.append(Relationship(dictionary: curator))
+                relationshipsArray.append(AMRelationship(dictionary: curator))
             }
         }
         if let tracksRoot = relationships["tracks"] as? [String:Any],
             let tracks = tracksRoot["data"] as? [[String:Any]] {
-            var songs: [Song] = []
-            var musicVideos: [MusicVideo] = []
+            var songs: [AMSong] = []
+            var musicVideos: [AMMusicVideo] = []
 
             tracks.forEach { track in
                 if let type = track["type"] as? String,
@@ -99,12 +99,12 @@ public class Playlist: EVObject {
                     switch trackType {
                     case .songs:
                         if let attributes = track["attributes"] as? NSDictionary {
-                            let song = Song(dictionary: attributes)
+                            let song = AMSong(dictionary: attributes)
                             songs.append(song)
                         }
                     case .musicVideos:
                         if let attributes = track["attributes"] as? NSDictionary {
-                            let musicVideo = MusicVideo(dictionary: attributes)
+                            let musicVideo = AMMusicVideo(dictionary: attributes)
                             musicVideos.append(musicVideo)
                         }
                     }
@@ -141,7 +141,7 @@ public extension ASAppleMusic {
 
      **Example:** *https://api.music.apple.com/v1/catalog/us/playlists/pl.acc464d753b94302b8806e6fcde56e17*
      */
-    func getPlaylist(withID id: String, storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ playlist: Playlist?, _ error: AMError?) -> Void) {
+    func getPlaylist(withID id: String, storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ playlist: AMPlaylist?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -167,7 +167,7 @@ public extension ASAppleMusic {
                         let data = response["data"] as? [[String:Any]],
                         let resource = data.first,
                         let attributes = resource["attributes"] as? NSDictionary {
-                        let playlist = Playlist(dictionary: attributes)
+                        let playlist = AMPlaylist(dictionary: attributes)
                         if let relationships = resource["relationships"] as? [String:Any] {
                             playlist.setRelationshipObjects(relationships)
                         }
@@ -208,7 +208,7 @@ public extension ASAppleMusic {
 
      **Example:** *https://api.music.apple.com/v1/catalog/us/playlists?ids=pl.acc464c740b94302b8805e5fcbe67e17,pl.97c6f95b0b774bedbcce227f9ea5d32b*
      */
-    func getMultiplePlaylists(withIDs ids: [String], storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ playlists: [Playlist]?, _ error: AMError?) -> Void) {
+    func getMultiplePlaylists(withIDs ids: [String], storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ playlists: [AMPlaylist]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -232,13 +232,13 @@ public extension ASAppleMusic {
                     self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
-                        var playlists: [Playlist]?
+                        var playlists: [AMPlaylist]?
                         if resources.count > 0 {
                             playlists = []
                         }
                         resources.forEach { playlistData in
                             if let attributes = playlistData["attributes"] as? NSDictionary {
-                                let playlist = Playlist(dictionary: attributes)
+                                let playlist = AMPlaylist(dictionary: attributes)
                                 if let relationships = playlistData["relationships"] as? [String:Any] {
                                     playlist.setRelationshipObjects(relationships)
                                 }

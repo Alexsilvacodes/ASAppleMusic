@@ -72,7 +72,7 @@ public extension ASAppleMusic {
                             let activities = activitiesData["data"] as? [[String:Any]] {
                             activities.forEach { activityData in
                                 if let activity = activityData["attributes"] as? NSDictionary {
-                                    resultObjects.append(Activity(dictionary: activity))
+                                    resultObjects.append(AMActivity(dictionary: activity))
                                 }
                             }
                         }
@@ -80,7 +80,7 @@ public extension ASAppleMusic {
                             let artists = artistsData["data"] as? [[String:Any]] {
                             artists.forEach { artistData in
                                 if let artist = artistData["attributes"] as? NSDictionary {
-                                    resultObjects.append(Artist(dictionary: artist))
+                                    resultObjects.append(AMArtist(dictionary: artist))
                                 }
                             }
                         }
@@ -88,7 +88,7 @@ public extension ASAppleMusic {
                             let appleCurators = appleCuratorsData["data"] as? [[String:Any]] {
                             appleCurators.forEach { appleCuratorData in
                                 if let appleCurator = appleCuratorData["attributes"] as? NSDictionary {
-                                    resultObjects.append(AppleCurator(dictionary: appleCurator))
+                                    resultObjects.append(AMAppleCurator(dictionary: appleCurator))
                                 }
                             }
                         }
@@ -96,7 +96,7 @@ public extension ASAppleMusic {
                             let albums = albumsData["data"] as? [[String:Any]] {
                             albums.forEach { albumData in
                                 if let album = albumData["attributes"] as? NSDictionary {
-                                    resultObjects.append(Album(dictionary: album))
+                                    resultObjects.append(AMAlbum(dictionary: album))
                                 }
                             }
                         }
@@ -104,7 +104,7 @@ public extension ASAppleMusic {
                             let curators = curatorsData["data"] as? [[String:Any]] {
                             curators.forEach { curatorData in
                                 if let curator = curatorData["attributes"] as? NSDictionary {
-                                    resultObjects.append(Curator(dictionary: curator))
+                                    resultObjects.append(AMCurator(dictionary: curator))
                                 }
                             }
                         }
@@ -112,7 +112,7 @@ public extension ASAppleMusic {
                             let songs = songsData["data"] as? [[String:Any]] {
                             songs.forEach { songData in
                                 if let song = songData["attributes"] as? NSDictionary {
-                                    resultObjects.append(Song(dictionary: song))
+                                    resultObjects.append(AMSong(dictionary: song))
                                 }
                             }
                         }
@@ -120,7 +120,7 @@ public extension ASAppleMusic {
                             let playlists = playlistsData["data"] as? [[String:Any]] {
                             playlists.forEach { playlistData in
                                 if let playlist = playlistData["attributes"] as? NSDictionary {
-                                    resultObjects.append(Playlist(dictionary: playlist))
+                                    resultObjects.append(AMPlaylist(dictionary: playlist))
                                 }
                             }
                         }
@@ -128,7 +128,7 @@ public extension ASAppleMusic {
                             let musicVideos = musicVideosData["data"] as? [[String:Any]] {
                             musicVideos.forEach { musicVideoData in
                                 if let musicVideo = musicVideoData["attributes"] as? NSDictionary {
-                                    resultObjects.append(MusicVideo(dictionary: musicVideo))
+                                    resultObjects.append(AMMusicVideo(dictionary: musicVideo))
                                 }
                             }
                         }
@@ -136,7 +136,7 @@ public extension ASAppleMusic {
                             let stations = stationsData["data"] as? [[String:Any]] {
                             stations.forEach { stationData in
                                 if let station = stationData["attributes"] as? NSDictionary {
-                                    resultObjects.append(Station(dictionary: station))
+                                    resultObjects.append(AMStation(dictionary: station))
                                 }
                             }
                         }

@@ -8,48 +8,74 @@ import Alamofire
 import EVReflection
 
 /**
- Station object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Station.html)
+ Artist object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Artist.html)
  */
-public class Station: EVObject {
+public class AMArtist: EVObject {
 
-    /// The radio station artwork
-    public var artwork: Artwork?
+    /// The names of the genres associated with this artist
+    public var genreNames: [String]?
 
-    /// (Optional) The duration of the stream. Not emitted for 'live' or programmed stations
-    public var durationInMillis: Int64?
+    /// (Optional) The notes about the artist that appear in the iTunes Store
+    public var editorialNotes: AMEditorialNotes?
 
-    /// (Optional) The notes about the station that appear in Apple Music
-    public var editorialNotes: EditorialNotes?
-
-    /// (Optional) The episode number of the station. Only emitted when the station represents an episode of a show or other content
-    public var episodeNumber: Int?
-
-    /// Indicates whether the station is a live stream
-    public var isLive: Bool?
-
-    /// The localized name of the station
+    /// The localized name of the artist
     public var name: String?
 
-    /// The URL for sharing a station in Apple Music
+    /// The URL for sharing an artist in the iTunes Store
     public var url: String?
+
+    /// The relationships associated with this activity
+    public var relationships: [AMRelationship]?
+
+    /// The music videos on the album
+    public var musicVideos: [AMMusicVideo]?
 
     /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [
-            ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = Artwork(dictionary: artwork) } }, { return self.artwork }),
-            ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = EditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes })
+            ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = AMEditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes })
         ]
     }
-    /// :nodoc:
-    public override func setValue(_ value: Any!, forUndefinedKey key: String) {
-        if key == "durationInMillis" {
-            if let rawValue = value as? Int64 {
-                durationInMillis = rawValue
+
+    func setRelationshipObjects(_ relationships: [String:Any]) {
+        var relationshipsArray: [AMRelationship] = []
+
+        if let albumsRoot = relationships["albums"] as? [String:Any],
+            let albumsArray = albumsRoot["data"] as? [NSDictionary] {
+
+            albumsArray.forEach { album in
+                relationshipsArray.append(AMRelationship(dictionary: album))
             }
-        } else if key == "episodeNumber" {
-            if let rawValue = value as? Int {
-                episodeNumber = rawValue
+        }
+        if let genresRoot = relationships["genres"] as? [String:Any],
+            let genresArray = genresRoot["data"] as? [NSDictionary] {
+
+            genresArray.forEach { genre in
+                relationshipsArray.append(AMRelationship(dictionary: genre))
             }
+        }
+        if let musicVideosRoot = relationships["music-videos"] as? [String:Any],
+            let musicVideosArray = musicVideosRoot["data"] as? [[String:Any]] {
+            var musicVideos: [AMMusicVideo] = []
+
+            musicVideosArray.forEach { musicVideoData in
+                if let musicVideo = musicVideoData["attributes"] as? NSDictionary {
+                    musicVideos.append(AMMusicVideo(dictionary: musicVideo))
+                }
+            }
+
+            self.musicVideos = musicVideos
+        }
+        if let playlistsRoot = relationships["playlists"] as? [String:Any],
+            let playlistsArray = playlistsRoot["data"] as? [NSDictionary] {
+
+            playlistsArray.forEach { playlist in
+                relationshipsArray.append(AMRelationship(dictionary: playlist))
+            }
+        }
+
+        if !relationshipsArray.isEmpty {
+            self.relationships = relationshipsArray
         }
     }
 
@@ -58,19 +84,19 @@ public class Station: EVObject {
 public extension ASAppleMusic {
 
     /**
-     Get Station based on the id of the `storefront` and the station `id`
+     Get Artist based on the id of the `storefront` and the artist `id`
 
      - Parameters:
-     - id: The id of the station (Number). Example: `"ra.925434166"`
+     - id: The id of the artist (Number). Example: `"179934"`
      - storeID: The id of the store in two-letter code. Example: `"us"`
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Station*, *AMError*
-     - station: the `Station` object itself
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Artist*, *AMError*
+     - artist: the `Artist` object itself
      - error: if the request you will get an `AMError` object
 
-     **Example:** *https://api.music.apple.com/v1/catalog/us/stations/ra.925434166*
+     **Example:** *https://api.music.apple.com/v1/catalog/us/artists/179934*
      */
-    func getStation(withID id: String, storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ station: Station?, _ error: AMError?) -> Void) {
+    func getArtist(withID id: String, storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ artist: AMArtist?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -79,13 +105,13 @@ public extension ASAppleMusic {
                 error.title = "Unauthorized request"
                 error.detail = "Missing token, refresh current token or request a new token"
                 completion(nil, error)
-                self.print("[ASAppleMusic] 🛑: Missing token")
+                self.self.print("[ASAppleMusic] 🛑: Missing token")
                 return
             }
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/stations/\(id)"
+            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/artists/\(id)"
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
@@ -96,8 +122,11 @@ public extension ASAppleMusic {
                         let data = response["data"] as? [[String:Any]],
                         let resource = data.first,
                         let attributes = resource["attributes"] as? NSDictionary {
-                        let station = Station(dictionary: attributes)
-                        completion(station, nil)
+                        let artist = AMArtist(dictionary: attributes)
+                        if let relationships = resource["relationships"] as? [String:Any] {
+                            artist.setRelationshipObjects(relationships)
+                        }
+                        completion(artist, nil)
                         self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
@@ -122,19 +151,19 @@ public extension ASAppleMusic {
     }
 
     /**
-     Get several Station objects based on the `ids` of the stations that you want to get and the Storefront ID of the store
+     Get several Artist objects based on the `ids` of the artists that you want to get and the Storefront ID of the store
 
      - Parameters:
-     - ids: An id array of the stations. Example: `["ra.925344166", "ra.1228162316"]`
+     - ids: An id array of the artists. Example: `["179934", "463106"]`
      - storeID: The id of the store in two-letter code. Example: `"us"`
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[Station]*, *AMError*
-     - stations: the `[Station]` array of objects
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[Artist]*, *AMError*
+     - artists: the `[Artist]` array of objects
      - error: if the request you will get an `AMError` object
 
-     **Example:** *https://api.music.apple.com/v1/catalog/us/stations?ids=ra.925344166,ra.1228162316*
+     **Example:** *https://api.music.apple.com/v1/catalog/us/artists?ids=179934,463106*
      */
-    func getMultipleStations(withIDs ids: [String], storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ stations: [Station]?, _ error: AMError?) -> Void) {
+    func getMultipleArtists(withIDs ids: [String], storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ artists: [AMArtist]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -149,7 +178,7 @@ public extension ASAppleMusic {
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/stations?ids=\(ids.joined(separator: ","))"
+            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/artists?ids=\(ids.joined(separator: ","))"
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
@@ -158,17 +187,20 @@ public extension ASAppleMusic {
                     self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
-                        var stations: [Station]?
+                        var artists: [AMArtist]?
                         if resources.count > 0 {
-                            stations = []
+                            artists = []
                         }
-                        resources.forEach { stationData in
-                            if let attributes = stationData["attributes"] as? NSDictionary {
-                                let station = Station(dictionary: attributes)
-                                stations?.append(station)
+                        resources.forEach { artistData in
+                            if let attributes = artistData["attributes"] as? NSDictionary {
+                                let artist = AMArtist(dictionary: attributes)
+                                if let relationships = artistData["relationships"] as? [String:Any] {
+                                    artist.setRelationshipObjects(relationships)
+                                }
+                                artists?.append(artist)
                             }
                         }
-                        completion(stations, nil)
+                        completion(artists, nil)
                         self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
@@ -193,4 +225,3 @@ public extension ASAppleMusic {
     }
 
 }
-

@@ -10,13 +10,13 @@ import EVReflection
 /**
  Music Video object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/MusicVideo.html)
  */
-public class MusicVideo: EVObject {
+public class AMMusicVideo: EVObject {
 
     /// The artist’s name
     public var artistName: String?
 
     /// The artwork for the music video’s associated album
-    public var artwork: Artwork?
+    public var artwork: AMArtwork?
 
     /// (Optional) The RIAA rating of the content. The possible values for this rating are clean and explicit. No value means no rating
     public var contentRating: Rating?
@@ -25,7 +25,7 @@ public class MusicVideo: EVObject {
     public var durationInMillis: Int64?
 
     /// (Optional) The editorial notes for the music video
-    public var editorialNotes: EditorialNotes?
+    public var editorialNotes: AMEditorialNotes?
 
     /// The music video’s associated genres
     public var genreNames: [String]?
@@ -37,10 +37,10 @@ public class MusicVideo: EVObject {
     public var name: String?
 
     /// (Optional) The parameters to use to playback the music video
-    public var playParams: Playable?
+    public var playParams: AMPlayable?
 
     /// The preview assets for the music video
-    public var previews: [Preview]?
+    public var previews: [AMPreview]?
 
     /// The release date of the music video in YYYY-MM-DD format
     public var releaseDate: String?
@@ -55,20 +55,20 @@ public class MusicVideo: EVObject {
     public var videoSubType: String?
 
     /// The relationships associated with this activity
-    public var relationships: [Relationship]?
+    public var relationships: [AMRelationship]?
 
     /// :nodoc:
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [
-            ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = Artwork(dictionary: artwork) } }, { return self.artwork }),
-            ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = EditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes }),
-            ("playParams", { if let playParams = $0 as? NSDictionary { self.playParams = Playable(dictionary: playParams) } }, { return self.playParams }),
+            ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = AMArtwork(dictionary: artwork) } }, { return self.artwork }),
+            ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = AMEditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes }),
+            ("playParams", { if let playParams = $0 as? NSDictionary { self.playParams = AMPlayable(dictionary: playParams) } }, { return self.playParams }),
             ("previews", {
                     if let previewsArray = $0 as? [NSDictionary] {
-                        var previews: [Preview] = []
+                        var previews: [AMPreview] = []
 
                         previewsArray.forEach { preview in
-                            previews.append(Preview(dictionary: preview))
+                            previews.append(AMPreview(dictionary: preview))
                         }
 
                         self.previews = previews.isEmpty ? nil : previews
@@ -92,33 +92,33 @@ public class MusicVideo: EVObject {
             }
         } else if key == "playParams" {
             if let rawValue = value as? NSDictionary {
-                playParams = Playable(dictionary: rawValue)
+                playParams = AMPlayable(dictionary: rawValue)
             }
         }
     }
 
     func setRelationshipObjects(_ relationships: [String:Any]) {
-        var relationshipsArray: [Relationship] = []
+        var relationshipsArray: [AMRelationship] = []
 
         if let albumsRoot = relationships["albums"] as? [String:Any],
             let albumsArray = albumsRoot["data"] as? [NSDictionary] {
 
             albumsArray.forEach { album in
-                relationshipsArray.append(Relationship(dictionary: album))
+                relationshipsArray.append(AMRelationship(dictionary: album))
             }
         }
         if let artistsRoot = relationships["artists"] as? [String:Any],
             let artistsArray = artistsRoot["data"] as? [NSDictionary] {
 
             artistsArray.forEach { artist in
-                relationshipsArray.append(Relationship(dictionary: artist))
+                relationshipsArray.append(AMRelationship(dictionary: artist))
             }
         }
         if let genresRoot = relationships["genres"] as? [String:Any],
             let genresArray = genresRoot["data"] as? [NSDictionary] {
 
             genresArray.forEach { genre in
-                relationshipsArray.append(Relationship(dictionary: genre))
+                relationshipsArray.append(AMRelationship(dictionary: genre))
             }
         }
 
@@ -144,7 +144,7 @@ public extension ASAppleMusic {
 
      **Example:** *https://api.music.apple.com/v1/catalog/us/music-videos/639322181*
      */
-    func getMusicVideo(withID id: String, storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ musicVideo: MusicVideo?, _ error: AMError?) -> Void) {
+    func getMusicVideo(withID id: String, storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ musicVideo: AMMusicVideo?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -170,7 +170,7 @@ public extension ASAppleMusic {
                         let data = response["data"] as? [[String:Any]],
                         let resource = data.first,
                         let attributes = resource["attributes"] as? NSDictionary {
-                        let musicVideo = MusicVideo(dictionary: attributes)
+                        let musicVideo = AMMusicVideo(dictionary: attributes)
                         if let relationships = resource["relationships"] as? [String:Any] {
                             musicVideo.setRelationshipObjects(relationships)
                         }
@@ -212,7 +212,7 @@ public extension ASAppleMusic {
 
      **Example:** *https://api.music.apple.com/v1/catalog/us/music-videos?ids=609082181,890853283*
      */
-    func getMultipleMusicVideos(withIDs ids: [String], storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ musicVideos: [MusicVideo]?, _ error: AMError?) -> Void) {
+    func getMultipleMusicVideos(withIDs ids: [String], storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ musicVideos: [AMMusicVideo]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -236,13 +236,13 @@ public extension ASAppleMusic {
                     self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
-                        var musicVideos: [MusicVideo]?
+                        var musicVideos: [AMMusicVideo]?
                         if resources.count > 0 {
                             musicVideos = []
                         }
                         resources.forEach { musicVideoData in
                             if let attributes = musicVideoData["attributes"] as? NSDictionary {
-                                let musicVideo = MusicVideo(dictionary: attributes)
+                                let musicVideo = AMMusicVideo(dictionary: attributes)
                                 if let relationships = musicVideoData["relationships"] as? [String:Any] {
                                     musicVideo.setRelationshipObjects(relationships)
                                 }

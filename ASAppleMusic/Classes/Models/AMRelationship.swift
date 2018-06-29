@@ -6,7 +6,7 @@
 import Foundation
 import EVReflection
 
-public enum RelationshipType: String {
+public enum AMRelationshipType: String {
 
     case activities = "activities"
     case albums = "albums"
@@ -22,7 +22,7 @@ public enum RelationshipType: String {
 /**
  Relationship object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/RelationshipDictionary.html)
  */
-public class Relationship: EVObject {
+public class AMRelationship: EVObject {
 
     /// One or more destination objects
     public var id: String?
@@ -31,12 +31,12 @@ public class Relationship: EVObject {
     public var href: String?
 
     /// Type of the relationship, take a look at the enum to know the types
-    public var type: RelationshipType?
+    public var type: AMRelationshipType?
 
     /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if key == "type" {
-            if let rawValue = value as? String, let relationship = RelationshipType(rawValue: rawValue) {
+            if let rawValue = value as? String, let relationship = AMRelationshipType(rawValue: rawValue) {
                 type = relationship
             }
         }
