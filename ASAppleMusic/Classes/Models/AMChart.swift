@@ -11,6 +11,7 @@ public enum AMChartType: String {
     case albums = "albums"
     case musicVideos = "music-videos"
     case songs = "songs"
+    case playlists = "playlists"
 }
 
 /**
