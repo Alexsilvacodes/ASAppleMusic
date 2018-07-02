@@ -57,30 +57,128 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Chart.swift",
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMChart.swift",
       "line": 10,
-      "symbol": "ChartType",
+      "symbol": "AMChartType",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Chart.swift",
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMChart.swift",
       "line": 11,
-      "symbol": "ChartType.albums",
+      "symbol": "AMChartType.albums",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Chart.swift",
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMChart.swift",
       "line": 12,
-      "symbol": "ChartType.musicVideos",
+      "symbol": "AMChartType.musicVideos",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Chart.swift",
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMChart.swift",
       "line": 13,
-      "symbol": "ChartType.songs",
+      "symbol": "AMChartType.songs",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMPlaylist.swift",
+      "line": 14,
+      "symbol": "AMPlaylistType.userShared",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMPlaylist.swift",
+      "line": 15,
+      "symbol": "AMPlaylistType.editorial",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMPlaylist.swift",
+      "line": 16,
+      "symbol": "AMPlaylistType.external",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMPlaylist.swift",
+      "line": 17,
+      "symbol": "AMPlaylistType.personalMix",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMRelationship.swift",
+      "line": 9,
+      "symbol": "AMRelationshipType",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMRelationship.swift",
+      "line": 11,
+      "symbol": "AMRelationshipType.activities",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMRelationship.swift",
+      "line": 12,
+      "symbol": "AMRelationshipType.albums",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMRelationship.swift",
+      "line": 13,
+      "symbol": "AMRelationshipType.appleCurator",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMRelationship.swift",
+      "line": 14,
+      "symbol": "AMRelationshipType.artists",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMRelationship.swift",
+      "line": 15,
+      "symbol": "AMRelationshipType.curators",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMRelationship.swift",
+      "line": 16,
+      "symbol": "AMRelationshipType.genres",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMRelationship.swift",
+      "line": 17,
+      "symbol": "AMRelationshipType.playlists",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMRelationship.swift",
+      "line": 18,
+      "symbol": "AMRelationshipType.stations",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMRelationship.swift",
+      "line": 19,
+      "symbol": "AMRelationshipType.tracks",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
@@ -207,97 +305,6 @@
       "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Error.swift",
       "line": 31,
       "symbol": "Code.serviceUnavailable",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Playlist.swift",
-      "line": 14,
-      "symbol": "PlaylistType.userShared",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Playlist.swift",
-      "line": 15,
-      "symbol": "PlaylistType.editorial",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Playlist.swift",
-      "line": 16,
-      "symbol": "PlaylistType.external",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Playlist.swift",
-      "line": 17,
-      "symbol": "PlaylistType.personalMix",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Relationship.swift",
-      "line": 9,
-      "symbol": "RelationshipType",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Relationship.swift",
-      "line": 11,
-      "symbol": "RelationshipType.activities",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Relationship.swift",
-      "line": 12,
-      "symbol": "RelationshipType.albums",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Relationship.swift",
-      "line": 13,
-      "symbol": "RelationshipType.appleCurator",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Relationship.swift",
-      "line": 14,
-      "symbol": "RelationshipType.artists",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Relationship.swift",
-      "line": 15,
-      "symbol": "RelationshipType.curators",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Relationship.swift",
-      "line": 16,
-      "symbol": "RelationshipType.genres",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Relationship.swift",
-      "line": 17,
-      "symbol": "RelationshipType.playlists",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Relationship.swift",
-      "line": 18,
-      "symbol": "RelationshipType.stations",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     }
