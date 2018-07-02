@@ -7,7 +7,7 @@ import Foundation
 import EVReflection
 
 /**
- Artwork object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Artwork.html)
+ Artwork object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/artwork)
  */
 public class AMArtwork: EVObject {
 

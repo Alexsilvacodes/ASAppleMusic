@@ -8,7 +8,7 @@ import Alamofire
 import EVReflection
 
 /**
- Searches whatever type of content. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Searchforresources.html)
+ Searches whatever type of content. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/search_for_catalog_resources)
  */
 public extension ASAppleMusic {
 

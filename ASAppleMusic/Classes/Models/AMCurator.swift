@@ -8,7 +8,7 @@ import Alamofire
 import EVReflection
 
 /**
- Curator object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Curator.html)
+ Curator object representation. For more information take a look at [Apple Music API]https://developer.apple.com/documentation/applemusicapi/curator)
  */
 public class AMCurator: EVObject {
 

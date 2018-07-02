@@ -8,7 +8,7 @@ import Alamofire
 import EVReflection
 
 /**
- Music Video object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/MusicVideo.html)
+ Music Video object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/musicvideo)
  */
 public class AMMusicVideo: EVObject {
 

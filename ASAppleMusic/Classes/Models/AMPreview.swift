@@ -7,7 +7,7 @@ import Foundation
 import EVReflection
 
 /**
- Playlist Type object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Preview.html)
+ Playlist Type object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/preview)
  */
 public class AMPreview: EVObject {
 

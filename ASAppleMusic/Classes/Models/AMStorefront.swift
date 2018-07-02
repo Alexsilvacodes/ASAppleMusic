@@ -8,7 +8,7 @@ import Alamofire
 import EVReflection
 
 /**
- Storefront object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Storefront.html)
+ Storefront object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/storefront)
  */
 public class AMStorefront: EVObject {
 

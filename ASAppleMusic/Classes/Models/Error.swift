@@ -33,7 +33,7 @@ public enum Code: Int {
 }
 
 /**
- Source object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/ErrorDictionary.html)
+ Source object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/error/source)
  */
 public class Source: EVObject {
 
@@ -43,7 +43,7 @@ public class Source: EVObject {
 }
 
 /**
- Error object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/ErrorDictionary.html)
+ Error object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/error)
  */
 public class AMError: EVObject {
 
@@ -56,7 +56,7 @@ public class AMError: EVObject {
     /// The HTTP status code for this problem
     public var status: String?
 
-    /// The code for this error. For possible values, [see HTTP Status Codes](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/HTTPStatusCodes.html)
+    /// The code for this error. For possible values, [see HTTP Status Codes](https://developer.apple.com/documentation/applemusicapi/http_status_codes)
     public var code: Code?
 
     /// A short description of the problem that may be localized
@@ -65,7 +65,7 @@ public class AMError: EVObject {
     /// A long description of the problem that may be localized
     public var detail: String?
 
-    /// A object containing references to the source of the error. For possible members, [see Source object](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/ErrorDictionary.html)
+    /// A object containing references to the source of the error. For possible members, [see Source object](https://developer.apple.com/documentation/applemusicapi/error/source)
     public var source: Source?
 
     /// Contains meta information about the error
