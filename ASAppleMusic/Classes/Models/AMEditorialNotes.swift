@@ -7,7 +7,7 @@ import Foundation
 import EVReflection
 
 /**
- EditorialNotes object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/EditorialNotes.html)
+ EditorialNotes object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/editorialnotes)
  */
 public class AMEditorialNotes: EVObject {
 

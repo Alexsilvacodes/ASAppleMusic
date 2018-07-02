@@ -14,7 +14,7 @@ public enum AMChartType: String {
 }
 
 /**
- Chart object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/FetchCharts.html)
+ Chart object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/chart)
  */
 public class AMChart: EVObject {
 

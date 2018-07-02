@@ -8,7 +8,7 @@ import Alamofire
 import EVReflection
 
 /**
- Activity object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Activity.html)
+ Activity object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/album)
  */
 public class AMActivity: EVObject {
 

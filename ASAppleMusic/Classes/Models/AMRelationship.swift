@@ -16,11 +16,12 @@ public enum AMRelationshipType: String {
     case genres = "genres"
     case playlists = "playlists"
     case stations = "stations"
+    case tracks = "tracks"
 
 }
 
 /**
- Relationship object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/RelationshipDictionary.html)
+ Relationship object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/relationship)
  */
 public class AMRelationship: EVObject {
 

@@ -8,7 +8,7 @@ import Alamofire
 import EVReflection
 
 /**
- Album object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/Album.html)
+ Album object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/album)
  */
 public class AMAlbum: EVObject {
 
