@@ -156,7 +156,7 @@ public extension ASAppleMusic {
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/playlist/\(id)"
+            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/playlists/\(id)"
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
