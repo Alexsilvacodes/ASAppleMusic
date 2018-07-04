@@ -85,6 +85,13 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMChart.swift",
+      "line": 14,
+      "symbol": "AMChartType.playlists",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMPlaylist.swift",
       "line": 14,
       "symbol": "AMPlaylistType.userShared",
