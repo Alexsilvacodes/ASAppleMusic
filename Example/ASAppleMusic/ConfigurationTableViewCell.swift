@@ -1,9 +1,6 @@
 //
-//  ConfigurationTableViewCell.swift
-//  ASAppleMusic_Example
-//
-//  Created by PartyPlay on 12/1/18.
-//  Copyright © 2018 CocoaPods. All rights reserved.
+//  Alex Silva - 2018
+//  alex@alexsays.info
 //
 
 import UIKit

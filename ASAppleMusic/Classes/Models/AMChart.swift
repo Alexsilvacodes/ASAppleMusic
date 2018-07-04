@@ -56,7 +56,7 @@ public extension ASAppleMusic {
      - curator: the `Curator` object itself
      - error: if the request you will get an `AMError` object
 
-     **Example:** *https://api.music.apple.com/v1/catalog/us/curators/1217688517*
+     **Example:** *https://api.music.apple.com/v1/catalog/us/charts?types=songs,albums,playlists&genre=20&limit=1*
      */
     func getCharts(_ types: [String], fromStorefrontID storeID: String, lang: String? = nil, chart: String? = nil, genre: String? = nil, limit: Int? = nil, offset: Int? = nil, completion: @escaping (_ charts: [AMChart]?, _ error: AMError?) -> Void) {
         callWithToken { token in
@@ -115,6 +115,13 @@ public extension ASAppleMusic {
                             musicVideos.forEach { musicVideo in
                                 let chart = AMChart(dictionary: musicVideo)
                                 chart.type = .musicVideos
+                                resultObjects.append(chart)
+                            }
+                        }
+                        if let playlists = results["playlists"] as? [NSDictionary] {
+                            playlists.forEach { playlist in
+                                let chart = AMChart(dictionary: playlist)
+                                chart.type = .playlists
                                 resultObjects.append(chart)
                             }
                         }

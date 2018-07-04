@@ -83,6 +83,7 @@
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* MainViewController.swift */,
 				8760B05B2007F6C1008CD701 /* ConfigurationViewController.swift */,
+				8760B05F2008C66A008CD701 /* ConfigurationTableViewCell.swift */,
 				8760B05D2007F6CA008CD701 /* DetailViewController.swift */,
 				8760B0612008DD36008CD701 /* ASAppleMusic+Helper.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -91,7 +92,6 @@
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 				8760B0592007F4C1008CD701 /* Sections.plist */,
 				87855816200926EB0070BA8B /* Secret.plist */,
-				8760B05F2008C66A008CD701 /* ConfigurationTableViewCell.swift */,
 			);
 			name = "Example for ASAppleMusic";
 			path = ASAppleMusic;
