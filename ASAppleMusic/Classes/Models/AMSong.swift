@@ -12,6 +12,8 @@ import EVReflection
  */
 public class AMSong: EVObject {
 
+    public var albumName: String?
+
     /// The artist’s name
     public var artistName: String?
 

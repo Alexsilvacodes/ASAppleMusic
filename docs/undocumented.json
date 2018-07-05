@@ -190,6 +190,13 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/AMSong.swift",
+      "line": 15,
+      "symbol": "AMSong.albumName",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/partyplay/Documents/ASAppleMusic/ASAppleMusic/Classes/Models/Error.swift",
       "line": 14,
       "symbol": "Code.ok",
