@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             ASAppleMusic.shared.initialize(keyID: keyID, teamID: teamID, tokenServer: tokenServer)
         }
         ASAppleMusic.shared.debugLevel = .verbose
+        ASAppleMusic.shared.source = .user
 
         return true
     }

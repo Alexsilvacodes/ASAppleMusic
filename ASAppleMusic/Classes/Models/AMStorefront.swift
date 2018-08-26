@@ -36,7 +36,71 @@ public class AMStorefront: EVObject {
 }
 
 public extension ASAppleMusic {
-
+    
+    /**
+     Get User's Storefront
+     
+     - Parameters:
+     - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Storefront*, *AMError*
+     - storefront: the `Storefront` object itself
+     - error: if the request you will get an `AMError` object
+     
+     **Example:** *https://api.music.apple.com/v1/me/storefront*
+     */
+    func getUserStorefront(withLang lang: String? = nil, completion: @escaping (_ storefront: AMStorefront?, _ error: AMError?) -> Void) {
+        callWithToken { devToken, userToken in
+            guard let devToken = devToken, let userToken = userToken else {
+                let error = AMError()
+                error.status = "401"
+                error.code = .unauthorized
+                error.title = "Unauthorized request"
+                error.detail = "Missing token, refresh current token or request a new token"
+                completion(nil, error)
+                self.print("[ASAppleMusic] 🛑: Missing token")
+                return
+            }
+            let headers = [
+                "Authorization": "Bearer \(devToken)",
+                "Music-User-Token": userToken
+            ]
+            
+            var url = "https://api.music.apple.com/v1/me/storefront"
+            if let lang = lang {
+                url = url + "?l=\(lang)"
+            }
+            Alamofire.request(url, headers: headers)
+                .responseJSON { (response) in
+                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
+                    if let response = response.result.value as? [String:Any],
+                        let data = response["data"] as? [[String:Any]],
+                        let resource = data.first,
+                        let attributes = resource["attributes"] as? NSDictionary {
+                        let storefront = AMStorefront(dictionary: attributes)
+                        completion(storefront, nil)
+                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
+                    } else if let response = response.result.value as? [String:Any],
+                        let errors = response["errors"] as? [[String:Any]],
+                        let errorDict = errors.first as NSDictionary? {
+                        let error = AMError(dictionary: errorDict)
+                        
+                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
+                        
+                        completion(nil, error)
+                    } else {
+                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
+                        
+                        let error = AMError()
+                        error.status = "401"
+                        error.code = .unauthorized
+                        error.title = "Unauthorized request"
+                        error.detail = "Missing token, refresh current token or request a new token"
+                        completion(nil, error)
+                    }
+            }
+        }
+    }
+    
     /**
      Get Storefront based on the `id` of the store
 

@@ -125,18 +125,9 @@
 		<key>User Storefront</key>
 		<dict>
 			<key>function</key>
-			<string>getStorefront</string>
+			<string>getUserStorefront</string>
 			<key>params</key>
 			<dict>
-				<key>id</key>
-				<dict>
-					<key>name</key>
-					<string>ID</string>
-					<key>placeholder</key>
-					<string>us...</string>
-					<key>optional</key>
-					<false/>
-				</dict>
 				<key>l</key>
 				<dict>
 					<key>name</key>
