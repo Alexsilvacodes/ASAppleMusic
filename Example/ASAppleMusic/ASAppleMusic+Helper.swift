@@ -7,6 +7,7 @@ import Foundation
 import ASAppleMusic
 
 enum CallType: String {
+    case getUserStorefront = "getUserStorefront"
     case getStorefront = "getStorefront"
     case getMultipleStorefronts = "getMultipleStorefronts"
     case getAllStorefronts = "getAllStorefronts"
@@ -40,6 +41,10 @@ extension ASAppleMusic {
     func makeCall(ofType type: CallType, withParams params: [String:String], _ completion: @escaping (AnyObject?, AMError?) -> Void) {
         switch type {
         // Storefronts
+        case .getUserStorefront:
+            ASAppleMusic.shared.getUserStorefront(withLang: params["l"], completion: { storefront, error in
+                completion(storefront, error)
+            })
         case .getStorefront:
             ASAppleMusic.shared.getStorefront(withID: params["id"]!, lang: params["l"], completion: { storefront, error in
                 completion(storefront, error)

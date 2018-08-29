@@ -123,12 +123,18 @@ public class ASAppleMusic {
         self.teamID = teamID
         self.tokenServer = tokenServer
     }
+    
+    func callWithToken(_ completion: @escaping (_ devToken: String?) -> Void) {
+        callWithToken { (devToken, nil) in
+            completion(devToken)
+        }
+    }
 
-    func callWithToken(_ completion: @escaping (_ token: String?) -> Void) {
+    func callWithToken(_ completion: @escaping (_ devToken: String?, _ userToken: String?) -> Void) {
         switch source {
         case .developer:
-            getDeveloperToken { token in
-                completion(token)
+            getDeveloperToken { devToken in
+                completion(devToken, nil)
             }
         case .user:
             getDeveloperToken { devToken in
@@ -136,20 +142,19 @@ public class ASAppleMusic {
                     let cloudService = SKCloudServiceController()
                     SKCloudServiceController.requestAuthorization { status in
                         if status == .authorized {
-                            cloudService.requestUserToken(forDeveloperToken: devToken,
-                                                          completionHandler: { userToken, error in
+                            cloudService.requestUserToken(forDeveloperToken: devToken, completionHandler: { (userToken, error) in
                                 if let userToken = userToken {
-                                    completion(userToken)
+                                    completion(devToken, userToken)
                                 } else {
-                                    completion(nil)
+                                    completion(devToken, nil)
                                 }
                             })
                         } else {
-                            completion(nil)
+                            completion(nil, nil)
                         }
                     }
                 } else {
-                    completion(nil)
+                    completion(nil, nil)
                 }
             }
         }
