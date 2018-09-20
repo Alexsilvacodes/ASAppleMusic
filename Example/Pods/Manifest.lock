@@ -1,12 +1,12 @@
 PODS:
-  - Alamofire (4.7.2)
-  - ASAppleMusic (1.0.1):
+  - Alamofire (4.7.3)
+  - ASAppleMusic (1.1.0):
     - Alamofire
     - EVReflection/Alamofire
-  - EVReflection/Alamofire (5.6.2):
+  - EVReflection/Alamofire (5.7.0):
     - Alamofire
     - EVReflection/Core
-  - EVReflection/Core (5.6.2)
+  - EVReflection/Core (5.7.0)
 
 DEPENDENCIES:
   - ASAppleMusic (from `../`)
@@ -21,9 +21,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
-  ASAppleMusic: c6c5979269fda1844c2d306d4471bc360d55beec
-  EVReflection: 640322f8a3aaf78cbc3c23892476b6adb636ebf0
+  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
+  ASAppleMusic: 4bcbd0c13461e0c684b4decbff79b90fbf7959fe
+  EVReflection: c579d225cf0ec062d80f35f5af82acd770016a76
 
 PODFILE CHECKSUM: 6c41e99ecb537c18d6a4308b2e46168da441d2e4
 
