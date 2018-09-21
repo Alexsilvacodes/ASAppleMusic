@@ -106,7 +106,7 @@ public extension ASAppleMusic {
 
      **Example:** *https://api.music.apple.com/v1/me/library/music-videos/639322181*
      */
-    func getMusicVideo(withID id: String, lang: String? = nil, completion: @escaping (_ musicVideo: AMLibraryMusicVideo?, _ error: AMError?) -> Void) {
+    func getLibraryMusicVideo(withID id: String, lang: String? = nil, completion: @escaping (_ musicVideo: AMLibraryMusicVideo?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -173,7 +173,7 @@ public extension ASAppleMusic {
 
      **Example:** *https://api.music.apple.com/v1/me/library/music-videos?ids=609082181,890853283*
      */
-    func getMultipleMusicVideos(withIDs ids: [String]? = nil, lang: String? = nil, completion: @escaping (_ musicVideos: [AMLibraryMusicVideo]?, _ error: AMError?) -> Void) {
+    func getMultipleLibraryMusicVideos(withIDs ids: [String]? = nil, lang: String? = nil, completion: @escaping (_ musicVideos: [AMLibraryMusicVideo]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()

@@ -76,7 +76,7 @@ public extension ASAppleMusic {
 
      **Example:** *https://api.music.apple.com/v1/me/library/playlists/pl.acc464d753b94302b8806e6fcde56e17*
      */
-    func getPlaylist(withID id: String, lang: String? = nil, completion: @escaping (_ playlist: AMLibraryPlaylist?, _ error: AMError?) -> Void) {
+    func getLibraryPlaylist(withID id: String, lang: String? = nil, completion: @escaping (_ playlist: AMLibraryPlaylist?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -142,7 +142,7 @@ public extension ASAppleMusic {
 
      **Example:** *https://api.music.apple.com/v1/me/library/playlists?ids=pl.acc464c740b94302b8805e5fcbe67e17,pl.97c6f95b0b774bedbcce227f9ea5d32b*
      */
-    func getMultiplePlaylists(withIDs ids: [String]? = nil, lang: String? = nil, completion: @escaping (_ playlists: [AMLibraryPlaylist]?, _ error: AMError?) -> Void) {
+    func getMultipleLibraryPlaylists(withIDs ids: [String]? = nil, lang: String? = nil, completion: @escaping (_ playlists: [AMLibraryPlaylist]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()

@@ -50,7 +50,7 @@ public extension ASAppleMusic {
 
      **Example:** *https://api.music.apple.com/v1/me/library/artists/179934*
      */
-    func getArtist(withID id: String, lang: String? = nil, completion: @escaping (_ artist: AMLibraryArtist?, _ error: AMError?) -> Void) {
+    func getLibraryArtist(withID id: String, lang: String? = nil, completion: @escaping (_ artist: AMLibraryArtist?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -116,7 +116,7 @@ public extension ASAppleMusic {
 
      **Example:** *https://api.music.apple.com/v1/me/library/artists?ids=179934,463106*
      */
-    func getMultipleArtists(withIDs ids: [String]? = nil, lang: String? = nil, completion: @escaping (_ artists: [AMLibraryArtist]?, _ error: AMError?) -> Void) {
+    func getMultipleLibraryArtists(withIDs ids: [String]? = nil, lang: String? = nil, completion: @escaping (_ artists: [AMLibraryArtist]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
