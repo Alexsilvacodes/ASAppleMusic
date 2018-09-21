@@ -8,11 +8,9 @@ import Alamofire
 import EVReflection
 
 /**
- Song object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/song)
+ Lbrary Album object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/libraryalbum/)
  */
-public class AMSong: EVObject {
-
-    public var albumName: String?
+public class AMLibraryAlbum: EVObject {
 
     /// The artist’s name
     public var artistName: String?
@@ -20,56 +18,17 @@ public class AMSong: EVObject {
     /// The album artwork
     public var artwork: AMArtwork?
 
-    /// (Optional) The song’s composer
-    public var composerName: String?
-
     /// (Optional) The RIAA rating of the content. The possible values for this rating are clean and explicit. No value means no rating
-    public var contentRating: Rating?
+    public var contentRating: String?
 
-    /// The disc number the song appears on
-    public var discNumber: Int?
-
-    /// (Optional) The duration of the song in milliseconds
-    public var durationInMillis: Int64?
-
-    /// (Optional) The notes about the song that appear in the iTunes Store
-    public var editorialNotes: AMEditorialNotes?
-
-    /// The genre names the song is associated with
-    public var genreNames: [String]?
-
-    /// The ISRC (International Standard Recording Code) for the song
-    public var isrc: String?
-
-    /// (Optional, classical music only) The movement count of this song
-    public var movementCount: Int?
-
-    /// (Optional, classical music only) The movement name of this song
-    public var movementName: String?
-
-    /// (Optional, classical music only) The movement number of this song
-    public var movementNumber: Int?
-
-    /// The localized name of the song
-    public var name: String?
-
-    /// (Optional) The parameters to use to playback the song
+    /// (Optional) The parameters to use to playback the tracks of the album
     public var playParams: AMPlayable?
 
-    /// The preview assets for the song
-    public var previews: [AMPreview]?
+    /// The number of tracks.
+    public var trackCount: Int?
 
-    /// The release date of the song in YYYY-MM-DD format
-    public var releaseDate: String?
-
-    /// The number of the song in the album’s track list
-    public var trackNumber: Int?
-
-    /// The URL for sharing a song in the iTunes Store
+    /// The URL for sharing an album in the iTunes Store
     public var url: String?
-
-    /// (Optional, classical music only) The name of the associated work
-    public var workName: String?
 
     /// The relationships associated with this activity
     public var relationships: [AMRelationship]?
@@ -78,47 +37,15 @@ public class AMSong: EVObject {
     public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
         return [
             ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = AMArtwork(dictionary: artwork) } }, { return self.artwork }),
-            ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = AMEditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes }),
-            ("playParams", { if let playParams = $0 as? NSDictionary { self.playParams = AMPlayable(dictionary: playParams) } }, { return self.playParams }),
-            ("previews", {
-                if let previewsArray = $0 as? [NSDictionary] {
-                    var previews: [AMPreview] = []
-
-                    previewsArray.forEach { preview in
-                        previews.append(AMPreview(dictionary: preview))
-                    }
-
-                    self.previews = previews.isEmpty ? nil : previews
-                }
-            }, { return self.previews })
+            ("playParams", { if let playParams = $0 as? NSDictionary { self.playParams = AMPlayable(dictionary: playParams) } }, { return self.playParams })
         ]
     }
 
     /// :nodoc:
     public override func setValue(_ value: Any!, forUndefinedKey key: String) {
-        if key == "contentRating" {
-            if let rawValue = value as? String {
-                contentRating = Rating(rawValue: rawValue)
-            }
-        } else if key == "durationInMillis" {
-            if let rawValue = value as? Int64 {
-                durationInMillis = rawValue
-            }
-        } else if key == "discNumber" {
+        if key == "trackCount" {
             if let rawValue = value as? Int {
-                discNumber = rawValue
-            }
-        } else if key == "movementCount" {
-            if let rawValue = value as? Int {
-                movementCount = rawValue
-            }
-        } else if key == "movementNumber" {
-            if let rawValue = value as? Int {
-                movementNumber = rawValue
-            }
-        } else if key == "trackNumber" {
-            if let rawValue = value as? Int {
-                trackNumber = rawValue
+                trackCount = rawValue
             }
         }
     }
@@ -126,13 +53,6 @@ public class AMSong: EVObject {
     func setRelationshipObjects(_ relationships: [String:Any]) {
         var relationshipsArray: [AMRelationship] = []
 
-        if let albumsRoot = relationships["albums"] as? [String:Any],
-            let albumsArray = albumsRoot["data"] as? [NSDictionary] {
-
-            albumsArray.forEach { album in
-                relationshipsArray.append(AMRelationship(dictionary: album))
-            }
-        }
         if let artistsRoot = relationships["artists"] as? [String:Any],
             let artistsArray = artistsRoot["data"] as? [NSDictionary] {
 
@@ -158,19 +78,18 @@ public class AMSong: EVObject {
 public extension ASAppleMusic {
 
     /**
-     Get Song based on the id of the `storefront` and the song `id`
+     Get LibraryAlbum based on the id of the album
 
      - Parameters:
-     - id: The id of the song (Number). Example: `"900032321"`
-     - storeID: The id of the store in two-letter code. Example: `"us"`
+     - id: The id of the album (Number). Example: `"190758912"`
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Song*, *AMError*
-     - song: the `Song` object itself
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *LibraryAlbum*, *AMError*
+     - album: the `LibraryAlbum` object itself
      - error: if the request you will get an `AMError` object
 
-     **Example:** *https://api.music.apple.com/v1/catalog/us/songs/900032321*
+     **Example:** *https://api.music.apple.com/v1/me/library/albums/190758912*
      */
-    func getSong(withID id: String, storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ song: AMSong?, _ error: AMError?) -> Void) {
+    func getLibraryAlbum(withID id: String, lang: String? = nil, completion: @escaping (_ album: AMLibraryAlbum?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -185,7 +104,7 @@ public extension ASAppleMusic {
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/songs/\(id)"
+            var url = "https://api.music.apple.com/v1/me/library/albums/\(id)"
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
@@ -196,11 +115,11 @@ public extension ASAppleMusic {
                         let data = response["data"] as? [[String:Any]],
                         let resource = data.first,
                         let attributes = resource["attributes"] as? NSDictionary {
-                        let song = AMSong(dictionary: attributes)
+                        let album = AMLibraryAlbum(dictionary: attributes)
                         if let relationships = resource["relationships"] as? [String:Any] {
-                            song.setRelationshipObjects(relationships)
+                            album.setRelationshipObjects(relationships)
                         }
-                        completion(song, nil)
+                        completion(album, nil)
                         self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
@@ -225,19 +144,18 @@ public extension ASAppleMusic {
     }
 
     /**
-     Get several Song objects based on the `ids` of the songs that you want to get and the Storefront ID of the store
+     Get several LibraryAlbum objects based on the `ids` of the albums
 
      - Parameters:
-     - ids: An id array of the songs. Example: `["204719240", "203251597"]`
-     - storeID: The id of the store in two-letter code. Example: `"us"`
+     - ids: (Optional) An id array of the albums. Example: `["299738314", "190758912"]`
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[Song]*, *AMError*
-     - songs: the `[Song]` array of objects
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[LibraryAlbum]*, *AMError*
+     - albums: the `[LibraryAlbum]` array of objects
      - error: if the request you will get an `AMError` object
 
-     **Example:** *https://api.music.apple.com/v1/catalog/us/songs?ids=204719240,203251597*
+     **Example:** *https://api.music.apple.com/v1/me/library/albums?ids=299738314,190758912*
      */
-    func getMultipleSongs(withIDs ids: [String], storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ songs: [AMSong]?, _ error: AMError?) -> Void) {
+    func getMultipleLibraryAlbums(withIDs ids: [String]? = nil, lang: String? = nil, completion: @escaping (_ albums: [AMLibraryAlbum]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -252,7 +170,12 @@ public extension ASAppleMusic {
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/songs?ids=\(ids.joined(separator: ","))&"
+            var url = "https://api.music.apple.com/v1/me/library/albums"
+            if let ids = ids {
+                url = url + "?ids=\(ids.joined(separator: ","))&"
+            } else {
+                url = url + "?"
+            }
             if let lang = lang {
                 url = url + "l=\(lang)"
             }
@@ -261,20 +184,20 @@ public extension ASAppleMusic {
                     self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
                         let resources = response["data"] as? [[String:Any]] {
-                        var songs: [AMSong]?
+                        var albums: [AMLibraryAlbum]?
                         if resources.count > 0 {
-                            songs = []
+                            albums = []
                         }
-                        resources.forEach { songData in
-                            if let attributes = songData["attributes"] as? NSDictionary {
-                                let song = AMSong(dictionary: attributes)
-                                if let relationships = songData["relationships"] as? [String:Any] {
-                                    song.setRelationshipObjects(relationships)
+                        resources.forEach { albumData in
+                            if let attributes = albumData["attributes"] as? NSDictionary {
+                                let album = AMLibraryAlbum(dictionary: attributes)
+                                if let relationships = albumData["relationships"] as? [String:Any] {
+                                    album.setRelationshipObjects(relationships)
                                 }
-                                songs?.append(song)
+                                albums?.append(album)
                             }
                         }
-                        completion(songs, nil)
+                        completion(albums, nil)
                         self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],

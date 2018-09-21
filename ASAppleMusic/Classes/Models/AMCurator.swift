@@ -150,9 +150,9 @@ public extension ASAppleMusic {
             let headers = [
                 "Authorization": "Bearer \(token)"
             ]
-            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/curators?ids=\(ids.joined(separator: ","))"
+            var url = "https://api.music.apple.com/v1/catalog/\(storeID)/curators?ids=\(ids.joined(separator: ","))&"
             if let lang = lang {
-                url = url + "?l=\(lang)"
+                url = url + "l=\(lang)"
             }
             Alamofire.request(url, headers: headers)
                 .responseJSON { (response) in
