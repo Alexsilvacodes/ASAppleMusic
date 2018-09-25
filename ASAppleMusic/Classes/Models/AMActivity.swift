@@ -83,7 +83,7 @@ public extension ASAppleMusic {
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
-            Alamofire.request(url, headers: headers)
+            Alamofire.SessionManager.default.request(url, headers: headers)
                 .responseJSON { (response) in
                     self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
@@ -150,7 +150,7 @@ public extension ASAppleMusic {
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
-            Alamofire.request(url, headers: headers)
+            Alamofire.SessionManager.default.request(url, headers: headers)
                 .responseJSON { (response) in
                     self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                     if let response = response.result.value as? [String:Any],
