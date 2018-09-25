@@ -51,8 +51,8 @@ public extension ASAppleMusic {
      **Example:** *https://api.music.apple.com/v1/me/library/artists/179934*
      */
     func getLibraryArtist(withID id: String, lang: String? = nil, completion: @escaping (_ artist: AMLibraryArtist?, _ error: AMError?) -> Void) {
-        callWithToken { token in
-            guard let token = token else {
+        callWithToken { devToken, userToken in
+            guard let devToken = devToken, let userToken = userToken else {
                 let error = AMError()
                 error.status = "401"
                 error.code = .unauthorized
@@ -63,7 +63,8 @@ public extension ASAppleMusic {
                 return
             }
             let headers = [
-                "Authorization": "Bearer \(token)"
+                "Authorization": "Bearer \(devToken)",
+                "Music-User-Token": userToken
             ]
             var url = "https://api.music.apple.com/v1/me/library/artists/\(id)"
             if let lang = lang {
@@ -117,8 +118,8 @@ public extension ASAppleMusic {
      **Example:** *https://api.music.apple.com/v1/me/library/artists?ids=179934,463106*
      */
     func getMultipleLibraryArtists(withIDs ids: [String]? = nil, lang: String? = nil, completion: @escaping (_ artists: [AMLibraryArtist]?, _ error: AMError?) -> Void) {
-        callWithToken { token in
-            guard let token = token else {
+        callWithToken { devToken, userToken in
+            guard let devToken = devToken, let userToken = userToken else {
                 let error = AMError()
                 error.status = "401"
                 error.code = .unauthorized
@@ -129,7 +130,8 @@ public extension ASAppleMusic {
                 return
             }
             let headers = [
-                "Authorization": "Bearer \(token)"
+                "Authorization": "Bearer \(devToken)",
+                "Music-User-Token": userToken
             ]
             var url = "https://api.music.apple.com/v1/me/library/artists"
             if let ids = ids {

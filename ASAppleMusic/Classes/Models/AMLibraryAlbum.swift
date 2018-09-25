@@ -21,14 +21,14 @@ public class AMLibraryAlbum: EVObject {
     /// (Optional) The RIAA rating of the content. The possible values for this rating are clean and explicit. No value means no rating
     public var contentRating: String?
 
+    /// The localized name of the album
+    public var name: String?
+
     /// (Optional) The parameters to use to playback the tracks of the album
     public var playParams: AMPlayable?
 
     /// The number of tracks.
     public var trackCount: Int?
-
-    /// The URL for sharing an album in the iTunes Store
-    public var url: String?
 
     /// The relationships associated with this activity
     public var relationships: [AMRelationship]?
@@ -90,8 +90,8 @@ public extension ASAppleMusic {
      **Example:** *https://api.music.apple.com/v1/me/library/albums/190758912*
      */
     func getLibraryAlbum(withID id: String, lang: String? = nil, completion: @escaping (_ album: AMLibraryAlbum?, _ error: AMError?) -> Void) {
-        callWithToken { token in
-            guard let token = token else {
+        callWithToken { devToken, userToken in
+            guard let devToken = devToken, let userToken = userToken else {
                 let error = AMError()
                 error.status = "401"
                 error.code = .unauthorized
@@ -102,7 +102,8 @@ public extension ASAppleMusic {
                 return
             }
             let headers = [
-                "Authorization": "Bearer \(token)"
+                "Authorization": "Bearer \(devToken)",
+                "Music-User-Token": userToken
             ]
             var url = "https://api.music.apple.com/v1/me/library/albums/\(id)"
             if let lang = lang {
@@ -156,8 +157,8 @@ public extension ASAppleMusic {
      **Example:** *https://api.music.apple.com/v1/me/library/albums?ids=299738314,190758912*
      */
     func getMultipleLibraryAlbums(withIDs ids: [String]? = nil, lang: String? = nil, completion: @escaping (_ albums: [AMLibraryAlbum]?, _ error: AMError?) -> Void) {
-        callWithToken { token in
-            guard let token = token else {
+        callWithToken { devToken, userToken in
+            guard let devToken = devToken, let userToken = userToken else {
                 let error = AMError()
                 error.status = "401"
                 error.code = .unauthorized
@@ -168,7 +169,8 @@ public extension ASAppleMusic {
                 return
             }
             let headers = [
-                "Authorization": "Bearer \(token)"
+                "Authorization": "Bearer \(devToken)",
+                "Music-User-Token": userToken
             ]
             var url = "https://api.music.apple.com/v1/me/library/albums"
             if let ids = ids {

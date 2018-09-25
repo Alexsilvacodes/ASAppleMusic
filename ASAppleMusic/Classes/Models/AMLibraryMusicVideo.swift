@@ -107,8 +107,8 @@ public extension ASAppleMusic {
      **Example:** *https://api.music.apple.com/v1/me/library/music-videos/639322181*
      */
     func getLibraryMusicVideo(withID id: String, lang: String? = nil, completion: @escaping (_ musicVideo: AMLibraryMusicVideo?, _ error: AMError?) -> Void) {
-        callWithToken { token in
-            guard let token = token else {
+        callWithToken { devToken, userToken in
+            guard let devToken = devToken, let userToken = userToken else {
                 let error = AMError()
                 error.status = "401"
                 error.code = .unauthorized
@@ -119,7 +119,8 @@ public extension ASAppleMusic {
                 return
             }
             let headers = [
-                "Authorization": "Bearer \(token)"
+                "Authorization": "Bearer \(devToken)",
+                "Music-User-Token": userToken
             ]
             var url = "https://api.music.apple.com/v1/me/library/music-videos/\(id)"
             if let lang = lang {
@@ -174,8 +175,8 @@ public extension ASAppleMusic {
      **Example:** *https://api.music.apple.com/v1/me/library/music-videos?ids=609082181,890853283*
      */
     func getMultipleLibraryMusicVideos(withIDs ids: [String]? = nil, lang: String? = nil, completion: @escaping (_ musicVideos: [AMLibraryMusicVideo]?, _ error: AMError?) -> Void) {
-        callWithToken { token in
-            guard let token = token else {
+        callWithToken { devToken, userToken in
+            guard let devToken = devToken, let userToken = userToken else {
                 let error = AMError()
                 error.status = "401"
                 error.code = .unauthorized
@@ -186,7 +187,8 @@ public extension ASAppleMusic {
                 return
             }
             let headers = [
-                "Authorization": "Bearer \(token)"
+                "Authorization": "Bearer \(devToken)",
+                "Music-User-Token": userToken
             ]
             var url = "https://api.music.apple.com/v1/me/library/music-videos"
             if let ids = ids {
