@@ -59,7 +59,7 @@ public extension ASAppleMusic {
                 params.append("types=\(typesString)")
             }
             if !params.isEmpty {
-                url = url + "?" + params.joined(separator: "&")
+                url = url + "&" + params.joined(separator: "&")
             }
             Alamofire.SessionManager.default.request(url, headers: headers)
                 .responseJSON { (response) in
@@ -207,7 +207,7 @@ public extension ASAppleMusic {
                 params.append("types=\(typesString)")
             }
             if !params.isEmpty {
-                url = url + "?" + params.joined(separator: "&")
+                url = url + "&" + params.joined(separator: "&")
             }
             Alamofire.SessionManager.default.request(url, headers: headers)
                 .responseJSON { (response) in
