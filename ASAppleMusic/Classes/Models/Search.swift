@@ -28,7 +28,7 @@ public extension ASAppleMusic {
 
      **Example:** *https://api.music.apple.com/v1/catalog/us/search?term=james+brown&limit=2&types=artists,albums*
      */
-    func searchTerm(_ term: String, fromStorefrontID storeID: String, lang: String? = nil, limit: Int? = nil, offset: Int? = nil, types: [String]? = nil, completion: @escaping (_ results: [AnyObject]?, _ error: AMError?) -> Void) {
+    func searchTerm(_ term: String, fromStorefrontID storeID: String, lang: String? = nil, limit: Int? = 25, offset: Int? = nil, types: [String]? = nil, completion: @escaping (_ results: [AnyObject]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
