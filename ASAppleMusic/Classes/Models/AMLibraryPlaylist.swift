@@ -24,8 +24,14 @@ public class AMLibraryPlaylist: EVObject {
     /// (Optional) The parameters to use to playback the tracks in the playlist
     public var playParams: AMPlayable?
 
+    /// The URL for to reference a playlist in your library
+    public var url: URL?
+
     /// Indicates whether the playlist can be edited
     public var canEdit: Bool?
+
+    /// The songs included in the playlist
+    public var songs: [AMLibrarySong]?
 
     /// The relationships associated with this activity
     public var relationships: [AMRelationship]?
@@ -45,18 +51,23 @@ public class AMLibraryPlaylist: EVObject {
     }
 
     func setRelationshipObjects(_ relationships: [String:Any]) {
-        var relationshipsArray: [AMRelationship] = []
+        if let tracksRoot = relationships["tracks"] as? [String:Any],
+            let tracks = tracksRoot["data"] as? [[String:Any]] {
+            var songs: [AMLibrarySong] = []
 
-        if let curatorsRoot = relationships["curators"] as? [String:Any],
-            let curatorsArray = curatorsRoot["data"] as? [NSDictionary] {
-
-            curatorsArray.forEach { curator in
-                relationshipsArray.append(AMRelationship(dictionary: curator))
+            tracks.forEach { track in
+                if let type = track["type"] as? String,
+                    type == "library-songs" {
+                    if let attributes = track["attributes"] as? NSDictionary {
+                        let song = AMLibrarySong(dictionary: attributes)
+                        songs.append(song)
+                    }
+                }
             }
-        }
 
-        if !relationshipsArray.isEmpty {
-            self.relationships = relationshipsArray
+            if !songs.isEmpty {
+                self.songs = songs
+            }
         }
     }
 
@@ -94,7 +105,9 @@ public extension ASAppleMusic {
             ]
             var url = "https://api.music.apple.com/v1/me/library/playlists/\(id)"
             if let lang = lang {
-                url = url + "?l=\(lang)"
+                url = url + "?l=\(lang)&include=tracks"
+            } else {
+                url = url + "?include=tracks"
             }
             Alamofire.SessionManager.default.request(url, headers: headers)
                 .responseJSON { (response) in
@@ -102,12 +115,15 @@ public extension ASAppleMusic {
                     if let response = response.result.value as? [String:Any],
                         let data = response["data"] as? [[String:Any]],
                         let resource = data.first,
+                        let href = resource["href"] as? String,
                         let attributes = resource["attributes"] as? NSDictionary {
                         let playlist = AMLibraryPlaylist(dictionary: attributes)
+                        playlist.url = URL(string: "https://api.music.apple.com\(href)")
                         if let relationships = resource["relationships"] as? [String:Any] {
                             playlist.setRelationshipObjects(relationships)
                         }
                         completion(playlist, nil)
+                        self.print(playlist)
                         self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
                     } else if let response = response.result.value as? [String:Any],
                         let errors = response["errors"] as? [[String:Any]],
@@ -178,8 +194,10 @@ public extension ASAppleMusic {
                             playlists = []
                         }
                         resources.forEach { playlistData in
-                            if let attributes = playlistData["attributes"] as? NSDictionary {
+                            if let attributes = playlistData["attributes"] as? NSDictionary,
+                                let href = playlistData["href"] as? String {
                                 let playlist = AMLibraryPlaylist(dictionary: attributes)
+                                playlist.url = URL(string: "https://api.music.apple.com\(href)")
                                 if let relationships = playlistData["relationships"] as? [String:Any] {
                                     playlist.setRelationshipObjects(relationships)
                                 }

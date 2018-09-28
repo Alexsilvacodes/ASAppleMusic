@@ -43,7 +43,7 @@ public class AMPlaylist: EVObject {
     /// (Optional) The parameters to use to playback the tracks in the playlist
     public var playParams: AMPlayable?
 
-    /// The URL for sharing an album in the iTunes Store
+    /// The URL for sharing a playlist in the iTunes Store
     public var url: String?
 
     /// The relationships associated with this activity

@@ -27,8 +27,14 @@ public class AMLibraryAlbum: EVObject {
     /// (Optional) The parameters to use to playback the tracks of the album
     public var playParams: AMPlayable?
 
+    /// The URL for to reference an album in your library
+    public var url: URL?
+
     /// The number of tracks.
     public var trackCount: Int?
+
+    /// The songs included in the playlist
+    public var songs: [AMLibrarySong]?
 
     /// The relationships associated with this activity
     public var relationships: [AMRelationship]?
@@ -51,25 +57,23 @@ public class AMLibraryAlbum: EVObject {
     }
 
     func setRelationshipObjects(_ relationships: [String:Any]) {
-        var relationshipsArray: [AMRelationship] = []
+        if let tracksRoot = relationships["tracks"] as? [String:Any],
+            let tracks = tracksRoot["data"] as? [[String:Any]] {
+            var songs: [AMLibrarySong] = []
 
-        if let artistsRoot = relationships["artists"] as? [String:Any],
-            let artistsArray = artistsRoot["data"] as? [NSDictionary] {
-
-            artistsArray.forEach { artist in
-                relationshipsArray.append(AMRelationship(dictionary: artist))
+            tracks.forEach { track in
+                if let type = track["type"] as? String,
+                    type == "library-songs" {
+                    if let attributes = track["attributes"] as? NSDictionary {
+                        let song = AMLibrarySong(dictionary: attributes)
+                        songs.append(song)
+                    }
+                }
             }
-        }
-        if let genresRoot = relationships["genres"] as? [String:Any],
-            let genresArray = genresRoot["data"] as? [NSDictionary] {
 
-            genresArray.forEach { genre in
-                relationshipsArray.append(AMRelationship(dictionary: genre))
+            if !songs.isEmpty {
+                self.songs = songs
             }
-        }
-
-        if !relationshipsArray.isEmpty {
-            self.relationships = relationshipsArray
         }
     }
 
@@ -107,7 +111,9 @@ public extension ASAppleMusic {
             ]
             var url = "https://api.music.apple.com/v1/me/library/albums/\(id)"
             if let lang = lang {
-                url = url + "?l=\(lang)"
+                url = url + "?l=\(lang)&include=tracks"
+            } else {
+                url = url + "?include=tracks"
             }
             Alamofire.SessionManager.default.request(url, headers: headers)
                 .responseJSON { (response) in
@@ -115,8 +121,10 @@ public extension ASAppleMusic {
                     if let response = response.result.value as? [String:Any],
                         let data = response["data"] as? [[String:Any]],
                         let resource = data.first,
+                        let href = resource["href"] as? String,
                         let attributes = resource["attributes"] as? NSDictionary {
                         let album = AMLibraryAlbum(dictionary: attributes)
+                        album.url = URL(string: "https://api.music.apple.com\(href)")
                         if let relationships = resource["relationships"] as? [String:Any] {
                             album.setRelationshipObjects(relationships)
                         }
@@ -191,8 +199,10 @@ public extension ASAppleMusic {
                             albums = []
                         }
                         resources.forEach { albumData in
-                            if let attributes = albumData["attributes"] as? NSDictionary {
+                            if let attributes = albumData["attributes"] as? NSDictionary,
+                                let href = albumData["href"] as? String {
                                 let album = AMLibraryAlbum(dictionary: attributes)
+                                album.url = URL(string: "https://api.music.apple.com\(href)")
                                 if let relationships = albumData["relationships"] as? [String:Any] {
                                     album.setRelationshipObjects(relationships)
                                 }
