@@ -9,7 +9,7 @@ env:
   - LC_CTYPE=en_US.UTF-8
   - LANG=en_US.UTF-8
   - WORKSPACE=Example/ASAppleMusic.xcworkspace
-  - IOS_FRAMEWORK_SCHEME="ASAppleMusic_Example"
+  - IOS_FRAMEWORK_SCHEME="ASAppleMusic"
   matrix:
     - DESTINATION="OS=12.1,name=iPhone XS" SCHEME="$IOS_FRAMEWORK_SCHEME" RUN_TESTS="NO" POD_LINT="NO"
     - DESTINATION="OS=11.4,name=iPhone X" SCHEME="$IOS_FRAMEWORK_SCHEME" RUN_TESTS="NO" POD_LINT="NO"
