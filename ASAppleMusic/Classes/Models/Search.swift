@@ -7,6 +7,86 @@ import Foundation
 import Alamofire
 import EVReflection
 
+public class AMSearch: Codable {
+
+    public class Response: Codable {
+
+        public class Results: Codable {
+
+            /// The activities returned for the search query.
+            public var activities: [AMActivity.Response]?
+
+            /// The albums returned for the search query.
+            public var albums: [AMAlbum.Response]?
+
+            /// The Apple curators returned for the search query.
+            public var appleCurators: [AMAppleCurator.Response]?
+
+            /// The artists returned for the search query.
+            public var artists: [AMArtist.Response]?
+
+            /// The curators returned for the search query.
+            public var curators: [AMCurator.Response]?
+
+            /// The music videos returned for the search query.
+            public var musicVideos: [AMMusicVideo.Response]?
+
+            /// The playlists returned for the search query.
+            public var playlists: [AMPlaylist.Response]?
+
+            /// The songs returned for the search query.
+            public var songs: [AMSong.Response]?
+
+            /// The stations returned for the search query.
+            public var stations: [AMStation.Response]?
+
+            enum CodingKeys: String, CodingKey {
+                case activities
+                case albums
+                case appleCurators = "apple-curators"
+                case artists
+                case curators
+                case musicVideos = "music-videos"
+                case playlists
+                case songs
+                case stations
+            }
+
+        }
+
+        /// The results including charts for each type.
+        public var results: Results?
+
+        /// An array of one or more errors that occurred while executing the operation.
+        public var errors: [AMError]?
+
+        /// A link to the next page of data or results; contains the offset query parameter that specifies the next page.
+        public var next: String?
+
+    }
+
+}
+
+public class AMSearchHints: Codable {
+
+    public class Response: Codable {
+
+        /// (Required) The results included in the response for a search hints request.
+        public var results: AMSearchHints = AMSearchHints()
+
+        /// An array of one or more errors that occurred while executing the operation.
+        public var errors: [AMError]?
+
+        /// A link to the next page of data or results; contains the offset query parameter that specifies the next page.
+        public var next: String?
+
+    }
+
+    /// (Required) The autocomplete options derived from the search hint.
+    public var terms: [String] = []
+
+}
+
 /**
  Searches whatever type of content. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/search_for_catalog_resources)
  */
@@ -22,13 +102,13 @@ public extension ASAppleMusic {
      - limit: (Optional) The limit of stores to get
      - offset: (Optional) The *page* of the results to get
      - types: (Optional) The list of the types of resources to include in the results. Values: `activities`, `artists`, `apple-curators`, `albums`, `curators`, `songs`, `playlists`, `music-videos`, and `stations`
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *AnyObject*, *AMError*
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Results*, *AMError*
      - results: the `[AnyObject]` array of results
      - error: if the request you will get an `AMError` object
 
      **Example:** *https://api.music.apple.com/v1/catalog/us/search?term=james+brown&limit=2&types=artists,albums*
      */
-    func searchTerm(_ term: String, fromStorefrontID storeID: String, lang: String? = nil, limit: Int? = 25, offset: Int? = nil, types: [String]? = nil, completion: @escaping (_ results: [AnyObject]?, _ error: AMError?) -> Void) {
+    func searchTerm(_ term: String, fromStorefrontID storeID: String, lang: String? = nil, limit: Int? = 25, offset: Int? = nil, types: [String]? = nil, completion: @escaping (_ results: AMSearch.Response.Results?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -40,9 +120,6 @@ public extension ASAppleMusic {
                 self.print("[ASAppleMusic] 🛑: Missing token")
                 return
             }
-            let headers = [
-                "Authorization": "Bearer \(token)"
-            ]
             var url = "https://api.music.apple.com/v1/catalog/\(storeID)/search?term=\(term.replacingOccurrences(of: " ", with: "+"))"
             var params: [String] = []
             if let lang = lang {
@@ -61,106 +138,39 @@ public extension ASAppleMusic {
             if !params.isEmpty {
                 url = url + "&" + params.joined(separator: "&")
             }
-            Alamofire.SessionManager.default.request(url, headers: headers)
-                .responseJSON { (response) in
-                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
-                    if let response = response.result.value as? [String:Any],
-                        let results = response["results"] as? [String:Any] {
-                        var resultObjects: [AnyObject] = []
-
-                        if let activitiesData = results["activities"] as? [String:Any],
-                            let activities = activitiesData["data"] as? [[String:Any]] {
-                            activities.forEach { activityData in
-                                if let activity = activityData["attributes"] as? NSDictionary {
-                                    resultObjects.append(AMActivity(dictionary: activity))
-                                }
-                            }
-                        }
-                        if let artistsData = results["artists"] as? [String:Any],
-                            let artists = artistsData["data"] as? [[String:Any]] {
-                            artists.forEach { artistData in
-                                if let artist = artistData["attributes"] as? NSDictionary {
-                                    resultObjects.append(AMArtist(dictionary: artist))
-                                }
-                            }
-                        }
-                        if let appleCuratorsData = results["apple-curators"] as? [String:Any],
-                            let appleCurators = appleCuratorsData["data"] as? [[String:Any]] {
-                            appleCurators.forEach { appleCuratorData in
-                                if let appleCurator = appleCuratorData["attributes"] as? NSDictionary {
-                                    resultObjects.append(AMAppleCurator(dictionary: appleCurator))
-                                }
-                            }
-                        }
-                        if let albumsData = results["albums"] as? [String:Any],
-                            let albums = albumsData["data"] as? [[String:Any]] {
-                            albums.forEach { albumData in
-                                if let album = albumData["attributes"] as? NSDictionary {
-                                    resultObjects.append(AMAlbum(dictionary: album))
-                                }
-                            }
-                        }
-                        if let curatorsData = results["curators"] as? [String:Any],
-                            let curators = curatorsData["data"] as? [[String:Any]] {
-                            curators.forEach { curatorData in
-                                if let curator = curatorData["attributes"] as? NSDictionary {
-                                    resultObjects.append(AMCurator(dictionary: curator))
-                                }
-                            }
-                        }
-                        if let songsData = results["songs"] as? [String:Any],
-                            let songs = songsData["data"] as? [[String:Any]] {
-                            songs.forEach { songData in
-                                if let song = songData["attributes"] as? NSDictionary {
-                                    resultObjects.append(AMSong(dictionary: song))
-                                }
-                            }
-                        }
-                        if let playlistsData = results["playlists"] as? [String:Any],
-                            let playlists = playlistsData["data"] as? [[String:Any]] {
-                            playlists.forEach { playlistData in
-                                if let playlist = playlistData["attributes"] as? NSDictionary {
-                                    resultObjects.append(AMPlaylist(dictionary: playlist))
-                                }
-                            }
-                        }
-                        if let musicVideosData = results["music-videos"] as? [String:Any],
-                            let musicVideos = musicVideosData["data"] as? [[String:Any]] {
-                            musicVideos.forEach { musicVideoData in
-                                if let musicVideo = musicVideoData["attributes"] as? NSDictionary {
-                                    resultObjects.append(AMMusicVideo(dictionary: musicVideo))
-                                }
-                            }
-                        }
-                        if let stationsData = results["stations"] as? [String:Any],
-                            let stations = stationsData["data"] as? [[String:Any]] {
-                            stations.forEach { stationData in
-                                if let station = stationData["attributes"] as? NSDictionary {
-                                    resultObjects.append(AMStation(dictionary: station))
-                                }
-                            }
-                        }
-                        completion(resultObjects, nil)
-                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
-                    } else if let response = response.result.value as? [String:Any],
-                        let errors = response["errors"] as? [[String:Any]],
-                        let errorDict = errors.first as NSDictionary? {
-                        let error = AMError(dictionary: errorDict)
-
-                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
-
-                        completion(nil, error)
-                    } else {
-                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
-
-                        let error = AMError()
-                        error.status = "401"
-                        error.code = .unauthorized
-                        error.title = "Unauthorized request"
-                        error.detail = "Missing token, refresh current token or request a new token"
-                        completion(nil, error)
-                    }
+            guard let callURL = URL(string: url) else {
+                self.print("[ASAppleMusic] 🛑: Failed to create URL")
+                completion(nil, nil)
+                return
             }
+            var request = URLRequest(url: callURL)
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+                self.print("[ASAppleMusic] Making Request 🌐: \(url)")
+                let decoder = JSONDecoder()
+                if let error = error {
+                    self.print("[ASAppleMusic] 🛑: \(error.localizedDescription)")
+                    if let data = data, let response = try? decoder.decode(AMSearch.Response.self, from: data),
+                        let amError = response.errors?.first {
+                        completion(nil, amError)
+                    } else {
+                        let amError = AMError()
+                        if let response = response, let statusCode = response.getStatusCode(),
+                            let code = Code(rawValue: String(statusCode * 100)) {
+                            amError.status = String(statusCode)
+                            amError.code = code
+                        }
+                        amError.detail = error.localizedDescription
+                        completion(nil, amError)
+                    }
+                } else if let data = data {
+                    self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
+                    let response = try? decoder.decode(AMSearch.Response.self, from: data)
+                    completion(response?.results, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            }).resume()
         }
     }
 
@@ -173,13 +183,13 @@ public extension ASAppleMusic {
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
      - limit: (Optional) The limit of stores to get
      - types: (Optional) The list of the types of resources to include in the results. Values: `activities`, `artists`, `apple-curators`, `albums`, `curators`, `songs`, `playlists`, `music-videos`, and `stations`
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[String]*, *AMError*
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[AMSearchHints]*, *AMError*
      - resultTerms: the `[String]` array of results
      - error: if the request you will get an `AMError` object
 
      **Example:** *https://api.music.apple.com/v1/catalog/us/search/hints?term=love&limit=10*
      */
-    func getSearchHints(_ term: String, fromStorefrontID storeID: String, lang: String? = nil, limit: Int? = nil, types: [String]? = nil, completion: @escaping (_ resultTerms: [String]?, _ error: AMError?) -> Void) {
+    func getSearchHints(_ term: String, fromStorefrontID storeID: String, lang: String? = nil, limit: Int? = nil, types: [String]? = nil, completion: @escaping (_ resultTerms: AMSearchHints?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -191,9 +201,6 @@ public extension ASAppleMusic {
                 self.print("[ASAppleMusic] 🛑: Missing token")
                 return
             }
-            let headers = [
-                "Authorization": "Bearer \(token)"
-            ]
             var url = "https://api.music.apple.com/v1/catalog/\(storeID)/search/hints?term=\(term.replacingOccurrences(of: " ", with: "+")))"
             var params: [String] = []
             if let lang = lang {
@@ -209,33 +216,39 @@ public extension ASAppleMusic {
             if !params.isEmpty {
                 url = url + "&" + params.joined(separator: "&")
             }
-            Alamofire.SessionManager.default.request(url, headers: headers)
-                .responseJSON { (response) in
-                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
-                    if let response = response.result.value as? [String:Any],
-                        let results = response["results"] as? [String:Any],
-                        let resultTerms = results["terms"] as? [String] {
-                        completion(resultTerms, nil)
-                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
-                    } else if let response = response.result.value as? [String:Any],
-                        let errors = response["errors"] as? [[String:Any]],
-                        let errorDict = errors.first as NSDictionary? {
-                        let error = AMError(dictionary: errorDict)
-
-                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
-
-                        completion(nil, error)
-                    } else {
-                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
-
-                        let error = AMError()
-                        error.status = "401"
-                        error.code = .unauthorized
-                        error.title = "Unauthorized request"
-                        error.detail = "Missing token, refresh current token or request a new token"
-                        completion(nil, error)
-                    }
+            guard let callURL = URL(string: url) else {
+                self.print("[ASAppleMusic] 🛑: Failed to create URL")
+                completion(nil, nil)
+                return
             }
+            var request = URLRequest(url: callURL)
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+                self.print("[ASAppleMusic] Making Request 🌐: \(url)")
+                let decoder = JSONDecoder()
+                if let error = error {
+                    self.print("[ASAppleMusic] 🛑: \(error.localizedDescription)")
+                    if let data = data, let response = try? decoder.decode(AMSearchHints.Response.self, from: data),
+                        let amError = response.errors?.first {
+                        completion(nil, amError)
+                    } else {
+                        let amError = AMError()
+                        if let response = response, let statusCode = response.getStatusCode(),
+                            let code = Code(rawValue: String(statusCode * 100)) {
+                            amError.status = String(statusCode)
+                            amError.code = code
+                        }
+                        amError.detail = error.localizedDescription
+                        completion(nil, amError)
+                    }
+                } else if let data = data {
+                    self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
+                    let response = try? decoder.decode(AMSearchHints.Response.self, from: data)
+                    completion(response?.results, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            }).resume()
         }
     }
 

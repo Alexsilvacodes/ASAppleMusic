@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'ASAppleMusic'
-  s.version          = '1.1.7'
+  s.version          = '1.1.8'
   s.summary          = 'Apple Music library for developer and user token.'
   s.description      = <<-DESC
 ASAppleMusic is a framework created to help developers to use the Apple Music API with their developer token or the user token that will be requested to the device user
@@ -15,6 +15,4 @@ ASAppleMusic is a framework created to help developers to use the Apple Music AP
   s.ios.deployment_target = '11.0'
   s.source_files = 'ASAppleMusic/Classes/**/*'
   s.ios.framework  = 'UIKit'
-  s.dependency 'Alamofire'
-  s.dependency 'EVReflection/Alamofire'
 end

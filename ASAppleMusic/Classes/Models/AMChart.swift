@@ -4,37 +4,54 @@
 //
 
 import Foundation
-import Alamofire
-import EVReflection
-
-public enum AMChartType: String {
-    case albums = "albums"
-    case musicVideos = "music-videos"
-    case songs = "songs"
-    case playlists = "playlists"
-}
 
 /**
  Chart object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/chart)
  */
-public class AMChart: EVObject {
+public class AMChart: Codable {
 
-    /// The localized name for the chart
-    public var name: String?
+    public class Response: Codable {
 
-    /// The chart identifier
-    public var chart: String?
+        public class Results: Codable {
 
-    /// The URL for the chart
-    public var href: String?
+            /// The albums returned when fetching charts.
+            public var albums: [AMChart]?
 
-    /// An array of the objects that were requested ordered by popularity
-    public var data: [AnyObject]?
+            /// The music videos returned when fetching charts.
+            public var musicVideos: [AMChart]?
 
-    /// Chart type: `albums`, `music-videos` and `songs`
-    public var type: AMChartType?
+            /// The songs returned when fetching charts.
+            public var songs: [AMChart]?
 
-    /// (Optional) The URL for the next page
+            enum CodingKeys: String, CodingKey {
+                case albums
+                case musicVideos = "music-videos"
+                case songs
+            }
+
+        }
+
+        /// The results including charts for each type.
+        public var results: Results?
+
+        /// An array of one or more errors that occurred while executing the operation.
+        public var errors: [AMError]?
+
+    }
+
+    /// (Required) The chart identifier.
+    public var chart: String = ""
+
+    /// (Required) An array of the requested objects, ordered by popularity. For example, if songs were specified as the chart type in the request, the array contains Song objects.
+    public var data: [AMResource] = []
+
+    /// (Required) The URL for the chart.
+    public var href: String = ""
+
+    /// (Required) The localized name for the chart.
+    public var name: String = ""
+
+    /// The URL for the next page.
     public var next: String?
 
 }
@@ -52,13 +69,13 @@ public extension ASAppleMusic {
      - genre: (Optional) Genre ID type to get the charts (Number). Example: `"13"`
      - limit: (Optional) The limit of stores to get. Example: `"2"`
      - offset: (Optional) The *page* of the results to get. Example `"2"`
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Curator*, *AMError*
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Results*, *AMError*
      - curator: the `Curator` object itself
      - error: if the request you will get an `AMError` object
 
      **Example:** *https://api.music.apple.com/v1/catalog/us/charts?types=songs,albums,playlists&genre=20&limit=1*
      */
-    func getCharts(_ types: [String], fromStorefrontID storeID: String, lang: String? = nil, chart: String? = nil, genre: String? = nil, limit: Int? = nil, offset: Int? = nil, completion: @escaping (_ charts: [AMChart]?, _ error: AMError?) -> Void) {
+    func getCharts(_ types: [String], fromStorefrontID storeID: String, lang: String? = nil, chart: String? = nil, genre: String? = nil, limit: Int? = nil, offset: Int? = nil, completion: @escaping (_ charts: AMChart.Response.Results?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -70,9 +87,6 @@ public extension ASAppleMusic {
                 self.print("[ASAppleMusic] 🛑: Missing token")
                 return
             }
-            let headers = [
-                "Authorization": "Bearer \(token)"
-            ]
             var url = "https://api.music.apple.com/v1/catalog/\(storeID)/charts?types=\(types.joined(separator: ","))"
             var params: [String] = []
             if let lang = lang {
@@ -90,62 +104,39 @@ public extension ASAppleMusic {
             if !params.isEmpty {
                 url = url + "?" + params.joined(separator: "&")
             }
-            Alamofire.SessionManager.default.request(url, headers: headers)
-                .responseJSON { (response) in
-                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
-                    if let response = response.result.value as? [String:Any],
-                        let results = response["results"] as? [String:Any] {
-                        var resultObjects: [AMChart] = []
-
-                        if let albums = results["albums"] as? [NSDictionary] {
-                            albums.forEach { album in
-                                let chart = AMChart(dictionary: album)
-                                chart.type = .albums
-                                resultObjects.append(chart)
-                            }
-                        }
-                        if let songs = results["songs"] as? [NSDictionary] {
-                            songs.forEach { song in
-                                let chart = AMChart(dictionary: song)
-                                chart.type = .songs
-                                resultObjects.append(chart)
-                            }
-                        }
-                        if let musicVideos = results["music-videos"] as? [NSDictionary] {
-                            musicVideos.forEach { musicVideo in
-                                let chart = AMChart(dictionary: musicVideo)
-                                chart.type = .musicVideos
-                                resultObjects.append(chart)
-                            }
-                        }
-                        if let playlists = results["playlists"] as? [NSDictionary] {
-                            playlists.forEach { playlist in
-                                let chart = AMChart(dictionary: playlist)
-                                chart.type = .playlists
-                                resultObjects.append(chart)
-                            }
-                        }
-                        completion(resultObjects, nil)
-                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
-                    } else if let response = response.result.value as? [String:Any],
-                        let errors = response["errors"] as? [[String:Any]],
-                        let errorDict = errors.first as NSDictionary? {
-                        let error = AMError(dictionary: errorDict)
-
-                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
-
-                        completion(nil, error)
-                    } else {
-                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
-
-                        let error = AMError()
-                        error.status = "401"
-                        error.code = .unauthorized
-                        error.title = "Unauthorized request"
-                        error.detail = "Missing token, refresh current token or request a new token"
-                        completion(nil, error)
-                    }
+            guard let callURL = URL(string: url) else {
+                self.print("[ASAppleMusic] 🛑: Failed to create URL")
+                completion(nil, nil)
+                return
             }
+            var request = URLRequest(url: callURL)
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+                self.print("[ASAppleMusic] Making Request 🌐: \(url)")
+                let decoder = JSONDecoder()
+                if let error = error {
+                    self.print("[ASAppleMusic] 🛑: \(error.localizedDescription)")
+                    if let data = data, let response = try? decoder.decode(AMChart.Response.self, from: data),
+                        let amError = response.errors?.first {
+                        completion(nil, amError)
+                    } else {
+                        let amError = AMError()
+                        if let response = response, let statusCode = response.getStatusCode(),
+                            let code = Code(rawValue: String(statusCode * 100)) {
+                            amError.status = String(statusCode)
+                            amError.code = code
+                        }
+                        amError.detail = error.localizedDescription
+                        completion(nil, amError)
+                    }
+                } else if let data = data {
+                    self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
+                    let response = try? decoder.decode(AMChart.Response.self, from: data)
+                    completion(response?.results, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            }).resume()
         }
     }
 

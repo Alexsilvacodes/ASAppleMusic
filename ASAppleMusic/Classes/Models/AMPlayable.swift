@@ -4,17 +4,16 @@
 //
 
 import Foundation
-import EVReflection
 
 /**
  Playable Video object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/playparameters)
  */
-public class AMPlayable: EVObject {
+public class AMPlayable: Codable {
 
-    /// Notes shown when the content is being prominently displayed
-    public var id: String?
+    /// (Required) The ID of the content to use for playback.
+    public var id: String = ""
 
-    /// Abbreviated notes shown in-line or when the content is shown alongside other content
-    public var kind: String?
+    /// (Required) The kind of the content to use for playback.
+    public var kind: String = ""
 
 }

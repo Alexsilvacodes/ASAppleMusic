@@ -21,6 +21,7 @@
 		4A7E89EE68A66F8EBC462E254CC2AAC9 /* AMArtwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D2F476C49DD763E207166F0F8E791B /* AMArtwork.swift */; };
 		4C2DDF1EE0EBBF432D260EC9A69DE8AA /* AMAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C39B2398ADDDF1D7F97AD8ECB4D513 /* AMAlbum.swift */; };
 		4D4EAB9F753B8F5E27D2B94F85446CDE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F008D4D2DDC10ECCD68146FEA095CAD /* UIKit.framework */; };
+		4D8420972237D350008B8276 /* URLResponse+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8420962237D350008B8276 /* URLResponse+Extension.swift */; };
 		50D91842C1B40D3FD0CD535F4E0886EB /* EVReflection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D011C7A6DD6D00A6A13842E7368FAA18 /* EVReflection.framework */; };
 		532014DC1F14F3C58E8AB154228FCCF1 /* AMCurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D078E88AA6B99F47A329B3AD0515A20 /* AMCurator.swift */; };
 		5387216E723A3C68E851CA15573CDD71 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA83E0EACFDC03BA8E222681821C275C /* Request.swift */; };
@@ -181,6 +182,7 @@
 		4BEBEE1034D3D1BF30D392681296726A /* AMEditorialNotes.html */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.html.documentation; name = AMEditorialNotes.html; path = docs/docsets/ASAppleMusic.docset/Contents/Resources/Documents/Classes/AMEditorialNotes.html; sourceTree = "<group>"; };
 		4C021DC0B48FDA95E6EB888ED5DFBDC7 /* jazzy.css */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.css; name = jazzy.css; path = docs/docsets/ASAppleMusic.docset/Contents/Resources/Documents/css/jazzy.css; sourceTree = "<group>"; };
 		4C9B740247EE154E6C9B1A1B1E57333F /* Artist.html */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.html; name = Artist.html; path = docs/Classes/Artist.html; sourceTree = "<group>"; };
+		4D8420962237D350008B8276 /* URLResponse+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLResponse+Extension.swift"; sourceTree = "<group>"; };
 		509F560084A017E07828C88A99D6205E /* ASAppleMusic-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ASAppleMusic-dummy.m"; sourceTree = "<group>"; };
 		5125285C5956B6E65CF87CBCC74FD6AE /* AMActivity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AMActivity.swift; sourceTree = "<group>"; };
 		5475C97B2DE5B1B4E6E303D3CB785B7E /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -557,10 +559,19 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
+		4D8420952237D32B008B8276 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				4D8420962237D350008B8276 /* URLResponse+Extension.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		7510EF4D0DA274560A12E4199F17F6BD /* ASAppleMusic */ = {
 			isa = PBXGroup;
 			children = (
 				2F526DA42D001644A9BAB184398A4514 /* ASAppleMusic.swift */,
+				4D8420952237D32B008B8276 /* Helpers */,
 				C6B3D954FEBC284B67612075559965A1 /* Models */,
 				1DDFF25E204314368AD71ACE8D0290F1 /* Pod */,
 				F15FB64D43132AAE8616F037275FD435 /* Support Files */,
@@ -971,6 +982,7 @@
 				C6E2138572FB80EA7A7C4C6D0DC36A65 /* AMStorefront.swift in Sources */,
 				EC58D86899097E2ABBB85171EA49C107 /* ASAppleMusic-dummy.m in Sources */,
 				ABD671D43F0139F8A50FA0C80C306CFA /* ASAppleMusic.swift in Sources */,
+				4D8420972237D350008B8276 /* URLResponse+Extension.swift in Sources */,
 				093F8DE3AF4D598530360584B46F3204 /* Error.swift in Sources */,
 				A9FCDD173376B62EE1F80F66AA770DE4 /* Recommendation.swift in Sources */,
 				44762963AD179E8919E25F9276B25429 /* Search.swift in Sources */,

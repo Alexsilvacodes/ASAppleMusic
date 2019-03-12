@@ -4,7 +4,6 @@
 //
 
 import Foundation
-import Alamofire
 import StoreKit
 
 public enum Rating: String {
@@ -17,6 +16,12 @@ enum TrackType: String {
     case songs = "songs"
     case musicVideos = "music-videos"
 }
+
+public protocol AMTrack: Codable { }
+
+public protocol AMLibraryTrack: Codable { }
+
+public protocol AMResource: Codable { }
 
 /**
  The API that the framework will use
@@ -161,23 +166,30 @@ public class ASAppleMusic {
     }
 
     private func getDeveloperToken(_ completion: @escaping (_ token: String?) -> Void) {
-        guard let kid = keyID, let tid = teamID, let tokenServer = tokenServer else {
+        guard let kid = keyID, let tid = teamID, let tokenServer = tokenServer,
+            let serverURL = URL(string: tokenServer) else {
             self.print("[ASAppleMusic] 🛑: Missing token information for 'teamID'/'keyID'/'tokenServer'")
             completion(nil)
             return
         }
-        let parameters = ["kid": kid, "tid": tid]
-        Alamofire.request(tokenServer,
-                          method: .post,
-                          parameters: parameters,
-                          encoding: JSONEncoding.default)
-            .responseJSON { response in
-                if let json = response.result.value as? [String:Any],
-                    let token = json["token"] as? String {
-                    completion(token)
-                } else {
-                    completion(nil)
+        let json = ["kid": kid, "tid": tid]
+        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+
+        var request = URLRequest(url: serverURL)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        URLSession.shared.dataTask(with: request) { data, _, error in
+            if let error = error {
+                self.print("[ASAppleMusic] 🛑: \(error.localizedDescription)")
+                completion(nil)
+            } else {
+                guard let data = data, let jsonDict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                    let json = jsonDict, let token = json["token"] as? String else {
+                        completion(nil)
+                        return
                 }
+                completion(token)
             }
+        }.resume()
     }
 }

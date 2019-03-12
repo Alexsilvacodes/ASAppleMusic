@@ -4,48 +4,60 @@
 //
 
 import Foundation
-import Alamofire
-import EVReflection
 
 /**
- Activity object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/activity)
+ Activity object representation. For more information take a look at\
+ [Apple Music API](https://developer.apple.com/documentation/applemusicapi/activity)
  */
-public class AMActivity: EVObject {
+public class AMActivity: Codable, AMResource {
 
-    /// The activity artwork
-    public var artwork: AMArtwork?
-    /// (Optional) The notes about the activity that appear in the iTunes Store
-    public var editorialNotes: AMEditorialNotes?
-    /// The localized name of the activity
-    public var name: String?
-    /// The URL for sharing an activity in the iTunes Store
-    public var url: String?
-    /// The relationships associated with this activity
-    public var relationships: [AMRelationship]?
+    public class Attributes: Codable {
 
-    /// :nodoc:
-    public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
-        return [
-            ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = AMArtwork(dictionary: artwork) } }, { return self.artwork }),
-            ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = AMEditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes })
-        ]
+        /// (Required) The activity artwork
+        public var artwork: AMArtwork = AMArtwork()
+
+        /// The notes about the activity that appear in the iTunes Store
+        public var editorialNotes: AMEditorialNotes?
+
+        /// (Required) The localized name of the activity
+        public var name: String = ""
+        
+        /// (Required) The URL for sharing an activity in the iTunes Store
+        public var url: String = ""
+
     }
 
-    func setRelationshipObjects(_ relationships: [String:Any]) {
-        var relationshipsArray: [AMRelationship] = []
+    public class Relationships: Codable {
 
-        if let playlistsRoot = relationships["playlists"] as? [String:Any],
-            let playlistsArray = playlistsRoot["data"] as? [NSDictionary] {
-
-            playlistsArray.forEach { playlist in
-                relationshipsArray.append(AMRelationship(dictionary: playlist))
-            }
-        }
-
-        if !relationshipsArray.isEmpty {
-            self.relationships = relationshipsArray
-        }
+        /// The playlists associated with this activity. By default, playlists includes identifiers only.
+        public var playlists: AMRelationship.Playlist?
+        
     }
+
+    public class Response: Codable {
+
+        /// The data included in the response to an activity object request.
+        public var data: [AMActivity]?
+
+        /// An array of one or more errors that occurred while executing the operation.
+        public var errors: [AMError]?
+
+        /// A link to the request that generated the response data or results; not present in a request.
+        public var href: String?
+
+        /// A link to the next page of data or results; contains the offset query parameter that specifies the next page.
+        public var next: String?
+
+    }
+
+    /// The attributes for the activity.
+    public var attributes: Attributes?
+
+    /// The relationships for the activity.
+    public var relationships: Relationships?
+
+    // Always activities.
+    public var type: String = "activities"
 
 }
 
@@ -58,13 +70,15 @@ public extension ASAppleMusic {
      - id: The id of the activity (Number). Example: `"926339514"`
      - storeID: The id of the store in two-letter code. Example: `"us"`
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *Activity*, *AMError*
+     - completion: The completion code that will be executed asynchronously after the request is completed.\
+     It has two return parameters: *Activity*, *AMError*
      - activity: the `Activity` object itself
      - error: if the request you will get an `AMError` object
 
      **Example:** *https://api.music.apple.com/v1/catalog/us/activities/926339514*
      */
-    func getActivity(withID id: String, storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ activity: AMActivity?, _ error: AMError?) -> Void) {
+    func getActivity(withID id: String, storefrontID storeID: String, lang: String? = nil,
+                     completion: @escaping (_ activity: AMActivity?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -76,62 +90,63 @@ public extension ASAppleMusic {
                 self.print("[ASAppleMusic] 🛑: Missing token")
                 return
             }
-            let headers = [
-                "Authorization": "Bearer \(token)"
-            ]
             var url = "https://api.music.apple.com/v1/catalog/\(storeID)/activities/\(id)"
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
-            Alamofire.SessionManager.default.request(url, headers: headers)
-                .responseJSON { (response) in
-                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
-                    if let response = response.result.value as? [String:Any],
-                        let data = response["data"] as? [[String:Any]],
-                        let resource = data.first,
-                        let attributes = resource["attributes"] as? NSDictionary {
-                        let activity = AMActivity(dictionary: attributes)
-                        if let relationships = resource["relationships"] as? [String:Any] {
-                            activity.setRelationshipObjects(relationships)
-                        }
-                        completion(activity, nil)
-                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
-                    } else if let response = response.result.value as? [String:Any],
-                        let errors = response["errors"] as? [[String:Any]],
-                        let errorDict = errors.first as NSDictionary? {
-                        let error = AMError(dictionary: errorDict)
-
-                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
-
-                        completion(nil, error)
-                    } else {
-                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
-
-                        let error = AMError()
-                        error.status = "401"
-                        error.code = .unauthorized
-                        error.title = "Unauthorized request"
-                        error.detail = "Missing token, refresh current token or request a new token"
-                        completion(nil, error)
-                    }
+            guard let callURL = URL(string: url) else {
+                self.print("[ASAppleMusic] 🛑: Failed to create URL")
+                completion(nil, nil)
+                return
             }
+            var request = URLRequest(url: callURL)
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+                self.print("[ASAppleMusic] Making Request 🌐: \(url)")
+                let decoder = JSONDecoder()
+                if let error = error {
+                    self.print("[ASAppleMusic] 🛑: \(error.localizedDescription)")
+                    if let data = data, let response = try? decoder.decode(AMActivity.Response.self, from: data),
+                        let amError = response.errors?.first {
+                        completion(nil, amError)
+                    } else {
+                        let amError = AMError()
+                        if let response = response, let statusCode = response.getStatusCode(),
+                            let code = Code(rawValue: String(statusCode * 100)) {
+                            amError.status = String(statusCode)
+                            amError.code = code
+                        }
+                        amError.detail = error.localizedDescription
+                        completion(nil, amError)
+                    }
+                } else if let data = data {
+                    self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
+                    let response = try? decoder.decode(AMActivity.Response.self, from: data)
+                    completion(response?.data?.first, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            }).resume()
         }
     }
 
     /**
-     Get several Activity objects based on the `ids` of the activities that you want to get and the Storefront ID of the store
+     Get several Activity objects based on the `ids` of the activities that you want to get and the Storefront ID of\
+     the store
 
      - Parameters:
      - ids: An id array of the activities. Example: `["956449513", "936419203"]`
      - storeID: The id of the store in two-letter code. Example: `"us"`
      - lang: (Optional) The language that you want to use to get data. **Default value: `en-us`**
-     - completion: The completion code that will be executed asynchronously after the request is completed. It has two return parameters: *[Activity]*, *AMError*
+     - completion: The completion code that will be executed asynchronously after the request is completed. It has two\
+     return parameters: *[Activity]*, *AMError*
      - activities: the `[Activity]` array of objects
      - error: if the request you will get an `AMError` object
 
      **Example:** *https://api.music.apple.com/v1/catalog/us/activities?ids=956449513,936419203*
      */
-    func getMultipleActivities(withIDs ids: [String], storefrontID storeID: String, lang: String? = nil, completion: @escaping (_ activities: [AMActivity]?, _ error: AMError?) -> Void) {
+    func getMultipleActivities(withIDs ids: [String], storefrontID storeID: String, lang: String? = nil,
+                               completion: @escaping (_ activities: [AMActivity]?, _ error: AMError?) -> Void) {
         callWithToken { token in
             guard let token = token else {
                 let error = AMError()
@@ -143,52 +158,43 @@ public extension ASAppleMusic {
                 self.print("[ASAppleMusic] 🛑: Missing token")
                 return
             }
-            let headers = [
-                "Authorization": "Bearer \(token)"
-            ]
             var url = "https://api.music.apple.com/v1/catalog/\(storeID)/activities?ids=\(ids.joined(separator: ","))"
             if let lang = lang {
-                url = url + "?l=\(lang)"
+                url = url + "l=\(lang)"
             }
-            Alamofire.SessionManager.default.request(url, headers: headers)
-                .responseJSON { (response) in
-                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
-                    if let response = response.result.value as? [String:Any],
-                        let resources = response["data"] as? [[String:Any]] {
-                        var activities: [AMActivity]?
-                        if resources.count > 0 {
-                            activities = []
-                        }
-                        resources.forEach { activityData in
-                            if let attributes = activityData["attributes"] as? NSDictionary {
-                                let activity = AMActivity(dictionary: attributes)
-                                if let relationships = activityData["relationships"] as? [String:Any] {
-                                    activity.setRelationshipObjects(relationships)
-                                }
-                                activities?.append(activity)
-                            }
-                        }
-                        completion(activities, nil)
-                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
-                    } else if let response = response.result.value as? [String:Any],
-                        let errors = response["errors"] as? [[String:Any]],
-                        let errorDict = errors.first as NSDictionary? {
-                        let error = AMError(dictionary: errorDict)
-
-                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
-
-                        completion(nil, error)
+            guard let callURL = URL(string: url) else {
+                self.print("[ASAppleMusic] 🛑: Failed to create URL")
+                completion(nil, nil)
+                return
+            }
+            var request = URLRequest(url: callURL)
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+                self.print("[ASAppleMusic] Making Request 🌐: \(url)")
+                let decoder = JSONDecoder()
+                if let error = error {
+                    self.print("[ASAppleMusic] 🛑: \(error.localizedDescription)")
+                    if let data = data, let response = try? decoder.decode(AMActivity.Response.self, from: data),
+                        let amError = response.errors?.first {
+                        completion(nil, amError)
                     } else {
-                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
-
-                        let error = AMError()
-                        error.status = "401"
-                        error.code = .unauthorized
-                        error.title = "Unauthorized request"
-                        error.detail = "Missing token, refresh current token or request a new token"
-                        completion(nil, error)
+                        let amError = AMError()
+                        if let response = response, let statusCode = response.getStatusCode(),
+                            let code = Code(rawValue: String(statusCode * 100)) {
+                            amError.status = String(statusCode)
+                            amError.code = code
+                        }
+                        amError.detail = error.localizedDescription
+                        completion(nil, amError)
                     }
-            }
+                } else if let data = data {
+                    self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
+                    let response = try? decoder.decode(AMActivity.Response.self, from: data)
+                    completion(response?.data, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            }).resume()
         }
     }
 

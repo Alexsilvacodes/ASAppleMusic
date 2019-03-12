@@ -10,85 +10,70 @@ import EVReflection
 /**
  LibraryMusicVideo object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/librarymusicvideo)
  */
-public class AMLibraryMusicVideo: EVObject {
+public class AMLibraryMusicVideo: Codable, AMResource, AMLibraryTrack {
 
-    /// The name of the album the music video appears on
-    public var albumName: String?
+    public class Attributes: Codable {
 
-    /// The artist’s name
-    public var artistName: String?
+        /// The name of the album the music video appears on.
+        public var albumName: String?
 
-    /// The artwork for the music video’s associated album
-    public var artwork: AMArtwork?
+        /// (Required) The artist’s name.
+        public var artistName: String = ""
 
-    /// (Optional) The RIAA rating of the content. The possible values for this rating are clean and explicit. No value means no rating
-    public var contentRating: Rating?
+        /// (Required) The artwork for the music video’s associated album.
+        public var artwork: AMArtwork = AMArtwork()
 
-    /// (Optional) The duration of the music video in milliseconds
-    public var durationInMillis: Int64?
+        /// The Recording Industry Association of America (RIAA) rating of the content. The possible values for this rating are clean and explicit. No value means no rating.
+        public var contentRating: String?
 
-    /// The localized name of the music video
-    public var name: String?
+        /// The duration of the music video in milliseconds.
+        public var durationInMillis: Int64?
 
-    /// (Optional) The parameters to use to playback the music video
-    public var playParams: AMPlayable?
+        /// (Required) The localized name of the music video.
+        public var name: String = ""
 
-    /// (Optional) The number of the music video in the album’s track list
-    public var trackNumber: Int?
+        /// The parameters to use to play back the music video.
+        public var playParams: AMPlayable?
 
-    /// The relationships associated with this activity
-    public var relationships: [AMRelationship]?
+        /// The number of the music video in the album’s track list.
+        public var trackNumber: Int?
 
-    /// :nodoc:
-    public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
-        return [
-            ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = AMArtwork(dictionary: artwork) } }, { return self.artwork }),
-            ("playParams", { if let playParams = $0 as? NSDictionary { self.playParams = AMPlayable(dictionary: playParams) } }, { return self.playParams })
-        ]
-    }
-    /// :nodoc:
-    public override func setValue(_ value: Any!, forUndefinedKey key: String) {
-        if key == "contentRating" {
-            if let rawValue = value as? String {
-                contentRating = Rating(rawValue: rawValue)
-            }
-        } else if key == "durationInMillis" {
-            if let rawValue = value as? Int64 {
-                durationInMillis = rawValue
-            }
-        } else if key == "trackNumber" {
-            if let rawValue = value as? Int {
-                trackNumber = rawValue
-            }
-        } else if key == "playParams" {
-            if let rawValue = value as? NSDictionary {
-                playParams = AMPlayable(dictionary: rawValue)
-            }
-        }
     }
 
-    func setRelationshipObjects(_ relationships: [String:Any]) {
-        var relationshipsArray: [AMRelationship] = []
+    public class Relationships: Codable {
 
-        if let albumsRoot = relationships["albums"] as? [String:Any],
-            let albumsArray = albumsRoot["data"] as? [NSDictionary] {
+        /// The library albums associated with the music video. By default, albums is not included.
+        public var albums: AMRelationship.LibraryAlbum?
 
-            albumsArray.forEach { album in
-                relationshipsArray.append(AMRelationship(dictionary: album))
-            }
-        }
-        if let artistsRoot = relationships["artists"] as? [String:Any],
-            let artistsArray = artistsRoot["data"] as? [NSDictionary] {
+        /// The library artists associated with the music video. By default, artists is not included.
+        public var artists: AMRelationship.LibraryArtist?
 
-            artistsArray.forEach { artist in
-                relationshipsArray.append(AMRelationship(dictionary: artist))
-            }
-        }
-
-        if !relationshipsArray.isEmpty {
-            self.relationships = relationshipsArray
-        }
     }
+
+    public class Response: Codable {
+
+        /// The data included in the response for a library music video object request.
+        public var data: [AMLibraryMusicVideo]?
+
+        /// An array of one or more errors that occurred while executing the operation.
+        public var errors: [AMError]?
+
+        /// A link to the request that generated the response data or results; not present in a request.
+        public var href: String?
+
+        /// A link to the next page of data or results; contains the offset query parameter that specifies the next page.
+        public var next: String?
+
+    }
+
+    /// The attributes for the library music video.
+    public var attributes: Attributes?
+
+    /// The relationships for the library music video.
+    public var relationships: Relationships?
+
+    // Always libraryMusicVideos.
+    public var type: String = "libraryMusicVideos"
 
 }
 
@@ -118,47 +103,44 @@ public extension ASAppleMusic {
                 self.print("[ASAppleMusic] 🛑: Missing token")
                 return
             }
-            let headers = [
-                "Authorization": "Bearer \(devToken)",
-                "Music-User-Token": userToken
-            ]
             var url = "https://api.music.apple.com/v1/me/library/music-videos/\(id)"
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
-            Alamofire.SessionManager.default.request(url, headers: headers)
-                .responseJSON { (response) in
-                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
-                    if let response = response.result.value as? [String:Any],
-                        let data = response["data"] as? [[String:Any]],
-                        let resource = data.first,
-                        let attributes = resource["attributes"] as? NSDictionary {
-                        let musicVideo = AMLibraryMusicVideo(dictionary: attributes)
-                        if let relationships = resource["relationships"] as? [String:Any] {
-                            musicVideo.setRelationshipObjects(relationships)
-                        }
-                        completion(musicVideo, nil)
-                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
-                    } else if let response = response.result.value as? [String:Any],
-                        let errors = response["errors"] as? [[String:Any]],
-                        let errorDict = errors.first as NSDictionary? {
-                        let error = AMError(dictionary: errorDict)
-
-
-                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
-
-                        completion(nil, error)
-                    } else {
-                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
-
-                        let error = AMError()
-                        error.status = "401"
-                        error.code = .unauthorized
-                        error.title = "Unauthorized request"
-                        error.detail = "Missing token, refresh current token or request a new token"
-                        completion(nil, error)
-                    }
+            guard let callURL = URL(string: url) else {
+                self.print("[ASAppleMusic] 🛑: Failed to create URL")
+                completion(nil, nil)
+                return
             }
+            var request = URLRequest(url: callURL)
+            request.addValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
+            request.addValue(userToken, forHTTPHeaderField: "Music-User-Token")
+            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+                self.print("[ASAppleMusic] Making Request 🌐: \(url)")
+                let decoder = JSONDecoder()
+                if let error = error {
+                    self.print("[ASAppleMusic] 🛑: \(error.localizedDescription)")
+                    if let data = data, let response = try? decoder.decode(AMLibraryMusicVideo.Response.self, from: data),
+                        let amError = response.errors?.first {
+                        completion(nil, amError)
+                    } else {
+                        let amError = AMError()
+                        if let response = response, let statusCode = response.getStatusCode(),
+                            let code = Code(rawValue: String(statusCode * 100)) {
+                            amError.status = String(statusCode)
+                            amError.code = code
+                        }
+                        amError.detail = error.localizedDescription
+                        completion(nil, amError)
+                    }
+                } else if let data = data {
+                    self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
+                    let response = try? decoder.decode(AMLibraryMusicVideo.Response.self, from: data)
+                    completion(response?.data?.first, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            }).resume()
         }
     }
 
@@ -186,10 +168,6 @@ public extension ASAppleMusic {
                 self.print("[ASAppleMusic] 🛑: Missing token")
                 return
             }
-            let headers = [
-                "Authorization": "Bearer \(devToken)",
-                "Music-User-Token": userToken
-            ]
             var url = "https://api.music.apple.com/v1/me/library/music-videos"
             if let ids = ids {
                 url = url + "?ids=\(ids.joined(separator: ","))&"
@@ -199,46 +177,40 @@ public extension ASAppleMusic {
             if let lang = lang {
                 url = url + "l=\(lang)"
             }
-            Alamofire.SessionManager.default.request(url, headers: headers)
-                .responseJSON { (response) in
-                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
-                    if let response = response.result.value as? [String:Any],
-                        let resources = response["data"] as? [[String:Any]] {
-                        var musicVideos: [AMLibraryMusicVideo]?
-                        if resources.count > 0 {
-                            musicVideos = []
-                        }
-                        resources.forEach { musicVideoData in
-                            if let attributes = musicVideoData["attributes"] as? NSDictionary {
-                                let musicVideo = AMLibraryMusicVideo(dictionary: attributes)
-                                if let relationships = musicVideoData["relationships"] as? [String:Any] {
-                                    musicVideo.setRelationshipObjects(relationships)
-                                }
-                                musicVideos?.append(musicVideo)
-                            }
-                        }
-                        completion(musicVideos, nil)
-                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
-                    } else if let response = response.result.value as? [String:Any],
-                        let errors = response["errors"] as? [[String:Any]],
-                        let errorDict = errors.first as NSDictionary? {
-                        let error = AMError(dictionary: errorDict)
-
-
-                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
-
-                        completion(nil, error)
-                    } else {
-                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
-
-                        let error = AMError()
-                        error.status = "401"
-                        error.code = .unauthorized
-                        error.title = "Unauthorized request"
-                        error.detail = "Missing token, refresh current token or request a new token"
-                        completion(nil, error)
-                    }
+            guard let callURL = URL(string: url) else {
+                self.print("[ASAppleMusic] 🛑: Failed to create URL")
+                completion(nil, nil)
+                return
             }
+            var request = URLRequest(url: callURL)
+            request.addValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
+            request.addValue(userToken, forHTTPHeaderField: "Music-User-Token")
+            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+                self.print("[ASAppleMusic] Making Request 🌐: \(url)")
+                let decoder = JSONDecoder()
+                if let error = error {
+                    self.print("[ASAppleMusic] 🛑: \(error.localizedDescription)")
+                    if let data = data, let response = try? decoder.decode(AMLibraryMusicVideo.Response.self, from: data),
+                        let amError = response.errors?.first {
+                        completion(nil, amError)
+                    } else {
+                        let amError = AMError()
+                        if let response = response, let statusCode = response.getStatusCode(),
+                            let code = Code(rawValue: String(statusCode * 100)) {
+                            amError.status = String(statusCode)
+                            amError.code = code
+                        }
+                        amError.detail = error.localizedDescription
+                        completion(nil, amError)
+                    }
+                } else if let data = data {
+                    self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
+                    let response = try? decoder.decode(AMLibraryMusicVideo.Response.self, from: data)
+                    completion(response?.data, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            }).resume()
         }
     }
 

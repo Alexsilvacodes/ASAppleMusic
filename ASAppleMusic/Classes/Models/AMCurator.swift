@@ -4,52 +4,59 @@
 //
 
 import Foundation
-import Alamofire
-import EVReflection
 
 /**
  Curator object representation. For more information take a look at [Apple Music API]https://developer.apple.com/documentation/applemusicapi/curator)
  */
-public class AMCurator: EVObject {
+public class AMCurator: Codable, AMResource {
 
-    /// The curator artwork
-    public var artwork: AMArtwork?
+    public class Attributes: Codable {
 
-    /// (Optional) The notes about the curator
-    public var editorialNotes: AMEditorialNotes?
+        /// (Required) The curator artwork
+        public var artwork: AMArtwork = AMArtwork()
 
-    /// The localized name of the curator
-    public var name: String?
+        /// The notes about the curator that appear in the iTunes Store
+        public var editorialNotes: AMEditorialNotes?
 
-    /// The URL for sharing a curator in Apple Music
-    public var url: String?
-    
-    /// The relationships associated with this activity
-    public var relationships: [AMRelationship]?
+        /// (Required) The localized name of the curator
+        public var name: String = ""
 
-    /// :nodoc:
-    public override func propertyConverters() -> [(key: String, decodeConverter: ((Any?) -> ()), encodeConverter: (() -> Any?))] {
-        return [
-            ("artwork", { if let artwork = $0 as? NSDictionary { self.artwork = AMArtwork(dictionary: artwork) } }, { return self.artwork }),
-            ("editorialNotes", { if let editorialNotes = $0 as? NSDictionary { self.editorialNotes = AMEditorialNotes(dictionary: editorialNotes) } }, { return self.editorialNotes })
-        ]
+        /// (Required) The URL for sharing an curator in the iTunes Store
+        public var url: String = ""
+
     }
 
-    func setRelationshipObjects(_ relationships: [String:Any]) {
-        var relationshipsArray: [AMRelationship] = []
+    public class Relationships: Codable {
 
-        if let playlistsRoot = relationships["playlists"] as? [String:Any],
-            let playlistsArray = playlistsRoot["data"] as? [NSDictionary] {
+        /// The playlists associated with this curator. By default, playlists includes identifiers only.
+        public var playlists: AMRelationship.Playlist?
 
-            playlistsArray.forEach { playlist in
-                relationshipsArray.append(AMRelationship(dictionary: playlist))
-            }
-        }
-
-        if !relationshipsArray.isEmpty {
-            self.relationships = relationshipsArray
-        }
     }
+
+    public class Response: Codable {
+
+        /// (Required) The data included in the response for a curator object request.
+        public var data: [AMCurator]?
+
+        /// An array of one or more errors that occurred while executing the operation.
+        public var errors: [AMError]?
+
+        /// A link to the request that generated the response data or results; not present in a request.
+        public var href: String?
+
+        /// A link to the next page of data or results; contains the offset query parameter that specifies the next page.
+        public var next: String?
+
+    }
+
+    /// The attributes for the activity.
+    public var attributes: Attributes?
+
+    /// The relationships for the activity.
+    public var relationships: Relationships?
+
+    // Always curators.
+    public var type: String = "curators"
 
 }
 
@@ -80,45 +87,43 @@ public extension ASAppleMusic {
                 self.print("[ASAppleMusic] 🛑: Missing token")
                 return
             }
-            let headers = [
-                "Authorization": "Bearer \(token)"
-            ]
             var url = "https://api.music.apple.com/v1/catalog/\(storeID)/curators/\(id)"
             if let lang = lang {
                 url = url + "?l=\(lang)"
             }
-            Alamofire.SessionManager.default.request(url, headers: headers)
-                .responseJSON { (response) in
-                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
-                    if let response = response.result.value as? [String:Any],
-                        let data = response["data"] as? [[String:Any]],
-                        let resource = data.first,
-                        let attributes = resource["attributes"] as? NSDictionary {
-                        let curator = AMCurator(dictionary: attributes)
-                        if let relationships = resource["relationships"] as? [String:Any] {
-                            curator.setRelationshipObjects(relationships)
-                        }
-                        completion(curator, nil)
-                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
-                    } else if let response = response.result.value as? [String:Any],
-                        let errors = response["errors"] as? [[String:Any]],
-                        let errorDict = errors.first as NSDictionary? {
-                        let error = AMError(dictionary: errorDict)
-
-                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
-
-                        completion(nil, error)
-                    } else {
-                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
-
-                        let error = AMError()
-                        error.status = "401"
-                        error.code = .unauthorized
-                        error.title = "Unauthorized request"
-                        error.detail = "Missing token, refresh current token or request a new token"
-                        completion(nil, error)
-                    }
+            guard let callURL = URL(string: url) else {
+                self.print("[ASAppleMusic] 🛑: Failed to create URL")
+                completion(nil, nil)
+                return
             }
+            var request = URLRequest(url: callURL)
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+                self.print("[ASAppleMusic] Making Request 🌐: \(url)")
+                let decoder = JSONDecoder()
+                if let error = error {
+                    self.print("[ASAppleMusic] 🛑: \(error.localizedDescription)")
+                    if let data = data, let response = try? decoder.decode(AMCurator.Response.self, from: data),
+                        let amError = response.errors?.first {
+                        completion(nil, amError)
+                    } else {
+                        let amError = AMError()
+                        if let response = response, let statusCode = response.getStatusCode(),
+                            let code = Code(rawValue: String(statusCode * 100)) {
+                            amError.status = String(statusCode)
+                            amError.code = code
+                        }
+                        amError.detail = error.localizedDescription
+                        completion(nil, amError)
+                    }
+                } else if let data = data {
+                    self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
+                    let response = try? decoder.decode(AMCurator.Response.self, from: data)
+                    completion(response?.data?.first, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            }).resume()
         }
     }
 
@@ -147,52 +152,43 @@ public extension ASAppleMusic {
                 self.print("[ASAppleMusic] 🛑: Missing token")
                 return
             }
-            let headers = [
-                "Authorization": "Bearer \(token)"
-            ]
             var url = "https://api.music.apple.com/v1/catalog/\(storeID)/curators?ids=\(ids.joined(separator: ","))&"
             if let lang = lang {
                 url = url + "l=\(lang)"
             }
-            Alamofire.SessionManager.default.request(url, headers: headers)
-                .responseJSON { (response) in
-                    self.print("[ASAppleMusic] Making Request 🌐: \(url)")
-                    if let response = response.result.value as? [String:Any],
-                        let resources = response["data"] as? [[String:Any]] {
-                        var curators: [AMCurator]?
-                        if resources.count > 0 {
-                            curators = []
-                        }
-                        resources.forEach { curatorData in
-                            if let attributes = curatorData["attributes"] as? NSDictionary {
-                                let curator = AMCurator(dictionary: attributes)
-                                if let relationships = curatorData["relationships"] as? [String:Any] {
-                                    curator.setRelationshipObjects(relationships)
-                                }
-                                curators?.append(curator)
-                            }
-                        }
-                        completion(curators, nil)
-                        self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
-                    } else if let response = response.result.value as? [String:Any],
-                        let errors = response["errors"] as? [[String:Any]],
-                        let errorDict = errors.first as NSDictionary? {
-                        let error = AMError(dictionary: errorDict)
-
-                        self.print("[ASAppleMusic] 🛑: \(error.title ?? "") - \(error.status ?? "")")
-
-                        completion(nil, error)
-                    } else {
-                        self.print("[ASAppleMusic] 🛑: Unauthorized request")
-
-                        let error = AMError()
-                        error.status = "401"
-                        error.code = .unauthorized
-                        error.title = "Unauthorized request"
-                        error.detail = "Missing token, refresh current token or request a new token"
-                        completion(nil, error)
-                    }
+            guard let callURL = URL(string: url) else {
+                self.print("[ASAppleMusic] 🛑: Failed to create URL")
+                completion(nil, nil)
+                return
             }
+            var request = URLRequest(url: callURL)
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+                self.print("[ASAppleMusic] Making Request 🌐: \(url)")
+                let decoder = JSONDecoder()
+                if let error = error {
+                    self.print("[ASAppleMusic] 🛑: \(error.localizedDescription)")
+                    if let data = data, let response = try? decoder.decode(AMCurator.Response.self, from: data),
+                        let amError = response.errors?.first {
+                        completion(nil, amError)
+                    } else {
+                        let amError = AMError()
+                        if let response = response, let statusCode = response.getStatusCode(),
+                            let code = Code(rawValue: String(statusCode * 100)) {
+                            amError.status = String(statusCode)
+                            amError.code = code
+                        }
+                        amError.detail = error.localizedDescription
+                        completion(nil, amError)
+                    }
+                } else if let data = data {
+                    self.print("[ASAppleMusic] Request Succesful ✅: \(url)")
+                    let response = try? decoder.decode(AMCurator.Response.self, from: data)
+                    completion(response?.data, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            }).resume()
         }
     }
 
