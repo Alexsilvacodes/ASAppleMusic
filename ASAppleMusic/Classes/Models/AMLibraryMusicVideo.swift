@@ -10,9 +10,9 @@ import EVReflection
 /**
  LibraryMusicVideo object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/librarymusicvideo)
  */
-public class AMLibraryMusicVideo: Codable, AMResource, AMLibraryTrack {
+public class AMLibraryMusicVideo: Decodable, AMResource, AMLibraryTrack {
 
-    public class Attributes: Codable {
+    public class Attributes: Decodable {
 
         /// The name of the album the music video appears on.
         public var albumName: String?
@@ -40,7 +40,7 @@ public class AMLibraryMusicVideo: Codable, AMResource, AMLibraryTrack {
 
     }
 
-    public class Relationships: Codable {
+    public class Relationships: Decodable {
 
         /// The library albums associated with the music video. By default, albums is not included.
         public var albums: AMRelationship.LibraryAlbum?
@@ -50,7 +50,7 @@ public class AMLibraryMusicVideo: Codable, AMResource, AMLibraryTrack {
 
     }
 
-    public class Response: Codable {
+    public class Response: Decodable {
 
         /// The data included in the response for a library music video object request.
         public var data: [AMLibraryMusicVideo]?
@@ -74,6 +74,12 @@ public class AMLibraryMusicVideo: Codable, AMResource, AMLibraryTrack {
 
     // Always libraryMusicVideos.
     public var type: String = "libraryMusicVideos"
+
+    public enum CodingKeys: String, CodingKey {
+        case attributes
+        case relationships
+        case type
+    }
 
 }
 
@@ -115,7 +121,7 @@ public extension ASAppleMusic {
             var request = URLRequest(url: callURL)
             request.addValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
             request.addValue(userToken, forHTTPHeaderField: "Music-User-Token")
-            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                 let decoder = JSONDecoder()
                 if let error = error {
@@ -140,7 +146,8 @@ public extension ASAppleMusic {
                 } else {
                     completion(nil, nil)
                 }
-            }).resume()
+            }
+            task.resume()
         }
     }
 
@@ -185,7 +192,7 @@ public extension ASAppleMusic {
             var request = URLRequest(url: callURL)
             request.addValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
             request.addValue(userToken, forHTTPHeaderField: "Music-User-Token")
-            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                 let decoder = JSONDecoder()
                 if let error = error {
@@ -210,7 +217,8 @@ public extension ASAppleMusic {
                 } else {
                     completion(nil, nil)
                 }
-            }).resume()
+            }
+            task.resume()
         }
     }
 

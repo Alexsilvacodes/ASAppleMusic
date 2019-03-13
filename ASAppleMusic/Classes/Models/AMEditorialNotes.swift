@@ -8,7 +8,7 @@ import Foundation
 /**
  EditorialNotes object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/editorialnotes)
  */
-public class AMEditorialNotes: Codable {
+public class AMEditorialNotes: Decodable {
 
     /// Notes shown when the content is being prominently displayed
     public var standard: String = ""

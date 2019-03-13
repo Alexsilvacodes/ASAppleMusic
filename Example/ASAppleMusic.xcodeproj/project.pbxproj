@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D8420992238EC3E008B8276 /* Secret.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4D8420982238EC3E008B8276 /* Secret.plist */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* MainViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
@@ -17,12 +18,12 @@
 		8760B05E2007F6CA008CD701 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8760B05D2007F6CA008CD701 /* DetailViewController.swift */; };
 		8760B0602008C66A008CD701 /* ConfigurationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8760B05F2008C66A008CD701 /* ConfigurationTableViewCell.swift */; };
 		8760B0622008DD36008CD701 /* ASAppleMusic+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8760B0612008DD36008CD701 /* ASAppleMusic+Helper.swift */; };
-		87855817200926EB0070BA8B /* Secret.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87855816200926EB0070BA8B /* Secret.plist */; };
 		D524C666CCB2F34D28739A29 /* Pods_ASAppleMusic_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CE27DEF3906B97085C4115F /* Pods_ASAppleMusic_Example.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2842995893FD5743B0CB3DA0 /* Pods-ASAppleMusic_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ASAppleMusic_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ASAppleMusic_Tests/Pods-ASAppleMusic_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		4D8420982238EC3E008B8276 /* Secret.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secret.plist; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* ASAppleMusic_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ASAppleMusic_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -36,7 +37,6 @@
 		8760B05D2007F6CA008CD701 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		8760B05F2008C66A008CD701 /* ConfigurationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationTableViewCell.swift; sourceTree = "<group>"; };
 		8760B0612008DD36008CD701 /* ASAppleMusic+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ASAppleMusic+Helper.swift"; sourceTree = "<group>"; };
-		87855816200926EB0070BA8B /* Secret.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Secret.plist; sourceTree = "<group>"; };
 		AB41398B7B54157A5C0E3FD5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		C496978A06B39A230E54EE60 /* ASAppleMusic.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ASAppleMusic.podspec; path = ../ASAppleMusic.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		CE0EF875AC3217D95D24BC23 /* Pods-ASAppleMusic_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ASAppleMusic_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ASAppleMusic_Tests/Pods-ASAppleMusic_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -91,7 +91,7 @@
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 				8760B0592007F4C1008CD701 /* Sections.plist */,
-				87855816200926EB0070BA8B /* Secret.plist */,
+				4D8420982238EC3E008B8276 /* Secret.plist */,
 			);
 			name = "Example for ASAppleMusic";
 			path = ASAppleMusic;
@@ -164,7 +164,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
@@ -199,7 +199,7 @@
 			files = (
 				8760B05A2007F4C1008CD701 /* Sections.plist in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
-				87855817200926EB0070BA8B /* Secret.plist in Resources */,
+				4D8420992238EC3E008B8276 /* Secret.plist in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 			);
@@ -298,12 +298,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -351,12 +353,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;

@@ -8,9 +8,9 @@ import Foundation
 /**
  Album object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/album)
  */
-public class AMAlbum: Codable, AMResource {
+public class AMAlbum: Decodable, AMResource  {
 
-    public class Attributes: Codable {
+    public class Attributes: Decodable {
 
         /// (Required) The name of the album the music video appears on.
         public var albumName: String = ""
@@ -62,7 +62,7 @@ public class AMAlbum: Codable, AMResource {
 
     }
 
-    public class Relationships: Codable {
+    public class Relationships: Decodable {
 
         /// The artists associated with the album. By default, artists includes identifiers only.
         public var artists: AMRelationship.Artist?
@@ -75,7 +75,7 @@ public class AMAlbum: Codable, AMResource {
 
     }
 
-    public class Response: Codable {
+    public class Response: Decodable {
 
         /// The data included in the response to an album object request.
         public var data: [AMAlbum]?
@@ -99,6 +99,12 @@ public class AMAlbum: Codable, AMResource {
 
     // Always albums.
     public var type: String = "albums"
+
+    public enum CodingKeys: String, CodingKey {
+        case attributes
+        case relationships
+        case type
+    }
     
 }
 
@@ -140,7 +146,7 @@ public extension ASAppleMusic {
             }
             var request = URLRequest(url: callURL)
             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                 let decoder = JSONDecoder()
                 if let error = error {
@@ -165,7 +171,8 @@ public extension ASAppleMusic {
                 } else {
                     completion(nil, nil)
                 }
-            }).resume()
+            }
+            task.resume()
         }
     }
 
@@ -205,7 +212,7 @@ public extension ASAppleMusic {
             }
             var request = URLRequest(url: callURL)
             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                 let decoder = JSONDecoder()
                 if let error = error {
@@ -230,7 +237,8 @@ public extension ASAppleMusic {
                 } else {
                     completion(nil, nil)
                 }
-            }).resume()
+            }
+            task.resume()
         }
     }
 

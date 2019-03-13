@@ -17,11 +17,37 @@ enum TrackType: String {
     case musicVideos = "music-videos"
 }
 
-public protocol AMTrack: Codable { }
+public protocol AMTrack: Decodable { }
 
-public protocol AMLibraryTrack: Codable { }
+public protocol AMLibraryTrack: Decodable { }
 
-public protocol AMResource: Codable { }
+public protocol AMResource: Decodable, CustomStringConvertible { }
+
+public extension CustomStringConvertible {
+
+    public var description : String {
+        var description: String = "***** \(type(of: self)) *****\n"
+        description += diveMirror(object: self)
+        return description
+    }
+
+    private func diveMirror(object: Any) -> String {
+        var description = ""
+        let selfMirror = Mirror(reflecting: object)
+        selfMirror.children.forEach { child in
+            if let propertyName = child.label {
+                if !Mirror(reflecting: child.value).children.isEmpty {
+                    description += "\(propertyName):\n"
+                    description += "\t - " + diveMirror(object: child.value)
+                } else {
+                    description += "\(propertyName): \(child.value)\n"
+                }
+            }
+        }
+        return description
+    }
+
+}
 
 /**
  The API that the framework will use
@@ -173,23 +199,25 @@ public class ASAppleMusic {
             return
         }
         let json = ["kid": kid, "tid": tid]
-        let jsonData = try? JSONSerialization.data(withJSONObject: json)
+        let jsonData = try! JSONSerialization.data(withJSONObject: json)
 
         var request = URLRequest(url: serverURL)
         request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
-        URLSession.shared.dataTask(with: request) { data, _, error in
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {
                 self.print("[ASAppleMusic] 🛑: \(error.localizedDescription)")
                 completion(nil)
             } else {
                 guard let data = data, let jsonDict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                    let json = jsonDict, let token = json["token"] as? String else {
+                    let jsonAux = jsonDict, let token = jsonAux["token"] as? String else {
                         completion(nil)
                         return
                 }
                 completion(token)
             }
-        }.resume()
+        }
+        task.resume()
     }
 }

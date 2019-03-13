@@ -8,7 +8,7 @@ import Foundation
 /**
  Relationship object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/relationship)
  */
-public class AMRelationship: Codable {
+public class AMRelationship: Decodable {
 
     public class Album: AMRelationship {
 

@@ -479,7 +479,7 @@ extension EVReflectable {
         
         // Custom or standard toDictionary
         if let v = self as? EVCustomReflectable {
-            dict = v.toCodableValue() as? NSDictionary ?? NSDictionary()
+            dict = v.toDecodableValue() as? NSDictionary ?? NSDictionary()
         } else {
             dict = self.toDictionary(conversionOptions)
         }

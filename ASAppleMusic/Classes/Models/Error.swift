@@ -8,7 +8,7 @@ import Foundation
 /**
  Code object representation. For more information take a look at [Apple Music API](https://developer.apple.com/library/content/documentation/NetworkingInternetWeb/Conceptual/AppleMusicWebServicesReference/HTTPStatusCodes.html)
  */
-public enum Code: String, Codable {
+public enum Code: String, Decodable {
 
     case ok = "20000"
     case created = "20100"
@@ -34,12 +34,12 @@ public enum Code: String, Codable {
 /**
  Error object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/error)
  */
-public class AMError: Codable {
+public class AMError: Decodable {
 
     /**
      Source object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/error/source)
      */
-    public class Source: Codable {
+    public class Source: Decodable {
 
         /// The URI query parameter that caused the error
         public var parameter: String?

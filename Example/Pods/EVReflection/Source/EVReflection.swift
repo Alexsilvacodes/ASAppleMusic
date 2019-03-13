@@ -335,7 +335,7 @@ final public class EVReflection {
         
         // Custom or standard toDictionary
         if let v = theObject as? EVCustomReflectable {
-            dict = v.toCodableValue() as? NSDictionary ?? NSDictionary()
+            dict = v.toDecodableValue() as? NSDictionary ?? NSDictionary()
         } else {
             let (dictionary, _) = EVReflection.toDictionary(theObject, conversionOptions: conversionOptions)
             dict = dictionary
@@ -867,7 +867,7 @@ final public class EVReflection {
             return (theValue as AnyObject, valueType, false)
         }
         if theValue is EVCustomReflectable {
-            let value: AnyObject = (theValue as! EVCustomReflectable).toCodableValue() as AnyObject
+            let value: AnyObject = (theValue as! EVCustomReflectable).toDecodableValue() as AnyObject
             return (value, valueType, false)
         }
 
@@ -1439,7 +1439,7 @@ final public class EVReflection {
                     var (unboxedValue, valueType, isObject) = valueForAny(theObject, key: originalKey, anyValue: value, conversionOptions: conversionOptions, isCachable: isCachable, parents: parents)
 
                     if let v = value as? EVCustomReflectable {
-                        unboxedValue = v.toCodableValue() as AnyObject
+                        unboxedValue = v.toDecodableValue() as AnyObject
                         valueType = String(describing: type(of: v))
                         isObject = false
                     }
@@ -1565,7 +1565,7 @@ final public class EVReflection {
         case let date as Date:
             return getDateFormatter().string(from: date) as NSString
         case let reflectable as EVCustomReflectable:
-            return convertDictionaryForJsonSerialization(reflectable.toCodableValue() as? NSDictionary ?? NSDictionary(), theObject: theObject)
+            return convertDictionaryForJsonSerialization(reflectable.toDecodableValue() as? NSDictionary ?? NSDictionary(), theObject: theObject)
         case let reflectable as EVReflectable:
             return convertDictionaryForJsonSerialization(reflectable.toDictionary(), theObject: theObject)
         case let ok as NSDictionary:

@@ -8,7 +8,7 @@ import Foundation
 /**
  Playable Video object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/playparameters)
  */
-public class AMPlayable: Codable {
+public class AMPlayable: Decodable {
 
     /// (Required) The ID of the content to use for playback.
     public var id: String = ""

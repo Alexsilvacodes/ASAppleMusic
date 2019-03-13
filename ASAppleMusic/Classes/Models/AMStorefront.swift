@@ -8,9 +8,9 @@ import Foundation
 /**
  Storefront object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/storefront)
  */
-public class AMStorefront: Codable, AMResource {
+public class AMStorefront: Decodable, AMResource {
 
-    public class Attributes: Codable {
+    public class Attributes: Decodable {
 
         /// (Required) The default language for the storefront, represented as a language tag.
         public var defaultLanguageTag: String = ""
@@ -23,7 +23,7 @@ public class AMStorefront: Codable, AMResource {
 
     }
 
-    public class Response: Codable {
+    public class Response: Decodable {
 
         /// (Required) The data included in the response for a storefront object request.
         public var data: [AMStorefront]?
@@ -44,6 +44,11 @@ public class AMStorefront: Codable, AMResource {
 
     // Always storefronts.
     public var type: String = "storefronts"
+
+    public enum CodingKeys: String, CodingKey {
+        case attributes
+        case type
+    }
 
 }
 
@@ -84,7 +89,7 @@ public extension ASAppleMusic {
             var request = URLRequest(url: callURL)
             request.addValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
             request.addValue(userToken, forHTTPHeaderField: "Music-User-Token")
-            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                 let decoder = JSONDecoder()
                 if let error = error {
@@ -109,7 +114,8 @@ public extension ASAppleMusic {
                 } else {
                     completion(nil, nil)
                 }
-            }).resume()
+            }
+            task.resume()
         }
     }
     
@@ -148,7 +154,7 @@ public extension ASAppleMusic {
             }
             var request = URLRequest(url: callURL)
             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                 let decoder = JSONDecoder()
                 if let error = error {
@@ -173,7 +179,8 @@ public extension ASAppleMusic {
                 } else {
                     completion(nil, nil)
                 }
-            }).resume()
+            }
+            task.resume()
         }
     }
 
@@ -212,7 +219,7 @@ public extension ASAppleMusic {
             }
             var request = URLRequest(url: callURL)
             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                 let decoder = JSONDecoder()
                 if let error = error {
@@ -237,7 +244,8 @@ public extension ASAppleMusic {
                 } else {
                     completion(nil, nil)
                 }
-            }).resume()
+            }
+            task.resume()
         }
     }
 
@@ -287,7 +295,7 @@ public extension ASAppleMusic {
             }
             var request = URLRequest(url: callURL)
             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                 let decoder = JSONDecoder()
                 if let error = error {
@@ -312,7 +320,8 @@ public extension ASAppleMusic {
                 } else {
                     completion(nil, nil)
                 }
-            }).resume()
+            }
+            task.resume()
         }
     }
 

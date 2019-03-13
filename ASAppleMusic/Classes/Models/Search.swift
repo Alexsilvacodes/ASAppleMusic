@@ -7,11 +7,11 @@ import Foundation
 import Alamofire
 import EVReflection
 
-public class AMSearch: Codable {
+public class AMSearch: Decodable {
 
-    public class Response: Codable {
+    public class Response: Decodable {
 
-        public class Results: Codable {
+        public class Results: Decodable {
 
             /// The activities returned for the search query.
             public var activities: [AMActivity.Response]?
@@ -67,9 +67,9 @@ public class AMSearch: Codable {
 
 }
 
-public class AMSearchHints: Codable {
+public class AMSearchHints: Decodable {
 
-    public class Response: Codable {
+    public class Response: Decodable {
 
         /// (Required) The results included in the response for a search hints request.
         public var results: AMSearchHints = AMSearchHints()
@@ -145,7 +145,7 @@ public extension ASAppleMusic {
             }
             var request = URLRequest(url: callURL)
             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                 let decoder = JSONDecoder()
                 if let error = error {
@@ -170,7 +170,8 @@ public extension ASAppleMusic {
                 } else {
                     completion(nil, nil)
                 }
-            }).resume()
+            }
+            task.resume()
         }
     }
 
@@ -223,7 +224,7 @@ public extension ASAppleMusic {
             }
             var request = URLRequest(url: callURL)
             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                 let decoder = JSONDecoder()
                 if let error = error {
@@ -248,7 +249,8 @@ public extension ASAppleMusic {
                 } else {
                     completion(nil, nil)
                 }
-            }).resume()
+            }
+            task.resume()
         }
     }
 

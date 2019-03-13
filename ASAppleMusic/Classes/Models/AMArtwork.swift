@@ -8,7 +8,7 @@ import Foundation
 /**
  Artwork object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/artwork)
  */
-public class AMArtwork: Codable {
+public class AMArtwork: Decodable {
 
     /// (Optional) The average background color of the image
     public var bgColor: String?

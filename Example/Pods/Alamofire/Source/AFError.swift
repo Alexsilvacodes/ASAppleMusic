@@ -48,7 +48,7 @@ public enum AFError: Error {
 
     /// The underlying reason the multipart encoding error occurred.
     ///
-    /// - bodyPartURLInvalid:                   The `fileURL` provided for reading an encodable body part isn't a
+    /// - bodyPartURLInvalid:                   The `fileURL` provided for reading an enDecodable body part isn't a
     ///                                         file URL.
     /// - bodyPartFilenameInvalid:              The filename of the `fileURL` provided has either an empty
     ///                                         `lastPathComponent` or `pathExtension.

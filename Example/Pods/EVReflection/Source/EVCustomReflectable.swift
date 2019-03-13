@@ -12,5 +12,5 @@ import Foundation
 public protocol EVCustomReflectable {
     static func constructWith(value: Any?) -> EVCustomReflectable?
     func constructWith(value: Any?) -> EVCustomReflectable?
-    func toCodableValue() -> Any
+    func toDecodableValue() -> Any
 }

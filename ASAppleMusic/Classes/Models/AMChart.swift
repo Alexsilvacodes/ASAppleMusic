@@ -5,14 +5,20 @@
 
 import Foundation
 
+public class AMChartResource: AMResource {
+
+    public var description: String
+
+}
+
 /**
  Chart object representation. For more information take a look at [Apple Music API](https://developer.apple.com/documentation/applemusicapi/chart)
  */
-public class AMChart: Codable {
+public class AMChart: Decodable {
 
-    public class Response: Codable {
+    public class Response: Decodable {
 
-        public class Results: Codable {
+        public class Results: Decodable {
 
             /// The albums returned when fetching charts.
             public var albums: [AMChart]?
@@ -20,12 +26,16 @@ public class AMChart: Codable {
             /// The music videos returned when fetching charts.
             public var musicVideos: [AMChart]?
 
+            /// The playlists returned when fetching charts.
+            public var playlists: [AMChart]?
+
             /// The songs returned when fetching charts.
             public var songs: [AMChart]?
 
             enum CodingKeys: String, CodingKey {
                 case albums
                 case musicVideos = "music-videos"
+                case playlists
                 case songs
             }
 
@@ -43,7 +53,7 @@ public class AMChart: Codable {
     public var chart: String = ""
 
     /// (Required) An array of the requested objects, ordered by popularity. For example, if songs were specified as the chart type in the request, the array contains Song objects.
-    public var data: [AMResource] = []
+    public var data: [AMChartResource] = []
 
     /// (Required) The URL for the chart.
     public var href: String = ""
@@ -111,7 +121,7 @@ public extension ASAppleMusic {
             }
             var request = URLRequest(url: callURL)
             request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            URLSession.init().dataTask(with: request, completionHandler: { data, response, error in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 self.print("[ASAppleMusic] Making Request 🌐: \(url)")
                 let decoder = JSONDecoder()
                 if let error = error {
@@ -136,7 +146,8 @@ public extension ASAppleMusic {
                 } else {
                     completion(nil, nil)
                 }
-            }).resume()
+            }
+            task.resume()
         }
     }
 
