@@ -71,7 +71,7 @@ Alex Silva
 
 - [alex@alexsilva.codes](mailto:alex@alexsilva.codes)
 - [@alexw0h4l](https://twitter.com/alexw0h4l)
-- [My website 👨🏻‍💻](http://alexsays.info)
+- [My website 👨🏻‍💻](https://alexsilva.codes)
 
 ## License
 
