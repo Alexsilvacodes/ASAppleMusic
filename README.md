@@ -69,7 +69,7 @@ By [Aaron Asencio](http://aaronat1.com)
 
 Alex Silva
 
-- [alex@alexsays.info](mailto:alex@alexsays.info)
+- [alex@alexislva.codes](mailto:alex@alexislva.codes)
 - [@alexw0h4l](https://twitter.com/alexw0h4l)
 - [My website 👨🏻‍💻](http://alexsays.info)
 
