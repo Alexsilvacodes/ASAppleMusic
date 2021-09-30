@@ -69,9 +69,8 @@ By [Aaron Asencio](http://aaronat1.com)
 
 Alex Silva
 
-- [alex@alexsilva.codes](mailto:alex@alexsilva.codes)
-- [@alexw0h4l](https://twitter.com/alexw0h4l)
-- [My website 👨🏻‍💻](https://alexsilva.codes)
+- [@alexsilvadev](https://twitter.com/alexsilvadev)
+- [My website 👨🏻‍💻](https://alexsilva.dev)
 
 ## License
 
